@@ -1,0 +1,1 @@
+En esta carpeta se encuentran las resoluciones tanto en latex como en pdf de las guias de AED/AED2

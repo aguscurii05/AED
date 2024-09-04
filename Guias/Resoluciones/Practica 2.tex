@@ -1,0 +1,314 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, margin={1in}]{geometry}
+\usepackage{amssymb, amsmath}
+\usepackage{setspace}
+\spacing{1.5}
+
+\title{AED - Practica 2}
+\author{Agustin Stescovich Curi}
+\date{August 2024}
+
+\begin{document}
+\begin{center}
+    \Huge{\textbf{Algoritmos y Estrucutras de Datos Practica 2}}
+\end{center}
+
+\noindent\huge{\textbf{2.1. Funciones Auxiliares}}
+
+\noindent\LARGE{\textbf{Ejercicio 1}}\\
+\begin{itemize}
+    \item [a)]  \Large{\textit{pred} raizCuadrada $(x:\mathbb{Z})\{$\\
+    $(\exists c:\mathbb{Z})(c>0 \ \land \ (c*c= x))$\\$\}$}
+    \item [b)] \Large{\textit{pred} esPrimo $(x:\mathbb{Z})\{$\\
+    $(\forall n:\mathbb{Z})((1<n<x)\to_L (x \mod n \ \neq 0))$\\$\}$}
+\end{itemize}
+\LARGE{\textbf{Ejercicio 2}}
+\begin{itemize}
+    \item [a)]\Large{\textit{pred} sonCoprimos $(x,y:\mathbb{Z})\{$\\
+    $((\forall n:\mathbb{Z})(((n>1) \land_L(x \mod n = 0))\to_L(y \mod n \neq 0)))\land_L\\
+    ((\forall m:\mathbb{Z})(((m>1) \land_L(x \mod m = 0))\to_L(y \mod m \neq 0)))$}\\
+    \}
+    \item[b)] \Large{\textit{pred} mayorPrimoQueDivide $(x,y:\mathbb{Z})\{$\\
+    $(esPrimo(y)\land_L(x \mod y = 0)\land(\forall c:\mathbb{Z})(((esPrimo(c))\land_L(x \mod c = 0))\to_L(c\leq y))$\\\}
+    }
+\end{itemize}
+\LARGE{\textbf{Ejercicio 3}}
+\begin{itemize}
+    \item [a)]  \Large{\textit{pred} todosElementosPositivos $(s:seq\langle Z \rangle)\{$\\
+    $(\forall i:\mathbb{Z})((0\leq i < |s|)\to_L \ s[i]\geq0)$\\$\}$}
+    
+    \item [b)] \large{\textit{pred} todosDistintos $(s:seq\langle Z \rangle)\{$\\
+    $(\forall i:\mathbb{Z})((0\leq i < |s|)\to_L (\forall j:\mathbb{Z})((0\leq j < |s| \land i\neq j)\to_L(s[i]\neq s[j])))$\\$\}$}
+\end{itemize}
+\LARGE{\textbf{Ejercicio 4}}
+\begin{itemize}
+    \item [a)] \Large{\textit{pred} esPrefijo $(s,t:seq\langle Z \rangle)\{\\ (\forall i:\mathbb{Z})(0\leq i < |s| \to_L (s[i]=t[i]))$}\\\}\\\\
+    \normalsize{Falta aclarar que $|s|\leq|t|$}
+
+    \item [b)] \Large{\textit{pred} estaOrdenada $(s:seq\langle Z \rangle)$\{\\
+    $(\forall i,j:\mathbb{Z})(i\leq j \to_L (s[i]\leq s[j]))$\\\}}
+    
+    \item [c)] \large{\textit{pred} hayUnoParQueDivideAlResto $(s:seq\langle Z \rangle)$\{\\
+    $(\exists i:\mathbb{Z})((0\leq i < |s|)\land_L(s[i] \mod 2 = 0)\land_L(\forall j:\mathbb{Z})(0\leq j <|s| \to_L(s[j] \mod s[i] =0)))$}\\\}
+
+    \item[d)] \large{\textit{pred} igualesEnElRango $(t:seq\langle z\rangle,i,j,n:\mathbb{Z})$\{\\
+    $(\forall m:\mathbb{Z})(i\leq m \leq j \to_L (s[m]=n))$}
+    
+    \large{\textit{pred} enTresPartes $(s:seq\langle Z \rangle)$\{\\
+    $(\exists i,j:\mathbb{Z})(0<i<j<|s|-1)\land_L \\\ igualesEnELRango(s,0,i,0)\land_L \\\ igualesEnELRango(s,i+1,j,1)\land_L \\\ igualesEnELRango(s,j+1,|s|-1,2)$\\\}\\ 
+    \textbf{Extra: }Cambiaria los $\land_L$ por $\lor_L$}
+\end{itemize}
+\LARGE{\textbf{Ejercicio 5}}
+
+\begin{itemize}
+    \item[a) ] \Large{cantApariciones $(s:seq\langle \mathbb{Z} \rangle, e:\mathbb{Z})$ = $\displaystyle\sum_{i=0}^{|s|-1}IfThenElseFi(s[i]=e,1,0)$}\\
+    
+    \item [b) ] \textit{pred} esPar $(x:\mathbb{Z})\{(x \mod 2 = 0)\}$\\\\
+    posImp $(s:seq\langle \mathbb{Z} \rangle)$ = $\displaystyle\sum_{i=0}^{|s|-1}IfThenElseFi(\neg esPar(i),s[i],0)$\\
+    
+    \item[c) ] positivos $(s:seq\langle \mathbb{Z} \rangle)$ = $\displaystyle\sum_{i=0}^{|s|-1}IfThenElseFi(s[i]>0,s[i],0)$\\
+    
+    \item[d) ] positivos $(s:seq\langle \mathbb{Z} \rangle)$ = $\displaystyle\sum_{i=0}^{|s|-1}IfThenElseFi(s[i]\neq0,\frac{1}{s[i]},0)$\\\\
+\end{itemize}
+
+\noindent\huge{\textbf{2.2. Analisis de especificacion}}\\\\
+\LARGE{\textbf{Ejercicio 6}}
+\begin{itemize}
+    \item [a) ] \Large{No es correcta debido a que si se toma el caso i=0 se cumple la precondicion del implica ($0\leq i<|l|$) pero la postcondicion es falsa ya que $l[i-1]=i[0-1]=i[-1]=\bot$. Para que no se indetermine propongo la siguiente especificiacion:\\\\
+    \textit{proc} progresionGeometricaFactor2 $(in\ l:seq\langle \mathbb{Z}\rangle):Bool$\\
+    requiere\ \{True\}\\
+    asegura\ \{$res=True \ \leftrightarrow\ ((\forall i:\mathbb{Z})(0\leq i<|l|-1 \to_L l[i+1]=2*l[i]))$\}\\
+
+    \item[b) ] \Large{No es correcta dado que no hay relacion entre antecedente y consecuente y la lista deberia tener al menos un elemento. Propongo:\\\\
+    \textit{proc} minimo $(in\ l:seq\langle \mathbb{Z}\rangle):\mathbb{Z}$\\
+    requiere\ \{$|l|>0$\}}\\
+    asegura\ \{$res = y\ \leftrightarrow(\exists y:\mathbb{Z})(y\in l\ \land (\forall x:\mathbb{Z})(x\in l \to_L y\leq x))$\}}\\
+\end{itemize}
+\LARGE{\textbf{Ejercicio 7}}\\
+\begin{itemize}
+    \item [a) ]
+    \begin{itemize}\Large{
+        \item [I)] $l=\ \langle 1,2,3,4\rangle\implies$  $indiceDelMaximo(l)= 3$
+        \item [II)] $l=\ \langle 15.5,-18,4.215,15.5,-1\rangle\implies$ $indiceDelMaximo(l)=0 \lor indiceDelMaximo(l)=3$
+        \item [III)] $l=\ \langle 0,0,0,0,0,0\rangle\implies$  $indiceDelMaximo(l)=0 \lor\ 1 \lor\ 2\lor\ 3\lor\ 4\lor\ 5$}\\
+    \end{itemize}
+    \item [b) ]
+    \begin{itemize}\Large{
+        \item [I)] $l=\ \langle 1,2,3,4\rangle\implies$  $indiceDelPrimerMaximo(l)= 3$
+        \item [II)] $l=\ \langle 15.5,-18,4.215,15.5,-1\rangle\implies$ $indiceDelPrimerMaximo(l)=0$
+        \item [III)] $l=\ \langle 0,0,0,0,0,0\rangle\implies$  $indiceDelPrimerMaximo(l)=0$}\\
+    \end{itemize}
+    \item[c) ] \Large{indiceDelMaximo e indiceDelPrimerMaximo tienen necesariamente la misma salida para las listas que tengan un unico maximo, ya que en caso contrario la primer funcion podria tener mas de una respuesta posible}\\
+\end{itemize}
+\LARGE{\textbf{Ejercicio 8}}\\
+\begin{itemize} \Large{
+    \item [a) ] La especificacion no es correcta ya que es contradictorio que la portcondicion sea correcta cuando $a<0$ y cuando $a\geq0$
+    \item [b) ] Correcta
+    \item [c) ] La especificacion no es correcta ya que por tabla de verdad de la implicacion, podria darse que el antecedente es falso y el consecuente correcto. Esto daria lugar a absurdos tales como que si parto de a=1 ($a\geq0$), b=2 entonces serian validos $f(a,b)=1$ y $f(a,b)=4$ al mismo tiempo, cosa que es absurda.
+    \item [d) ] Correcta}\\
+\end{itemize}
+\LARGE{\textbf{Ejercicio 9}}\\
+\begin{itemize}\Large{
+    \item [a) ] unoMasGrande(3)=9 $\therefore$ se cumple la postcondicion
+    \item [b) ] unoMasGrande(0.5)=0.25 pero $0.25\ngtr0.5$ \\
+    unoMasGrande(1)=1 pero $1\ngtr1$\\
+    unoMasGrande(-0.2)=0.4 y $0.4>-0.2$\\
+    unoMasGrande(-7)=49 y $49>-7$\\
+    \item[c) ]  requiere \{$x<0\ \lor x>1$\}}\\
+\end{itemize}
+\noindent\huge{\textbf{2.3. Relacion de fuerza}}\\\\
+\LARGE{\textbf{Ejercicio 10}}\\
+\begin{itemize}
+    \item [a) ] \Large{$P1:\{x\leq0\}$ $P2:\{x\leq10\}$ $P3:\{x\leq-10\}$\\\\
+    $P1\to P2$ \textbf{True} $\forall x$ por lo tanto $P1>P2$\\
+    $P2\to P1$ \textbf{False} por ejemplo con x=2 se cumple P2 pero no P1 por lo tanto $P2\ngtr P1$\\
+    $P1\to P3$ \textbf{False} por ejemplo con x=-2 se cumple P1 pero no P3 por lo tanto $P1\ngtr P3$\\
+    $P3\to P1$ \textbf{True} $\forall x$ por lo tanto $P3>P1$\\
+    $P3\to P2$ \textbf{True} $\forall x$ por lo tanto $P3>P2$\\
+    $P2\to P3$ \textbf{False} por ejemplo con x=-2 se cumple P2 pero no P3 por lo tanto $P1\ngtr P3$\\
+    \item [b) ] \Large{$Q1:\{r\geq x^2\}$ $Q2:\{r\geq0\}$ $Q3:\{r=x^2\}$\\\\
+    $Q1\to Q2$ \textbf{True} ya que $x^2\geq0\ \forall x$ por lo tanto $Q1>Q2$\\
+    $Q2\to Q1$ \textbf{False} depende del valor de $x^2$, por lo tanto no vale siempre la implicacion
+    $Q1\to Q3$ \textbf{False} la primer condicion permite que $r>x^2$ lo cual implicaria $r\neq x^2$ y $True\to False=False$ ; por lo tanto $P1\ngtr P3$\\
+    $Q3\to Q1$ \textbf{True} $\forall r,x$ por lo tanto $P3>P1$\\
+    $Q3\to Q2$ \textbf{True} $\forall r,x$ por lo tanto $P3>P2$\\
+    $Q2\to Q3$ \textbf{False} depende del valor de $x^2$, por lo tanto no vale siempre la implicacion\\}
+    \item [d) ]
+    \begin{itemize}
+        \item [i) ] Cumple ambas condiciones
+        \item[ii) ] No cumple la \textbf{precondicion}
+        \item[iii) ] Cumple ambas condiciones
+        \item[iv) ] No cumple la \textbf{postcondicion}
+        \item[v) ] Cumple ambas condiciones
+        \item[vi) ] No asegura la \textbf{ninguna}
+    \end{itemize}
+    \item [e) ] Las precondiciones y postcondiciones deben ser \textbf{mas fuertes} que las anteriores para poder reemplazar una especificacion de manera segura}
+    \large\textit{{Esta mal el e), la postcondicion debe ser mas debil}}\\
+\end{itemize}
+\LARGE{\textbf{Ejercicio 11}}\\
+\begin{itemize}\Large{
+    \item [a) ] Como el requiere de p1 se cumple entonces vale que $x\neq0$. Luego si $n\leq0$ entonces $(n\leq0\ \to x\neq0)$=True pues $True\to True=True$. En cambio si $n>0$ entonces tambien $(n\leq0\ \to x\neq0)$=True pues $False\to True=True$
+    \item[b) ] $\lfloor x^n\rfloor$ implica que siendo a y b los enteros mas cercanos $x^n$ entonces $\lfloor x^n\rfloor=\ a$, es decir el 'piso', por lo tanto sera como mucho 0.999... menor a $x^n$. Esto implica que $x^n-1<\lfloor x^n\rfloor<x^n$ y por lo tanto el resultado cumple tanto p1 como p2.
+    \item [c) ] \textit{a} no satisface p1 dado que por ejemplo podria satisfacer la precondicion de p2 con un $n>0$ y un $x=0$ ya que $False\to False\ =\ True$ pero no la de p1. Sin embargo como se vio en b) si satisface la postcondicion}\\
+\end{itemize}
+\noindent\huge{\textbf{2.4. Especificacion de problemas}}\\\\
+\LARGE{\textbf{Ejercicio 12}}\\
+\begin{itemize}\Large{
+    \item [a) ] \textit{proc} esPar $(in\ x:\mathbb{Z}):Bool\{\\
+    requiere\{True\}\\
+    asegura\{res=True \leftrightarrow (x \mod 2) =0\}$\\
+    \item[b) ] \textit{proc} esMult $(in\ n,m:\mathbb{Z}):Bool\{\\
+    requiere\{True\}\\
+    asegura\{res=True \leftrightarrow (\exists k:\mathbb{Z})(n*k=m)\}$\\
+    \item[c) ] \textit{proc} listDiv $(n:\mathbb{Z}):seq\langle\mathbb{Z}\rangle\{\\
+    requiere\{True\}\\
+    asegura\{(\forall i:\mathbb{Z})(0\leq i<|res|\to_L ((n \mod res[i]=0)\land res[i]>0))\}$
+    \item [d) ] \textit{proc} descomPrimos $(in\ x:\mathbb{Z}):seq\langle(\mathbb{Z},\mathbb{Z})\rangle\{\\
+    requiere\{x>0\}\\
+    asegura\{(p,e) \in res \to_L (x \mod p\ =0) \land_L esPrimo(p) \land_L p*e=x\}\\
+    asegura\{(\forall i,p:\mathbb{Z})(0\leq i,p<|s| \land i\neq p \to_L res[i]\neq res[p])\}\\
+    asegura\{(\forall i,p:\mathbb{Z})(0\leq i<p<|s| \to_L res[i][0]<res[p][0])\}$}\\
+\end{itemize}
+\LARGE{\textbf{Ejercicio 13}}\\
+\begin{itemize}\large{
+    \item [a) ] \textit{proc} contenidoEn $(s,t:seq\langle\mathbb{Z}\rangle):Bool\{\\
+    requiere\{True\}\\
+    asegura\{(\forall i:\mathbb{Z})(0\leq i<|s| \to_L (\exists j:\mathbb{Z})(0\leq j<|t| \land_L s[i]=t[j]))\}\\
+    \}$
+    
+    \item[b) ] \textit{proc} interseccion $(s,t:seq\langle\mathbb{Z}\rangle):seq\langle\mathbb{Z}\rangle\{\\
+    requiere\{True\}\\
+    asegura\{(\forall e:\mathbb{Z})((e\in s \land e \in t) \to_L \\\#apariciones(e,res)=min(\#apariciones(e,s),\#apariciones(e,t)))\}\\
+    \}$\\
+    \textit{aux} \#apariciones $(e:\mathbb{Z},s:seq\langle \mathbb{Z} \rangle)$ = $\displaystyle\sum_{i=0}^{|s|-1}IfThenElseFi(s[i]=e,1,0)$\\
+    
+    \item[c) ] \textit{aux} divideNElementos $(s:seq\langle\mathbb{Z}\rangle,n:\mathbb{Z}) = \displaystyle\sum_{i=0}^{|s|-1} IfThenElse(s[i] \mod n =\ 0,1,0)$\\\\
+    \textit{proc} divideMasElementos $(s:seq\langle\mathbb{Z}\rangle):\mathbb{Z}\{\\
+    requiere\{True\}\\
+    asegura\{res \in s\ \land\ (\forall i:\mathbb{Z})(0\leq i <|s| \to_L divideNElementos(s,res)\geq divideNElementos(s,s[i])\}$\\
+    
+    
+    \item[d) ] \textit{aux} maxValor $(s:seq\langle\mathbb{Z}\rangle):\mathbb{Z}= res \in s \land (\forall i:\mathbb{Z})(0\leq i <|s| \to_L (res\geq s[i]))$
+    
+    \textit{proc} seqMaxValor $(l:seq\langle seq\langle\mathbb{Z}\rangle\rangle):seq\langle\mathbb{Z}\rangle\{\\
+    requiere\{True\}\\
+    asegura\{res \in l \land (\forall i:\mathbb{Z})(0\leq i<|s| \to_L maxValor(res)\geq maxValor(l[i]))\}$\\
+    
+    \item[e) ] 
+    \textit{pred} noHayRepes $(s:seq\langle Z \rangle)\{$\\
+    $(\forall i:\mathbb{Z})((0\leq i < |s|)\to_L (\forall j:\mathbb{Z})((0\leq j < |s| \land i\neq j)\to_L(s[i]\neq s[j])))$\\$\}$\\
+    \textit{aux} cantSeqNelem $(t:seq\langle seq\langle\mathbb{Z}\rangle\rangle,n:\mathbb{Z}):\mathbb{Z}=\displaystyle\sum_{i=0}^{|s|-1}IfThenElse(|s[i]|=n,1,0)$\\\\
+    \textit{pred} respetaOrden $(s,t:seq\langle Z \rangle)\{(\forall i,j:\mathbb{Z})(0\leq i<j<|t| \to_L ((t[i] \in s \land_L t[j]\in s) \to_L \neg(\exists n,m:\mathbb{Z})(0\leq n<m<|s| \to_L s[n]=s[i] \land_L s[m]=t[i]))\}$
+    
+    \textit{proc} partes $(s:seq\langle\mathbb{Z}\rangle):seq\langle seq\langle\mathbb{Z}\rangle\rangle\{\\
+    requiere\{True\}\\
+    asegura\{|res|=2^{|s|}\ \land_L\ nohayRepes(res)\ \land_L\ (\forall i:\mathbb{Z})(0\leq i\leq|s| \to_L cantSeqNelem(res,i)={|s| \choose i}\ \land_L\ (\forall j:\mathbb{Z})(0\leq j <|res| \to_L respetaOrden(res[i],s))\}$\\\\
+    \textbf{Nota}: luego de ver rtas agregue la cond. respeta orden}\\
+\end{itemize}
+\noindent\huge{\textbf{2.5. Especificacion de problemas \\usando \textit{inout}}\\\\
+\LARGE{\textbf{Ejercicio 14}}\\
+\begin{itemize}\Large{
+    \item [a) ] La especificacion esta mal dado que las variables \textit{a} y \textit{b} deben ser de tipo in, ya que no es necesario que se modifiquen para calcular su suma, solo se accede a su valor.\\
+    \textbf{Nota}: Falto mencionar estados previos, etc.\\
+    \item[b) ]  Correcta\\
+    \item [c) ] Correcta. Cabe aclarar que no es necesario que \textit{a} y \textit{b} sean de tipo \textit{inout}. Sin embargo al asegurar que no se modifica su valor gracias a la pre y postcondicion, no genera problemas}\\
+\end{itemize}
+\LARGE{\textbf{Ejercicio 15}}\\
+\begin{itemize}\Large{
+    \item [a) ] \textit{Incorrecta}. No menciona los cambios de estado ni tampoco saca el primer elemento de l por lo tanto no cumple lo pedido.
+    \item[b) ]  \textit{Incorrecta}. Habla de cambios de estado pero no saca el primer elemento de l, solo lo devuelve, por lo tanto no cumple lo pedido.
+    \item[c) ] \textit{Incorrecta}. En la precondicion no se menciona el estado de origen de l $(L_0)$ y en la postcondicion no se elimina al primer elemento de l, solo se asegura que su largo es una unidad menor, por lo tanto, no cumple lo pedido.
+    \item [d) ] \textit{Correcta}. Respeta los cambios de estado y devuelve el primer elemento de l y a la lista l sin su cabeza.}\\
+\end{itemize}
+\LARGE{\textbf{Ejercicio 16}}\\
+\begin{itemize}\Large{
+    \item [a) ] La especificacion es incorrecta porque en una implicacion si el antedente es falso y el consecuente es verdadero, el predicado es verdadero. De esta manera si un numero esta en el rango de la secuencia, no es par y se duplica el valor de esa posicion en la lista, tendriamos un antecedente falso y un consecuente verdadero, por lo tanto la afirmacion seria verdadera. Sin embargo estariamos duplicando un elemento en una posicion impar, violando el enunciado.
+    \item[b) ] La especificacion es incorrecta por la misma razon que en el punto a), para ambos disyuntos se puede plantear un contraejemplo que haga correcta la especificacion pero no cumpla la consigna.\\
+    \textbf{Nota}: Falto poner que no se asegura que se mantenga el tamaño de la secuencia
+    \item[c) ] La especificacion no es correcta dado que no considera los cambios de estado de la secuencia.}\\
+    \item Propongo la siguiente especificacion:\\\\
+    \textit{proc} duplicarPares $(inout\ s:seq\langle\mathbb{Z}\rangle):seq\langle\mathbb{Z}\rangle\{\\
+    requiere\{l=L_0\}\\
+    asegura\{|l|=|L_0|\}\\
+    asegura\{(\forall i:\mathbb{Z})((0\leq i<|s| \land i \mod 2\ =0)\to_L l[i]=2*L_0)\}\\
+    asegura\{(\forall i:\mathbb{Z})((0\leq i<|s| \land i \mod 2\ \neq0)\to_L l[i]=L_0)\}$
+\end{itemize}
+\LARGE{\textbf{Ejercicio 17}}\\
+\begin{itemize}\Large{
+    \item [a) ] \textit{proc} primosHermanos $(\textit{inout}\ l:seq\langle\mathbb{Z}\rangle)$
+    \begin{itemize}
+        \item []requiere\{$l=L_0$\}
+        \item []asegura\{$(\forall i:\mathbb{Z})(0\leq i<|L_0| \to_L\\
+        (l[i]=res[i] \land_L esPrimo(res[i]) \land_L \\
+        (\forall j:\mathbb{Z})((esPrimo(j)\land_L j\neq res[i]) \to_L dist(res[i],l[i])\leq dist(j,l[i]) \land_L res[i]<j))$\} 
+    
+    \end{itemize}
+    \textit{aux} dist $(a,b:\mathbb{Z}):\mathbb{Z} = |a-b|\\
+    $
+    \item[b) ] \textit{proc} reemplazar $(\textit{inout}\ l:seq\langle Char\rangle,\textit{in}\ a,b: Char):seq\langle Char\rangle\{$
+    \begin{itemize}
+        \item []requiere \{$l=L_0$\}
+        \item []asegura \{$(\forall i:\mathbb{Z})(0\leq i<|L_0| \to_L (L_0[i]='a' \land l[i]='b'))$\}
+        \item []asegura \{$(\forall i:\mathbb{Z})(0\leq i<|L_0| \to_L (L_0[i]\neq'a' \land l[i]=L_0[i]))$\}
+        \item []asegura\{$|L_0|=|l|$\}
+    \end{itemize}
+    \textbf{Nota}: los '$\to_L$' estaban mal y los cambie por los '$\land$'\\
+    
+    \item[c) ] \textit{proc} limpiarDuplicados $(s:seq\langle Char\rangle):seq\langle Char\rangle$
+    \begin{itemize}
+        \item []requiere\{$l=L_0$\}
+        \item []asegura\{$noHayRepes(l) \land\ (|l|\leq |L_0|) \land\ (|l|+|res|=|L_0|) \land\ (\forall i:\mathbb{Z})(0\leq i<|l| \to_L  \#apariciones(l[i],res)=\#apariciones(l[i],L_0)-1\}$
+    \end{itemize}
+    \textbf{Nota}:Falto asegurar que contengan los mismos elementos (sin contar repes)
+    }\\
+\end{itemize}
+\noindent\huge{\textbf{2.6. Ejercicios de parcial}}\\\\
+\LARGE{\textbf{Ejercicio 18}}\\
+\begin{itemize}\large{
+    \item [a) ] \textit{aux} sumaDivisores $(n:\mathbb{Z}):\mathbb{Z}=\displaystyle\sum_{i=1}^{n-1}ifThenElse((n \mod i) = 0, i,0)$\\\\
+    \textit{proc} reemplazarNumerosPerfectos $(\textit{inout}\ s:seq\langle\mathbb{Z}\rangle)$
+    \begin{itemize}
+        \item []requiere\{$s=S_0$\}
+        \item []asegura\{$(\forall i:\mathbb{Z})((0\leq i<|S_0| \land_L sumaDivisores(S_0[i])=S_0[i]\ \land s\neq 0)\to_L s[i]=i)$\}
+        \item []asegura\{$(\forall i:\mathbb{Z})((0\leq i<|S_0| \land_L sumaDivisores(S_0[i])\neq S_0[i])\to_L s[i]=S_0[i])$\}
+        \item []asegura\{$|s|=|S_0|$\} 
+    \end{itemize}
+    
+    \item [b) ] \textit{pred} esMayorATodos $(\textit{in}\ s:seq\langle\mathbb{Z}\rangle,n:\mathbb{Z})\{(\forall i:\mathbb{Z})(0\leq i<|s| \to_L s[i]\leq n)\}$\\\\
+    \textit{pred} estaOrdenada $(\textit{in}\ s:seq\langle\mathbb{Z}\rangle)\{(\forall i:\mathbb{Z})(0<i<|s| \to_L |s[i-1]|\leq |s[i]|)\}$\\\\
+    \textit{proc} ordenarYBuscarMayor $(\textit{inout}\ s:seq\langle\mathbb{Z}\rangle):\mathbb{Z}$
+    \begin{itemize}
+        \item []requiere\{$s=S_0$\}
+        \item []asegura\{$estaOrdenada(s)$\}
+        \item []asegura\{$res \in S_0 \land esMayorATodos(S_0,res)$\}
+        \item []asegura\{$|s|=|S_0|$\}
+    \end{itemize}
+    \textbf{Nota}: Falto asegurar que los elementos de s y $S_0$ sean los mismos
+    \item [c) ]\textit{pred} esPrimo $(n:\mathbb{Z})\{2=\displaystyle\sum_{i=1}^{n}ifThenElse(n \mod i=0,1,0)\}$\\\\
+    \textit{proc} primosEnCero $(\textit{inout}\ s:seq\langle\mathbb{Z}\rangle)$
+    \begin{itemize}
+        \item []requiere\{$s=S_0$\}
+        \item []asegura\{$|s|=|S_0|$\}
+        \item []asegura\{$(\forall i:\mathbb{Z})((0\leq i<|s| \land_L esPrimo(i) \to_L s[i]=0)$\}
+        \item []asegura\{$(\forall i:\mathbb{Z})((0\leq i<|s| \land_L \neg esPrimo(i) \to_L s[i]=S_0[i])$\}
+        
+    \end{itemize}
+    \item [d) ] \textit{proc} positivosAumentados $(\textit{inout}\ s:seq\langle\mathbb{Z}\rangle)$
+    \begin{itemize}
+        \item []requiere\{$s=S_0$\}
+        \item []asegura\{$(\forall i:\mathbb{Z})((0\leq i<|s| \land_L S_0[i]\geq0)\to_L s[i]=S_0[i]*i)$\}
+        \item []asegura\{$(\forall i:\mathbb{Z})((0\leq i<|s| \land_L S_0[i]<0)\to_L s[i]=S_0[i])$\}
+        \item []asegura\{$|s|=|S_0|$\}
+    \end{itemize}
+    \item [e) ] \textit{pred} palabraMasLarga $(s:seq\langle string\rangle, pal:string)$\{$(\forall i:\mathbb{Z})((0\leq i<|s| \land_L pal \in s)\to_L |pal|\geq|s[i]|)$\}\\\\
+    \textit{pred} esPrefijo $(pal,pre:string)\{(\forall i:\mathbb{Z})(0\leq i<|pre| \to_L pre[i]=pal[i])\}$\\\\
+    \textit{proc} procesarPrefijos $(\textit{inout}\ s:seq\langle string\rangle, \textit{in}\ p:string):\mathbb{Z}$
+    \begin{itemize}
+        \item []requiere\{$s=S_0$\}
+        \item []asegura\{$(\forall i:\mathbb{Z})(0\leq i<|s| \to_L (s[i] \in S_0 \land esPrefijo(s[i],p)))$\}
+        \item []asegura\{$(\exists j:\mathbb{Z})(0\leq j <|s| \land_L res=|s[j]| \land_L palabraMasLarga(s,s[j]))$\}
+    \end{itemize}
+}
+\end{itemize}
+\end{document}
