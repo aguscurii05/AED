@@ -1,0 +1,385 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, margin={.9in}]{geometry}
+\usepackage{amssymb, amsmath}
+\usepackage{setspace}
+\spacing{1.8}
+
+\title{AED - Practica 3}
+\author{Agustin Stescovich Curi}
+\date{September 2024}
+
+\begin{document}
+\renewcommand{\labelenumi}{\alpha}
+\newcommand{\IfElse}[3]{\textbf{if }(#1)\textbf{ then } \\#2\\ \textbf{else }\\#3\\ \textbf{ endif}}
+\newcommand{\In}{\textit{in}}
+\newcommand{\Inout}{\textit{inout}}
+\newcommand{\Out}{\textit{out}}
+\newcommand{\ent}{\mathbb{Z}}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\requiere}[1]{
+    \texttt{\hspace{1cm}requiere}:\{#1\}\\
+}
+\newcommand{\asegura}[1]{
+    \texttt{\hspace{1cm}asegura}:\{#1\}\\
+}
+
+
+\begin{center}
+    \Huge{\textbf{Algoritmos y Estructuras de Datos Practica 3}}\\
+\end{center}
+\ \\
+\huge{\textbf{3.1. Precondicion mas debil en SmallLang}}
+\section*{Ejercicio 1}
+\large{
+\begin{itemize}
+    \item [a) ] $def(a+1)\equiv def(a)+def(1)\equiv True$
+    \item [b) ] $def(a/b)\equiv def(a) \land (def(b) \land b\neq0) \equiv b\neq0$
+    \item [c) ] $def(\sqrt{a/b})\equiv def(a)\land (def(b) \land b\neq0)\ \land \dfrac{a}{b}\geq0\equiv b\neq0 \land \dfrac{a}{b}\geq0 $
+    \item [d) ] $def(A[i]+1)\equiv def[A] \land def(i) \land 0\leq i<|A| \equiv 0\leq i<|A|$
+    \item [e) ] $def(A[i+2]\equiv (def(A) \land def(i))\land -2\leq i<|A|-2 \equiv -2\leq i<|A|$
+    \item [f) ] $def(0\leq i\leq|A| \land_L A[i]\geq0)\equiv (def(A)\land def(i)) \land i\neq|A|\equiv i\neq|A|$\\
+    \textbf{nota}: en f) hay que poner el rango, no el $\neq$
+\end{itemize}}
+\section*{Ejercicio 2}
+\large{\begin{itemize}
+    \item [a) ] 
+    \begin{align}
+    wp(\textbf{a:=a+1},\textbf{b:=a/2},b\geq0)&\equiv wp(\textbf{a:=a+1},wp(\textbf{b:=a/2},b\geq0))\\
+    &\equiv wp(\textbf{a:=a+1},def(a/2)\land Q^{b}_{a/2})\\
+    &\equiv wp(\textbf{a:=a+1},a/2\geq0)\\
+    &\equiv (def(a) \land (a+1)/2\geq0\\
+    &\equiv (a+1)/2\geq0\equiv a+1\geq0\equiv a\geq-1
+    \end{align}
+    \item [b) ] 
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{a:=A[i]+1}\ ,\textbf{b:=a*a}\ ,b\neq2)&\equiv wp(\textbf{a:=A[i]+1}\ ,wp(\textbf{b:=a*a}\ ,b\neq2))\\
+        &\equiv wp(\textbf{a:=A[i]+1}\ ,def(a) \land Q^b_{a*a}))\\
+        &\equiv wp(\textbf{a:=A[i]+1}\ ,def(a) \land a*a\neq2))\\
+        &\equiv (def(a) \land 0\leq i<|A|) \land_L Q^a_{A[i]+1}\\
+        &\equiv (0\leq i<|A| \land_L (A[i]+1)*(A[i]+1)\neq2)\\
+        &\equiv (0\leq i<|A| \land_L A[i]^2+2*A[i]+1\neq2)
+    \end{align}
+    \item [c) ] 
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{a:=A[i]+1}\ ,\textbf{a:=b*b}\ ,a\geq0)&\equiv wp(\textbf{a:=A[i]+1}\ ,wp(\textbf{a:=b*b}\ ,a\geq0))\\
+        &\equiv wp(\textbf{a:=A[i]+1}\ ,def(b) \land b*b\geq0))\\
+        &\equiv wp(\textbf{a:=A[i]+1}\ ,b*b\geq0))\\
+        &\equiv (def(A) \land def(i) \land 0\leq i<|A| \land b*b\geq0)\\
+        &\equiv (0\leq i<|A| \land b*b\geq0)
+    \end{align}
+    \item [d) ]
+    \setcounter{equation}{0}\normalsize{
+    \begin{align}
+        wp(\textbf{a:=a-b};\textbf{b:=b+a},a\geq0 \land b\geq0)&\equiv wp(\textbf{a:=a-b}, wp(\textbf{b:=b+a},a\geq0 \land b\geq0))\\
+        &\equiv wp(\textbf{a:=a-b}, def(b) \land def(a) \land (a\geq0 \land b+a\geq0)))\\
+        &\equiv wp(\textbf{a:=a-b}, (a\geq0 \land (b+a)\geq0)))\\
+        &\equiv (def(a) \land def(b) \land (a-b)\geq0 \land (b+(a-b))\geq0)\\
+        &\equiv ((a-b)\geq0 \land a\geq0)\\
+        &\equiv (a\geq b \land a\geq0)
+    \end{align}}
+\end{itemize}}
+\section*{Ejercicio 3}
+$Q \equiv (\forall j :Z)(0 \leq j < |A| \to_L A[j] \geq 0)$
+\normalsize{{\begin{itemize}
+    \item [a) ]
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{A[i]:=0},Q)&\equiv wp(setAt(A,i,0)[j],Q)\\
+        &\equiv (def(A) \land def(i) \land_L 0\leq i <|A| \land_L Q^A_{setAt(A,i,0)})\\
+        &\equiv (0\leq i <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L setAt(A,i,0)[j] \geq 0) )\\
+        &\equiv (0\leq i <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L (j=i \land A[i]\geq0) \land (j\neq i \land A[j]\geq0) ))\\
+        &\equiv (0\leq i <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L (j=i \land 0\geq0) \land (j\neq i \land A[j]\geq0) ))\\
+        &\equiv (0\leq i <|A| \land_L (\forall j :Z)((0 \leq j < |A| \land_L j\neq i) \to_L A[j]\geq0) ))\\
+    \end{align}
+    \item [b) ]
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{A[i+2]:=0},Q)&\equiv wp(setAt(A,i+2,0)[j],Q)\\
+        &\equiv (def(A) \land def(i+2) \land_L 0\leq i+2 <|A| \land_L Q^A_{setAt(A,i+2,0)})\\
+        &\equiv (0\leq i+2 <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L setAt(A,i+2,0)[j] \geq 0) )\\
+        &\equiv (0\leq i+2 <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L (j=i+2 \land 0\geq0) \land (j\neq i \land A[j]\geq0) ))\\
+        &\equiv (0\leq i+2 <|A| \land_L (\forall j :Z)((0 \leq j < |A| \land_L j\neq i+2) \to_L A[j]\geq0) ))
+    \end{align}
+    \item [c) ]
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{A[i+2]:=-1},Q)&\equiv wp(setAt(A,i+2,-1)[j],Q)\\
+        &\equiv (def(A) \land def(i+2) \land_L 0\leq i+2 <|A| \land_L Q^A_{setAt(A,i+2,-1)})\\
+        &\equiv (0\leq i+2 <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L setAt(A,i+2,-1)[j] \geq 0) )\\
+        &\equiv (0\leq i+2 <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L (j=i+2 \land -1\geq0) \land (j\neq i \land A[j]\geq0) ))\\
+        &\equiv (0\leq i+2 <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L \textit{False}\land (j\neq i \land A[j]\geq0) ))\\
+        &\equiv (0\leq i+2 <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L \textit{False}))\\
+        &\equiv (0\leq i+2 <|A| \land_L \textit{False})\\
+        &\equiv \textit{False}
+    \end{align}
+    \textbf{Nota}: deberia haber considerado la lista vacia de manera que si se cumpla el segundo disyunto a partir de (5)
+    \item [d) ]
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{A[i]:=2*A[i]},Q)&\equiv wp(setAt(A,i,2*A[i])[j],Q)\\
+        &\equiv (def(A) \land def(i) \land_L 0\leq i <|A| \land_L Q^A_{setAt(A,i,2*A[i])})\\
+        &\equiv (0\leq i <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L setAt(A,i,2*A[i])[j] \geq 0) )\\
+        &\equiv (0\leq i <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L (j=i \land 2*A[i]\geq0) \land (j\neq i \land A[j]\geq0) ))\\
+        &\equiv (0\leq i <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L (j=i \land A[i]\geq0) \land (j\neq i \land A[j]\geq0) ))\\
+        &\equiv (0\leq i <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L A[j]\geq0 ))
+    \end{align}
+    \item [e) ]
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{A[i]:=A[i-1]},Q)&\equiv wp(setAt(A,i,A[i-1])[j],Q)\\
+        &\equiv (def(A) \land def(i) \land def(A[i-1] \land_L 0\leq i-1 <|A| \land_L Q^A_{setAt(A,i,A[i-1])})\\
+        &\equiv (def(A) \land def(i) \land 0\leq i-1<|A| \land_L 0\leq i-1 <|A| \land_L Q^A_{setAt(A,i,A[i-1])})\\
+        &\equiv (1\leq i <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L setAt(A,i,A[i-1])[j] \geq 0) )\\
+        &\equiv (1\leq i <|A| \land_L (\forall j :Z)(0 \leq j < |A| \to_L (j=i \land A[i-1]\geq0) \land (j\neq i \land A[j]\geq0) ))\\
+        &\equiv (1\leq i <|A| \land_L (\forall j :Z)(0 \leq j < |A| \land j\neq i \to_L A[j]\geq0 ))
+    \end{align}
+\end{itemize}}
+\section*{Ejercicio 4}
+\normalsize{\begin{itemize}
+    \item [a) ]
+    $S\equiv \textbf{if} (a<0)\ b:=a\ \textbf{else}\ b:=-a\ \textbf{endif}\\
+    Q\equiv (b=-|a|)$
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{S},Q) &\equiv (def(B) \land_L (B \land wp(S1,Q))\lor (\neg B \land wp(S2,Q)\\
+        &\equiv def(a)\land_L(a<0 \land (def(a)\land Q^b_a)\lor(a\geq0 \land (def(a)\land Q^b_-a)\\
+        &\equiv (a<0 \land a=-|a|)\lor(a\geq0 \land -a=-|a|)\\
+        &\equiv (a<0 \land \textit{True})\lor(a\geq0 \land \textit{True})\\
+        &\equiv (a<0)\lor(a\geq0)\\
+        &\equiv \textit{True}
+    \end{align}
+    \item [b) ]
+    $S\equiv \textbf{if} (a<0)\ b:=a\ \textbf{else}\ b:=-a\ \textbf{endif}\\
+    Q\equiv (b=|a|)$
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{S},Q) &\equiv (def(B) \land_L (B \land wp(S1,Q))\lor (\neg B \land wp(S2,Q)\\
+        &\equiv def(a) \land_L(a<0 \land (def(a)\land Q^b_a)\lor(a\geq0 \land (def(a)\land Q^b_-a)\\
+        &\equiv (a<0 \land a=|a|)\lor(a\geq0 \land -a=|a|)\\
+        &\equiv (a<0 \land \textit{False})\lor(a\geq0 \land \textit{False})\\
+        &\equiv \textit{False}\lor \textit{False}\\
+        &\equiv \textit{False}
+    \end{align}
+    \item [c) ] 
+    $S\equiv \textbf{if}\ (i>0)\ s[i]:=0\ \textbf{else}\ s[0]:=0\ \textbf{endif}\\
+    Q \equiv (\forall j :Z)(0 \leq j < |s| \to_L s[j] \geq 0)$
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{S},Q)&\equiv (def(i)\land_L(i>0 \land wp(S1,Q))\lor (i\geq0 \land wp(S2,Q))\\
+        &\equiv (i>0 \land def(S) \land def(i) \land 0\leq i<|s| \land Q^{s[i]}_{setAt(S,i,0)} )\lor\\
+        &(i\leq0 \land def(S)\land Q^{s[i]}_{s[0]} )\\
+        &\equiv (0< i<|s| \land (\forall j :Z)(0 \leq j < |s| \to_L setAt(s,i,0) \geq 0) )\lor\\
+        &(i\leq0 \land (\forall j :Z)(0 \leq j < |s| \to_L s[0] \geq 0) )\\
+        &\equiv (0< i<|s| \land (\forall j :Z)(0 \leq j < |s| \to_L (i=j \land s[i]\geq0)\land(i\neq j \land s[j]\geq0) )\lor\\
+        &(i\leq0 \land (\forall j :Z)(0 \leq j < |s| \to_L 0 \geq 0) )\\
+        &\equiv (0< i<|s| \land (\forall j :Z)(0 \leq j < |s| \to_L (i=j \land \textit{True})\land(i\neq j \land s[j]\geq0) )\lor\\
+        &(i\leq0 \land \textit{True} )\\
+        &\equiv (0< i<|s| \land (\forall j :Z)((0 \leq j < |s| \land i\neq j)\to_L s[j]\geq0) )
+    \end{align}
+    \item [d) ] $S\equiv \textbf{if}\ (i>1)\ s[i]:=s[i-1]\ \textbf{else}\ s[i]:=0\ \textbf{endif}\\
+    Q \equiv (\forall j :Z)(1 \leq j < |s| \to_L s[j]=s[j-1])$\\\\
+    \textbf{Primero hago la wp entre S1 y Q}\\
+    \setcounter{equation}{0}
+    \small{\begin{align}
+        wp(S1,Q)&\equiv((def(S) \land def(i)\land def(S[i-1])) \land_L 0\leq i<|s|) \land_L Q^{s[i]}_{setAt(s,i,s[i-1])})\\
+        &\equiv(def(S)\land 0\leq i-1<|s|) \land_L 0\leq i<|s|) \land_L Q^{s[i]}_{setAt(s,i,s[i-1])})\\
+        &\equiv((1\leq i<|s|) \land_L (\forall j :Z)(1 \leq j < |s| \to_L\\\nonumber& setAt(s,i,s[i-1])[j]=setAt(s,i,s[i-1])[j-1]))\\
+        &\equiv((1\leq i<|s|) \land_L (\forall j :Z)(1 \leq j < |s| \to_L\\\nonumber& (i=j \land s[i-1]=setAt(s,i,s[i-1])[j-1])\land(i\neq j \land s[j]=setAt(s,i,s[i-1])[j-1]))\\
+        &\equiv((1\leq i<|s|) \land_L (\forall j :Z)(1 \leq j < |s| \to_L (i=j \land s[i-1]=s[i-1])\land(i\neq j \land s[j]=s[j-1])\\
+        &\equiv ((1\leq i<|s|) \land_L (\forall j :Z)((1 \leq j < |s| \land i\neq j)\to_L s[j]=s[j-1])\\
+    \end{align}}
+    
+    \textbf{Luego veo la wp de la consigna}
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{S},Q)&\equiv (def(i)\land_L(i>1 \land wp(S1,Q))\lor(i\leq 1 \land wp(S2,Q)))\\
+        &\equiv ((i>1 \land ((1\leq i<|s|) \land_L (\forall j :Z)((1 \leq j < |s| \land i\neq j)\to_L s[j]=s[j-1]))\lor\\\nonumber &(i\leq 1 \land (def(S)\land def(i) \land 0\leq i<|s| \land Q^{s[i]}_{setAt(s,i,0)}))))\\
+        &\equiv ((1<i<|s|) \land_L (\forall j :Z)((1 \leq j < |s| \land i\neq j)\to_L s[j]=s[j-1]))\lor\\\nonumber &(i =0 \land Q^{s[i]}_{setAt(s,i,0)})\land (i =1 \land Q^{s[i]}_{setAt(s,i,0)}))\\
+        &\equiv ((1<i<|s|) \land_L (\forall j :Z)((1 \leq j < |s| \land i\neq j)\to_L s[j]=s[j-1]))\lor\\\nonumber 
+        &(i =0 \land (\forall j :Z)(1 \leq j < |s| \to_L setAt(s,i,0)[j]=setAt(s,i,0)[j-1]))\land\\\nonumber 
+        & (i =1 \land (\forall j :Z)(1 \leq j < |s| \to_L setAt(s,i,0)[j]=setAt(s,i,0)[j-1]))\\
+        &\equiv ((1<i<|s|) \land_L (\forall j :Z)((1 \leq j < |s| \land i\neq j)\to_L s[j]=s[j-1]))\lor\\\nonumber 
+        &(i =0 \land (\forall j :Z)(1 \leq j < |s| \to_L(s[j]=s[j-1]))\land\\\nonumber 
+        & (i =1 \land (\forall j :Z)(1 \leq j < |s| \land i\neq j \to_L s[j]=s[j-1]))
+    \end{align}
+    \item [e) ]$S\equiv \textbf{if}\ (s[i]<0)\ s[i]:=-s[i]\ \textbf{else}\ skip\ \textbf{endif}\\
+    Q \equiv 0\leq i<|s| \land_L s[i]\geq0$\\\\
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{S},Q)&\equiv (def(s)\land def(i)\land 0\leq i<|s|)\land_L ((s[i]<0 
+        \land wp(S1,Q)\lor(s[i]\geq0 \land wp(S2,Q))\\
+        &\equiv (0\leq i<|s|)\land_L (s[i]<0 \land (setAt(s,i,-s[i])\land Q^{s[i]}_{-s[i]})\lor(s[i]\geq0 \land 0\leq i<|s| \land_L s[i]\geq0)\\
+        &\equiv (0\leq i<|s|)\land_L (s[i]<0 \land (def(s)\land def(i)\land 0\leq i<|s|\land_L (0\leq i<|s| \land_L setAt(s,i,-s[i])[i]\geq0))\\
+        &\equiv (0\leq i<|s|)\land_L (s[i]<0 \land (0\leq i<|s| \land_L setAt(s,i,-s[i])[i]\geq0))\\
+        &\equiv (0\leq i<|s|)\land_L (s[i]<0 \land (0\leq i<|s| \land_L -s[i]\geq0))\\
+        &\equiv (0\leq i<|s|)\land_L (s[i]<0 \land (0\leq i<|s| \land_L s[i]\leq0))\\
+        &\equiv (0\leq i<|s|)\\
+    \end{align}
+    \item [f) ]$S\equiv \textbf{if}\ (s[i]>0)\ s[i]:=-s[i]\ \textbf{else}\ skip\ \textbf{endif}\\
+    Q \equiv (\forall j:\mathbb{Z})(0\leq j<|s| \to_L s[j]\geq0)$\\\\
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{S},Q)&\equiv (def(s)\land def(i)\land 0\leq i<|s|)\land_L ((s[i]>0 
+        \land wp(S1,Q)\lor(s[i]\leq0 \land wp(S2,Q))\\
+        &\equiv (0\leq i<|s|)\land_L (s[i]>0 \land (setAt(s,i,-s[i])\land Q^{s[i]}_{-s[i]})\lor(s[i]\leq0 \land (0\leq j<|s| \land_L s[j]\geq0))\\
+        &\equiv (0\leq i<|s|)\land_L (s[i]>0 \land (\forall j:\mathbb{Z})(0\leq j<|s| \to_L setAt(s,i,-s[i])[j]\geq0)\lor\\\nonumber
+        &((i=j \land s[j]=0)\land (i\neq j \land (s[j]\geq0))\\
+        &\equiv (0\leq i<|s|)\land_L (s[i]>0 \land (\forall j:\mathbb{Z})(0\leq j<|s| \to_L (i=j \land -s[j]\geq0)\land(i\neq j \land ))\lor\\\nonumber
+        &((i=j \land s[j]=0)\land (i\neq j \land (s[j]\geq0))\\
+    \end{align}
+    no terminado/  
+\end{itemize}}
+\section*{Ejercicio 5}
+\begin{itemize}
+    \item [a) ] \textbf{Nombre del problema:} sumarIesimoElem\\
+    \textbf{Programa: } $a:=a+s[i]$\\
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(\textbf{a+s[i]},a=\displaystyle\sum_{j=0}^{i}s[j])&\equiv ((def(a)\land def(s)\land def(i)\land 0\leq i<|s|)\land_L Q^a_{s[i]})\\
+        &\equiv ((0\leq i<|s|)\land_L a+s[i]=\displaystyle\sum_{j=0}^{i}s[j])\\
+        &\equiv ((0\leq i<|s|)\land_L a=\displaystyle\sum_{j=0}^{i-1}s[j])
+    \end{align}
+    \item [b) ] \textbf{Nombre del programa:} iesimoElemPositivo\\
+    \textbf{Programa: } $res:=s[i]\geq0$\\
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(res:=s[i]\geq0,res = true \leftrightarrow (\forall j :Z)(0 \leq j \leq i \to_L s[j] \geq 0)&\equiv (0\leq i<|s|\ \land_L\\\nonumber 
+        & s[i]\geq0 = true \leftrightarrow(\forall j :Z)(0 \leq j \leq i \to_L s[j] \geq 0))\\
+        &\equiv (0\leq i<|s|\ \land_L(\forall j :Z)(0 \leq j \leq i \to_L s[j] \geq 0))
+    \end{align}
+    \item [c) ] \textbf{Nombre del programa:} hastaIesimoElemFibonacci\\
+    \textbf{Programa: } $s[i]:=fibonacci(i)$\\
+    \setcounter{equation}{0}
+    \begin{align}
+        wp(s[i]:=fibo(i),(\forall j:\mathbb{Z})(0\leq j\leq i \to_L s[j]=fibo(j)))&\equiv (def(s)\land def(i)\land 0\leq i<|s| \land_L \\\nonumber
+        &(\forall j:\mathbb{Z})(0\leq j\leq i \to_L setAt(s,i,fibo(i))[j]=fibo(j))\\
+        &\equiv (0\leq i<|s| \land_L(\forall j:\mathbb{Z})(0\leq j\leq i \to_L\\\nonumber 
+        &(i=j\land fibo(j)=fibo(j)\land(i\neq j \land s[j]=fibo(j)\\
+        &\equiv (0\leq i<|s| \land_L(\forall j:\mathbb{Z})\\\nonumber
+        &(0\leq j< i \land i\neq j \to_L s[j]=fibo(j)\\
+    \end{align}
+\end{itemize}
+\section*{Ejercicio 6}
+\begin{itemize}
+    \item [a) ]
+    \begin{itemize}
+        \item [I)] Es incorrecta dado que al elemento s[|s|] para el cual el programa se indefine
+        \item [II)] En el caso de que se tome la lista [0,4,2]  y el segundo elemento, es decir, i=1 entonces el programa solo va a entrar a la rama else del if y por lo tanto s[1]=1. Sin embargo 1 esta en el rango de |s| y no cumple que 1 mod 2 = 0.
+        \item [III) ] suponiendo que se ingrese la lista [1,4,3,3] entonces la 4ta posicion (indice 3) entrara por la primer rama del if y entonces s[3]=s[3]+6=9. Sin embargo 9 mod 2 = 0 es falso
+        \item [IV) ] Con [1,2,3,4] entonces i=3 no cumple $0\leq i<2$ por lo tanto hace falsa la precondicion. Sin embargo al ejecutar el programa entra por la rama then y se hace s[3]=4+6=10 y 10 mod 2 = 0 por lo tanto no cumple P pero si Q.
+    \end{itemize}
+    \item [b)] //
+\end{itemize}
+\huge{\textbf{3.1.1 Ejercicios de parcial}}
+\section*{Ejercicio 7}
+\normalsize{\begin{itemize}
+    \item [a) ] "wp"= Todas las posiciones en rango deben tener valores negativos\\
+    \setcounter{equation}{0}
+    $S\equiv\textbf{if}\ (s[i]<0)\ s[i]:=-s[i]\ \textbf{else}\ s[i]:=0\ \textbf{endif}\\
+    Q\equiv (\forall j:\mathbb{Z})(0\leq j<|s| \to_L s[j]>0)$
+    \begin{align}
+        wp(S,Q)&\equiv((def(s)\land(def(i)\land 0\leq i<|s|)\land_L (s[i]<0 \land Q^{s[i]}_{setAt(s,i,-s[i])})\lor(s[i]\geq0 \land Q^{s[i]}_{setAt(s,i,0)})\\
+        &\equiv(0\leq i<|s|)\land_L (s[i]<0 \land (\forall j:\mathbb{Z})(0\leq j<|s| \to_L setAt(s,i,-s[i])[j]>0))\lor\\\nonumber
+        &(s[i]\geq0 \land (\forall j:\mathbb{Z})(0\leq j<|s| \to_L setAt(s,i,0)[j]>0))\\
+        &\equiv(0\leq i<|s|)\land_L\\\nonumber 
+        &(s[i]<0 \land (\forall j:\mathbb{Z})(0\leq j<|s| \to_L (i=j \land -s[i]>0)\land(i\neq j \land s[j]>0)))\lor\\\nonumber
+        &(s[i]\geq0 \land (\forall j:\mathbb{Z})(0\leq j<|s| \to_L (i=j \land 0>0)\land(i\neq j \land s[j]>0))\\
+        &\equiv(0\leq i<|s|)\land_L\\\nonumber 
+        &(s[i]<0 \land (\forall j:\mathbb{Z})(0\leq j<|s| \to_L (i=j \land s[i]<0)\land(i\neq j \land s[j]>0)))\lor\\\nonumber
+        &(s[i]\geq0 \land (\forall j:\mathbb{Z})(0\leq j<|s| \to_L \textit{False}\land(i\neq j \land s[j]>0))\\
+        &\equiv(0\leq i<|s|)\land_L (s[i]<0 \land (\forall j:\mathbb{Z})(0\leq j<|s| \land i\neq j \to_L s[j]>0)))\lor (s[i]\geq0 \land \textit{False})\\
+        &\equiv(0\leq i<|s|)\land_L (s[i]<0 \land (\forall j:\mathbb{Z})(0\leq j<|s| \land i\neq j \to_L s[j]>0)))\lor \textit{False}\\
+        &\equiv(0\leq i<|s|)\land_L (s[i]<0 \land (\forall j:\mathbb{Z})(0\leq j<|s| \land i\neq j \to_L s[j]>0)))
+    \end{align}
+    \item [c) ] $S\equiv \IfElse{s[i]\neq 2^{i}}{s[i]=2*s[i-1]}{s[0]=1}$\\
+    $Q\equiv \{(\forall j:\ent)(0\leq j < |s| \to_L s[j]=2^{j})\}$\\
+    Veo la wp:\\
+    \setcounter{equation}{0}\begin{align}
+        wp(S,Q)&\equiv def(B) \land (B\land_L wp(S1,Q))\lor(\neg B \land_L wp(S2,Q))\\
+        &\equiv def(i)\land def(s) \land 0\leq i<|s| \land (s[i]\neq 2^{i} \land_L wp(S1,Q))\lor( s[i]= 2^{i}\land_L wp(S2,Q))\\
+        &\equiv 0\leq i<|s| \land (s[i]\neq 2^{i} \land_L wp(S1,Q))\lor( s[i]= 2^{i}\land_L wp(S2,Q))
+    \end{align}
+    Ahora veo ambas wp por separado:\\
+    \setcounter{equation}{0}\begin{align}
+        wp(S1,Q)&\equiv def(s)\land def(i) \land 0\leq i<|s| \land 0\leq i-1<|s| \land Q_{setAt(s,i,2*s[i-1])}^{s[j]}\\
+        &\equiv 1\leq i<|s| \land (\forall j:\ent)((0\leq j < |s|\land i\neq j) \to_L s[j]=2^{j}) \land (i=j \land 2*s[i-1]=2^{i})\\
+        &\equiv 1\leq i<|s| \land (\forall j:\ent)((0\leq j < |s|\land i\neq j) \to_L s[j]=2^{j}) \land (i=j \land s[i-1]=2^{i-1})\\
+        &\equiv 1\leq i<|s| \land (\forall j:\ent)((0\leq j < |s|\land i\neq j) \to_L s[j]=2^{j})
+    \end{align}
+    (Vale True el segundo disy dado que si $i=j$ entonces $i-1\neq j$ y el primer disy hace a esto True)
+    \setcounter{equation}{0}\begin{align}
+        wp(S2,Q)&\equiv def(S) \land 0\leq 0<|s| \land Q_{setAt(s,0,1)}^{s[j]}\\
+        &\equiv (\forall j:\ent)((0\leq j < |s|\land 0\neq j) \to_L s[j]=2^{j})\land(0= j \land s[0]=2^{0})\\
+        &\equiv (\forall j:\ent)((0\leq j < |s|\land 0\neq j) \to_L s[j]=2^{j})\land(0= j \land 1=1)\\
+        &\equiv (\forall j:\ent)((0\leq j < |s|\land 0\neq j) \to_L s[j]=2^{j})\land(0= j \land True)\\
+        &\equiv (\forall j:\ent)((0\leq j < |s|\land 0\neq j) \to_L s[j]=2^{j})\land True\\
+        &\equiv (\forall j:\ent)((0< j < |s|) \to_L s[j]=2^{j})
+    \end{align}
+    Ahora reemplazo las wp halladas en la original
+    \setcounter{equation}{0}\begin{align}
+        &\equiv 0\leq i<|s| \land (s[i]\neq 2^{i} \land_L 1\leq i<|s| \land (\forall j:\ent)((0\leq j < |s|\land i\neq j) \to_L s[j]=2^{j}))\lor\\\nonumber
+        &( s[i]= 2^{i}\land_L (\forall j:\ent)((0< j < |s|) \to_L s[j]=2^{j}))
+    \end{align}
+    \item [d) ] $S\equiv \IfElse{i \mod 3=0}{s[i]=s[i]+6}{s[i]=1}$\\
+    $Q\equiv (\forall j:\ent)(0\leq j < |s| \to_L s[j] \mod 3 = 0)$\\
+    Veo la wp:\\
+    \setcounter{equation}{0}\begin{align}
+        wp(S,Q)&\equiv def(i) \land ((i \mod 3=0 \land wp(S1,Q))\lor(i \mod 3\neq0 \land wp(S2,Q)))
+    \end{align}
+    \newpage
+    Ahora veo ambas wp por separado:\\
+    \setcounter{equation}{0}\begin{align}
+        wp(S1,Q)&\equiv def(i)\land 0\leq i<|s| \land_L Q^{s[j]}_{setAt(s,i,s[i]+6)}\\
+        &\equiv0\leq i<|s| \land_L (\forall j:\ent)((0\leq j < |s|\land i\neq j)\to_L s[j] \mod 3 = 0)\land(i=j\land s[i]+6 \mod 3=0 )\\
+        &\equiv0\leq i<|s| \land_L (\forall j:\ent)((0\leq j < |s|\land i\neq j)\to_L s[j] \mod 3 = 0)\land(i=j\land s[i] \mod 3=0 )\\
+        &\equiv0\leq i<|s| \land_L s[i] \mod 3=0 
+    \end{align}
+    \setcounter{equation}{0}\begin{align}
+        wp(S2,Q)&\equiv def(s)\land def(i) \land 0\leq i <|s|\land_L Q^{s[j]}_{setAt(s,i,i)}\\
+        &\equiv0\leq i<|s| \land_L (\forall j:\ent)((0\leq j < |s|\land i\neq j)\to_L s[j] \mod 3 = 0)\land(i=j\land i \mod 3=0 )
+    \end{align}
+    Ahora reemplazo las wp halladas en la original
+    \setcounter{equation}{0}\begin{align}
+        &(i \mod 3=0 \land wp(S1,Q))\lor(i \mod 3\neq0 \land wp(S2,Q))\\
+        \equiv& (i \mod 3=0 \land 0\leq i<|s| \land_L s[i] \mod 3=0 )\lor\\\nonumber
+        &(i \mod 3\neq0 \land0\leq i<|s| \land_L (\forall j:\ent)((0\leq j < |s|\land i\neq j)\to_L s[j] \mod 3 = 0)\land(i=j\land i \mod 3=0 ))\\
+        \equiv& (i \mod 3=0 \land 0\leq i<|s| \land_L s[i] \mod 3=0 )\lor\\\nonumber
+        &(i \mod 3\neq0 \land0\leq i<|s| \land_L (\forall j:\ent)((0\leq j < |s|\land i\neq j)\to_L s[j] \mod 3 = 0)\land False)\\
+        \equiv& (i \mod 3=0 \land 0\leq i<|s| \land_L s[i] \mod 3=0 )\lor False\\
+        \equiv& (i \mod 3=0 \land 0\leq i<|s| \land_L s[i] \mod 3=0 )
+    \end{align}
+    \item [e) ] $S\equiv \IfElse{i \mod 2 =0}{s[i]=2*s[i]}{s[0]=3}$\\
+    $Q\equiv (\forall j: \ent)(0\leq j<|s| \to_L s[j] \mod 2 =0)$\\
+    \newpage 
+    Veo la wp:\\
+    \setcounter{equation}{0}\begin{align}
+        wp(S,Q)&\equiv def(i) \land ((i \mod 2=0 \land wp(S1,Q))\lor(i \mod2\neq0 \land wp(S2,Q)))\\
+    \end{align}
+
+    Ahora veo ambas wp:\\
+    \setcounter{equation}{0}\begin{align}
+        wp(S1,Q)&\equiv def(s) \land def(i) \land 0\leq i<|s| \land_L Q^{s[j]}_{setAt(s,i,2*s[i])}\\
+        &\equiv0\leq i<|s| \land_L (\forall j: \ent)((0\leq j<|s|\land i\neq j) \to_L s[j] \mod 2 =0)\land(i=j\land 2*s[i] \mod 2=0)\\
+        &\equiv0\leq i<|s| \land_L (\forall j: \ent)((0\leq j<|s|\land i\neq j) \to_L s[j] \mod 2 =0)\land True\\
+        &\equiv0\leq i<|s| \land_L (\forall j: \ent)((0\leq j<|s|\land i\neq j) \to_L s[j] \mod 2 =0)\\
+    \end{align}
+    \setcounter{equation}{0}\begin{align}
+        wp(S2,Q)&\equiv def(s)\land 0\leq 0<|s| \land_L Q^{s[j]}_{setAt(s,0,3)}\\
+        &\equiv0\leq i<|s| \land_L (\forall j: \ent)((0\leq j<|s|\land 0\neq j) \to_L s[j] \mod 2 =0)\land(0=j\land  3\mod 2=0)\\
+        &\equiv0\leq i<|s| \land_L (\forall j: \ent)((0\leq j<|s|\land 0\neq j) \to_L s[j] \mod 2 =0)\land False\\
+        &False
+    \end{align}
+    Reemplazo las wp halladas:
+    \setcounter{equation}{0}\begin{align}
+       & def(i) \land ((i \mod 2=0 \land wp(S1,Q))\lor(i \mod2\neq0 \land wp(S2,Q)))\\
+       \equiv&(i \mod 2=0 \land 0\leq i<|s| \land_L (\forall j: \ent)((0\leq j<|s|\land i\neq j) \to_L s[j] \mod 2 =0))\lor(i \mod2\neq0 \land False))\\
+       \equiv&(i \mod 2=0 \land 0\leq i<|s| \land_L (\forall j: \ent)((0\leq j<|s|\land i\neq j) \to_L s[j] \mod 2 =0))\lor False\\
+       \equiv&(i \mod 2=0 \land 0\leq i<|s| \land_L (\forall j: \ent)((0\leq j<|s|\land i\neq j) \to_L s[j] \mod 2 =0))
+    \end{align}
+\end{itemize}}
+
+
+\end{document}

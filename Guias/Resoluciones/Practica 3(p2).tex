@@ -1,0 +1,426 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, margin={.9in}]{geometry}
+\usepackage{amssymb, amsmath}
+\usepackage{setspace}
+\usepackage{listings}
+\lstdefinestyle{base}{
+  emptylines=1,
+  breaklines=true,
+  moredelim=**[is][\color{darkgray}]{@}{@},
+  basicstyle=\ttfamily\footnotesize\bfseries,
+  frame=tb,
+}
+\spacing{1.8}
+\begin{document}
+\newcommand{\tuno}{$P_c\to I$}
+\newcommand{\tdos}{$\{I\land B\}S\{I\}\Longleftrightarrow \{I\land B\}\to wp(S,I)$}
+\newcommand{\enRango}[2]{0\leq #1 <|#2|}
+\newcommand{\enRangoInc}[2]{0\leq #1 \leq|#2|}
+\newcommand{\cont}{ \setcounter{equation}{0}}
+\newcommand{\entero}{\mathbb{Z}}
+\section*{Demostracion de correccion de ciclos en SmallLang}
+\subsection*{Ejercicio 1}
+\begin{itemize}\normalsize{
+    \item [a) ] $P_c\equiv\{\texttt{res}=0 \land \texttt{i}=0\}$ y $Q_c\equiv\{\texttt{res}=\sum\limits_{j=0}^{|s|-1}s[j]\}$
+    \item [b) ] Al usar como condicion del invariante $0\leq i<|s|$ no se 
+    considera la iteracion cuando se sale del ciclo, por lo tanto no se cumpliria 
+    este en la ultima iteracion.
+    \item [c) ] Falla $P_c\to I$ pues i=0 y res=0 entonces se cumple $0\leq0<|s|$ pero no vale $0=\sum\limits_{j=0}^{0}s[j]$ 
+    pues tendria que $0=s[0]$ y esto solo seria valido en el caso de que $s[0]=0$, 
+     $\therefore$ la $P_c$ no implica al invariante
+    \item [d) ] Veo el segundo punto del TI, es decir \texttt{$\{I\land B\}S\{I\}$}:\\
+    $\{I\land B\}S\{I\}\Longleftrightarrow \{I\land B\}\to wp(S,I) \ \therefore$ calculo $wp(S,I)$:
+    \begin{align}
+        wp(i:=i+1,res:=res+s[i],Q_c)&\equiv wp(i:=i+1,wp(res:=res+s[i],Q_c))\\
+        &\equiv wp(i:=i+1,def(res)\land def(s)\land def(i)\land \enRango{i}{s}\land_L\\\nonumber
+        & res+s[i]=\sum\limits_{j=0}^{i-1}s[j])\\
+        &\equiv def(i)\land \enRango{i+1}{s}\land_L res+s[i+1]=\sum\limits_{j=0}^{i}s[j]
+    \end{align}
+    Luego veo la implicacion:
+    \setcounter{equation}{0}\begin{align}
+        (0\leq i\leq|s| \land res=\sum\limits_{j=0}^{i-1}s[j] \land i<|s|) &\Rightarrow  \enRango{i}{s} \land res=\sum\limits_{j=0}^{i-1}s[j]\\
+        \enRango{i}{s} \land res=\sum\limits_{j=0}^{i-1}s[j] &\nRightarrow \enRango{i+1}{s}\land_L res+s[i+1]=\sum\limits_{j=0}^{i}s[j]
+    \end{align}
+    Los rangos no son iguales, ya que por ejemplo $i=|s|-1$ hace verdadero al antecedente pero falso al consecuente.
+    Asimismo podemos analizar cuando las sumatorias son iguales si se despeja res:
+    \cont\begin{align}
+        \sum\limits_{j=0}^{i-1}s[j] &\Longleftrightarrow res=(\sum\limits_{j=0}^{i}s[j])-s[i+1]\\
+        \sum\limits_{j=0}^{i-1}s[j] &\Longleftrightarrow res=(\sum\limits_{j=0}^{i-1}s[j])+s[i]-s[i+1]\\
+        0 &\Longleftrightarrow s[i]-s[i+1]\\
+        s[i+1] &\Longleftrightarrow s[i]
+    \end{align}
+    Esta condicion no es siempre verdadera, ya que depende de los valores de esas posiciones en la lista. 
+    De esta manera falla la tripla de Hoare $\{I\land B\}S\{I\}$ y $\therefore$ el ciclo no es correcto al
+    intercambiar de lugar las instrucciones de su cuerpo
+    \item [e) ]
+    \begin{enumerate}
+        \item $P_c \to I$\\\\
+        \cont\begin{align}
+            res=0 \land i=0 &\implies \enRangoInc{i}{s} \land_L res=\sum\limits_{j=0}^{i-1}s[j]\\
+            res=0 \land i=0 &\implies \enRangoInc{0}{s} \land_L 0=\sum\limits_{j=0}^{-1}s[j]\\
+            res=0 \land i=0 &\implies True \land_L 0=0\\
+            res=0 \land i=0 &\implies True \land_L True\\
+            res=0 \land i=0 &\implies True\ \checkmark
+        \end{align}
+        \item $\{I\land B\}S\{I\}\Longleftrightarrow \{I\land B\}\to wp(S,I)$. Veo la ultima wp:\\\\
+        \cont\begin{align}
+            wp(S,I)&\equiv wp(res:=res+s[i],wp(i:=i+1,I))\\
+            &\equiv wp(res:=res+s[i],def(i)\land res=\sum\limits_{j=0}^{(i+1)-1}s[j])\\
+            &\equiv wp(res:=res+s[i],res=\sum\limits_{j=0}^{i}s[j])\\
+            &\equiv def(res)\land def(s)\land def(i)\land \enRango{i}{s}\land_L res+s[i]=\sum\limits_{j=0}^{i}s[j]\\
+            &\equiv \enRango{i}{s}\land_L res=\sum\limits_{j=0}^{i-1}s[j]
+        \end{align}
+        Luego como $\{I\land B\}\equiv wp(S,I)$ por tautologia la implicaion es valida
+        \item $I\land \neg B \implies Q_c$
+        \cont\begin{align}
+            \enRangoInc{i}{s}\land_L res=\sum\limits_{j=0}^{i-1}s[j] \land i\geq|s| \implies i=|s| \land res=\sum\limits_{j=0}^{|s|-1}s[j] \equiv Q_c \ \checkmark
+        \end{align}
+    \end{enumerate}
+    Como son validas siempre las tres condiciones, el ciclo es \textbf{parcialmente correcto}
+
+    \item [f) ] Propongo la funcion variante $fv=|s|-i$. Pruebo por teorema de terminacion que el ciclo termina:\\
+    \begin{enumerate}
+        \item $\{I\land B\land V_0=fv\}S\{fv<V_0\}\Longleftrightarrow \{I\land B\land V_0=fv\}\to wp(S,\{fv<V_0\})$. Veo la wp:\\
+        \cont\begin{align}
+            wp(S,fv<V_0)&\equiv wp(res:=res+s[i],wp(i:=i+1,fv<V_0))\\
+            &\equiv wp(res:=res+s[i],def(i)\land |s|-i-1<V_0)\\
+            &\equiv wp(res:=res+s[i],|s|-i-1<V_0)\\
+            &\equiv def(res)\land def(s)\land def(i)\land \enRango{i}{s}\land_L |s|-i-1<V_0\\
+            &\equiv \enRango{i}{s}\land_L |s|-i-1<V_0\\
+        \end{align}
+        Ahora veo la implicacion:
+        \cont\begin{align}
+            \enRangoInc{i}{s} \land_L res=\sum\limits_{j=0}^{i-1}s[j] \land i<|s| \land V_0=fv &\implies res=\sum\limits_{j=0}^{i-1}s[j] \land \enRango{i}{s}\\
+            res=\sum\limits_{j=0}^{i-1}s[j] \land \enRango{i}{s} &\implies \enRango{i}{s}\land_L |s|-i-1<V_0
+        \end{align}
+        Luego puedo ver que los rangos coinciden y que al reemplazar fv en $V_0$ tengo que:\\
+        \begin{center}$|s|-i-1<V_0\implies |s|-i-1<|s|-i\implies -1<0\implies True$\end{center}
+
+        \item $(I\land fv\leq0)\to \neg B$\\
+        \cont\begin{align}
+            \enRangoInc{i}{s} \land_L res=\sum\limits_{j=0}^{i-1}s[j] \land |s|-i\leq0 \implies i=|s| \land res=\sum\limits_{j=0}^{i-1}s[j] \implies \neg (i<|s|)
+        \end{align}
+    \end{enumerate}
+    Por TI probamos que el ciclo es correcto respecto a su especificacion y por TT que el ciclo finaliza, $\therefore$ el ciclo es correcto
+}\end{itemize}
+
+\subsection*{Ejercicio 2}
+
+\begin{itemize}
+    \item [a) ] $P_c=\{n\geq0 \land i=0 \land res=0\}$ y $Q_c=\{res= \sum\limits_{j=0}^{n-1}ifThenElse(j\mod 2=0,j,0)\}$
+    \newpage\item [b) ] Veo los tres puntos del teorema del invariante:\\
+    \begin{enumerate}
+        \item $P_c \to I$\\
+        \cont\begin{align}
+            &n\geq0 \land i=0 \land res=0 \implies \enRangoInc{i}{n} \land i \mod 2=0 \land res= \sum\limits_{j=0}^{i-1}ifThenElse(j\mod 2=0,j,0)\\
+            &\enRangoInc{0}{n} \land 0 \mod 2=0 \land res= \sum\limits_{j=0}^{-1}ifThenElse(j\mod 2=0,j,0) \implies True\ \checkmark
+        \end{align}
+        \item $\{I\land B\}S\{I\}\Longleftrightarrow \{I\land B\}\to wp(S,I)$. Veo la ultima wp:\\\\
+        \cont\begin{align}
+            wp(S,I)&\equiv wp(res:=res+i,wp(i:=i+2,I)) \equiv wp(res:=res+i,def(i)\land I^{i}_{i+2})\\
+            &\equiv wp(res:=res+i, \enRangoInc{i+2}{n} \land_L i+2 \mod 2=0 \land res= \sum\limits_{j=0}^{i+1}ifThenElse(j\mod 2=0,j,0))\\
+            &\equiv wp(res:=res+i,\enRangoInc{i+2}{n} \land_l i \mod 2=0 \land res= \sum\limits_{j=0}^{i+1}ifThenElse(j\mod 2=0,j,0))\\
+            &\equiv def(res)\land def(i)\land \enRangoInc{i+2}{n} \land_L i \mod 2=0 \land\\\nonumber &res+i= \sum\limits_{j=0}^{i+1}ifThenElse(j\mod 2=0,j,0)
+        \end{align}
+        Luego analizo la sumatoria en sus ultimos terminos:\\
+
+            $res+i= \sum\limits_{j=0}^{i+1}ifThenElse(j\mod 2=0,j,0)\equiv\\
+            res+i=ifThenElse(i\mod 2=0,i,0)+ifThenElse(i+1\mod 2=0,i+1,0)+ \sum\limits_{j=0}^{i-1}ifThenElse(j\mod 2=0,j,0)$\\\\
+            Luego uso i mod 2 = 0:\\
+            $res+i=i+ \sum\limits_{j=0}^{i-1}ifThenElse(j\mod 2=0,j,0)$\\
+            $res=\sum\limits_{j=0}^{i-1}ifThenElse(j\mod 2=0,j,0)$\\\\
+
+            Asi $wp(S,I)\equiv \enRangoInc{i+2}{n} \land_L i \mod 2=0 \land res= \sum\limits_{j=0}^{i-1}ifThenElse(j\mod 2=0,j,0)$\\\\
+            Ahora vemos la implicacion para poder probar la tripla de Hoare
+
+            \cont\begin{align}
+                &\enRangoInc{i}{n} \land i \mod 2=0 \land res= \sum\limits_{j=0}^{i-1}ifThenElse(j\mod 2=0,j,0) \land i<n \implies\\
+                &\enRango{i}{n} \land i \mod 2=0 \land res= \sum\limits_{j=0}^{i-1}ifThenElse(j\mod 2=0,j,0)\implies\\
+                &\enRangoInc{i+2}{n} \land_L i \mod 2=0 \land res= \sum\limits_{j=0}^{i-1}ifThenElse(j\mod 2=0,j,0)
+            \end{align}
+            Luego en ambos lados del implica i es par y el res coincide. Resta ver que sucede con los rangos:
+            \cont\begin{align}
+                &\enRango{i}{n}\implies \enRangoInc{i+2}{n}\\
+                &i\geq 0 \land i<n \implies i\geq-2 \land i<n-2 \ \checkmark
+            \end{align}
+            $\therefore$ la tripla de Hoare es valida
+            \item $I\land \neg B \to Q_c$\\
+            \cont\begin{align}
+                &\enRangoInc{i}{n} \land i \mod 2=0 \land res= \sum\limits_{j=0}^{i-1}ifThenElse(j\mod 2=0,j,0) \land i\geq n \implies\\
+                & i \mod 2=0 \land res= \sum\limits_{j=0}^{i-1}ifThenElse(j\mod 2=0,j,0) \land i=n \implies\\
+                & n \mod 2=0 \land res= \sum\limits_{j=0}^{n-1}ifThenElse(j\mod 2=0,j,0) \land i=n \implies
+            \end{align}
+            Luego quedo la misma sumatoria de la $Q_c$ por lo tanto vale la implicacion ya que es de tipo $A\land B\to A$
+    \end{enumerate}
+    \item [c) ] Propongo $fv=n-1$
+    \begin{enumerate}
+        \item $\{I\land B\land V_0=fv\}S\{fv<V_0\}\Longleftrightarrow \{I\land B\land V_0=fv\}\to wp(S,\{fv<V_0\})$. Veo la wp:\\
+        \cont\begin{align}
+            wp(S,fv<V_0)&\equiv wp(res:=res+i,wp(i:=i+2,fv<V_0))\\
+            &\equiv wp(res:=res+i,def(i)\land n-i-2<V_0)\\
+            &\equiv wp(res:=res+i,n-i-2<V_0)\\
+            &\equiv def(res)\land def(i)\land n-i-2<V_0\\
+            &\equiv n-i-2<V_0
+        \end{align}
+        Ahora veo la implicacion:
+        \cont\begin{align}
+            &\enRango{i}{n} \land i \mod 2=0 \land res= \sum\limits_{j=0}^{i-1}ifThenElse(j\mod 2=0,j,0)\land V_0=fv \implies\\
+            &n-i-2<n-i \implies -2<0 \ \checkmark
+        \end{align}
+        
+        \item $(I\land fv\leq0)\to \neg B$\\
+        \cont\begin{align}
+            &\enRangoInc{i}{n} \land_L res=\sum\limits_{j=0}^{i-1}ifThenElse(j\mod 2=0,j,0) \land n-i\leq0 \implies\\
+            &i=n \land res=\sum\limits_{j=0}^{n-1}ifThenElse(j\mod 2=0,j,0) \implies \neg (i<n)
+        \end{align}
+    \end{enumerate}
+    Por \textbf{TI} el ciclo es parcialmente correcto y por \textbf{TT} el ciclo finaliza, por lo tanto el ciclo es correcto respecto a su especificacion
+\end{itemize}
+\subsection*{Ejercicio 3}
+\begin{itemize}
+    \item [a) ]Propongo la siguiente solucion:
+    \begin{lstlisting}[style=base]
+    i:=1
+    res:=0
+    while(i <= n)
+        if n mod i = 0 do
+            res:=res+i
+        else
+            skip
+        endif
+        i:=i+1
+    endwhile
+    \end{lstlisting}
+    \item [b) ] $P_c\equiv \{n\geq1 \land i=1 \land res=0\}$ y $Q_c\equiv\{i>n \land_L res=\sum\limits_{j=0}^{n}ifThenElse(n\mod j=0,j,0)\}$\\
+    $I\equiv \{1\leq i\leq n+1 \land res=\sum\limits_{j=0}^{i-1}ifThenElse(n\mod j=0,j,0) \}$
+\end{itemize}
+\subsection*{Ejercicio 4}
+\begin{itemize}
+    \item [a) ] Deberian apareceer la i y las listas s y r
+    \item [b) ] $I\equiv\{\enRangoInc{i}{s} \land |s|=|r| \land_L (\forall j:\entero)(\enRango{j}{i}\to_L s[j]=r[j])\}$
+
+    \begin{itemize}
+        \item $|s|=|r|$ es necesario para que valga $P_c\to I$
+        \item Necesito todo el invariante para que valga $I\land \neg B \to Q_c$
+    \end{itemize}
+    \item [c) ]Propongo $fv=|s|-i$\\
+    \begin{enumerate}
+        \item $\{I\land B\land V_0=fv\}S\{fv<V_0\}\Longleftrightarrow \{I\land B\land V_0=fv\}\to wp(S,\{fv<V_0\})$. Veo la wp:\\
+        \cont\begin{align}
+            wp(S,fv<V_0)&\equiv wp(r[i]:=s[i],wp(i:=i+1,fv<V_0))\\
+            &\equiv wp(r[i]:=s[i],def(i)\land |s|-i-1<V_0)\\
+            &\equiv wp(r[i]:=s[i],|s|-i-1<V_0)\\
+            &\equiv def(r)\land def(s)\land def(i)\land \enRango{i}{s}\land_L |s|-i-1<V_0\\
+            &\equiv \enRango{i}{s}\land_L |s|-i-1<V_0
+        \end{align}
+        Ahora veo la implicacion:
+        \cont\begin{align}
+            &\enRangoInc{i}{s} \land |s|=|r| \land_L (\forall j:\entero)(\enRango{j}{i}\to_L s[j]=r[j]) \land i<|s| \land fv=V_0 \implies\\
+            &|s|-i-1<|s|-i \implies -1<0 \ \checkmark
+        \end{align}
+        \newpage
+        \item $(I\land fv\leq0)\to \neg B$\\
+        \cont\begin{align}
+            &\enRangoInc{i}{s} \land |s|=|r| \land_L (\forall j:\entero)(\enRango{j}{i}\to_L s[j]=r[j])\land fv\leq 0 \implies\\
+            &i=|s| \land |s|=|r|\land_L (\forall j:\entero)(\enRango{j}{i}\to_L s[j]=r[j])\implies \neg (i<|s|)
+        \end{align}
+    \end{enumerate}
+\end{itemize}
+\subsection*{Ejercicio 5}
+\begin{itemize}
+    \item [a) ] Propongo $I\equiv \{|s| \mod 2\land |s|/2-1\leq i\leq|s|-1\land suma=\sum\limits_{j=0}^{|s|-2-i}s[j]\}$
+    \begin{enumerate}
+        \item \tuno
+        \begin{itemize}
+            \item |s| mod 2 aparece en ambas partes de la implicacion
+            \item $i=|s|-1 \implies |s|/2-1\leq i\leq|s|-1$ pues esta en el rango
+            \item Como $i=|s|-1$ entonces $suma=0$
+            Luego suponiendo verdadero la $P_c$ solo necesitaria el rango del invariante para que valga la implicacion
+        \end{itemize}
+        \item \tdos Necesito el rango
+        \item $I\land \neg B \to Q_c$ Necesito el invariante completo
+    \end{enumerate}
+\item [b) ] Propongo la funcion $fv=i-|s|/2+1$
+\begin{enumerate}
+    \item $\{I\land B\land V_0=fv\}S\{fv<V_0\}\Longleftrightarrow \{I\land B\land V_0=fv\}\to wp(S,\{fv<V_0\})$. Veo la wp:\\
+    \cont\begin{align}
+        &wp(suma:=suma+s[|s|-1-i],i:=i-1,fv<V_0)\\
+        &\equiv wp(suma:=suma+s[|s|-1-i], def(i)\land i-1-|s|/2+1<V_0)\\
+        &\equiv wp(def(suma)\land def(s)\land 0\leq |s|-1-i<|s| \land i-|s|/2<V_0)\\
+        &\equiv -|s|+1\leq -i<1 \land i-|s|/2<V_0\\
+        &\equiv -1<i\leq |s|-1 \land i-|s|/2<V_0\\
+        &\equiv i-|s|/2<V_0
+    \end{align}
+    Ahora veo la implicacion:
+    \cont\begin{align}
+        &|s| \mod 2\land |s|/2-1\leq i\leq|s|-1\land suma=\sum\limits_{j=0}^{|s|-2-i}s[j]\land i<|s| \land fv=V_0\\
+        &\equiv |s| \mod 2\land |s|/2-1\leq i\leq|s|-1\land suma=\sum\limits_{j=0}^{|s|-2-i}s[j]\land fv=V_0\implies\\
+        &i-|s|/2<i-|s|/2+1\implies 0<1 \ \checkmark
+    \end{align}
+    \item $ I\land fv\leq0 \to \neg B$
+    \cont\begin{align}
+        &|s| \mod 2\land |s|/2-1\leq i\leq|s|-1\land suma=\sum\limits_{j=0}^{|s|-2-i}s[j] \land i-|s|/2+1\leq0 \implies\\
+        &
+        i=|s|/2 \implies \neg (i\geq|s|/2)
+    \end{align}
+\end{enumerate}
+\end{itemize}
+\subsection*{Ejercicio 6}
+\begin{itemize}
+    \item [c) ] $P_c\equiv\{|s|\geq1 \land |s| \mod 2=0 \land res=0 \land i=|s|-1\}$\\
+    $Q_c\equiv res=\sum\limits_{j=0}^{|s|-1}s[j]$\\
+    $I\equiv\{-1\leq i<|s| \land_L res=\sum\limits_{j=0}^{|s|-i-2}s[|s|-1-j]\land |s|\geq1 \land |s|\mod2=0\}$
+    \begin{enumerate}
+        \item \tuno
+            \begin{itemize}
+                \item En ambos casos aparecen $|s|\geq1 \land |s| \mod 2 =0$
+                \item Como $i=|s|-1$ entonces $res=\sum\limits_{j=0}^{|s|-i-2}s[|s|-1-j]=\sum\limits_{j=0}^{-1}s[|s|-1-j]=0$, cumpliendo res=0
+                \item $i=|s|-1$ esta en el rango del I, es decir $-1\leq i<|s|$
+            \end{itemize}
+        \item $(I\land \neg B) \to Q_c$
+        \cont\begin{align}
+            &-1\leq i<|s| \land_L res=\sum\limits_{j=0}^{|s|-i-2}s[|s|-1-j]\land i<0 \implies\\
+            &i=-1 \land res=\sum\limits_{j=0}^{|s|-i-2}s[|s|-1-j]\implies -1=i<0 \implies \neg (i\geq0)\ \checkmark
+        \end{align}
+        \item \tdos
+        \cont\begin{align}
+            wp(&res:=res+s[i],wp(i:i-1,I))\equiv wp(res:=res+s[i], def(i)\land -1\leq i-1<|s|\\\nonumber
+            &\land_L res=\sum\limits_{j=0}^{|s|-i+1-2}s[|s|-1-j]\land |s|\geq1 \land |s|\mod2=0)\\
+            &\equiv wp(res:=res+s[i], 0\leq i\leq|s|\\\nonumber
+            &\land_L res=\sum\limits_{j=0}^{|s|-i-1}s[|s|-1-j]\land |s|\geq1 \land |s|\mod2=0)\\
+            &\equiv def(res)\land def(s)\land def(i) 0\leq i<|s|\\\nonumber
+            &\land_L res+s[i]=\sum\limits_{j=0}^{|s|-i-1}s[|s|-1-j]\land |s|\geq1 \land |s|\mod2=0\\
+            &\equiv 0\leq i<|s|\land_L res+s[i]=s[|s|-1-|s|+1+i]+\sum\limits_{j=0}^{|s|-i-2}s[|s|-1-j]\land |s|\geq1 \land |s|\mod2=0\\
+            &\equiv 0\leq i<|s|\land_L res+s[i]=s[i]+\sum\limits_{j=0}^{|s|-i-2}s[|s|-1-j]\land |s|\geq1 \land |s|\mod2=0\\
+            &\equiv 0\leq i<|s|\land_L res=\sum\limits_{j=0}^{|s|-i-2}s[|s|-1-j]\land |s|\geq1 \land |s|\mod2=0
+        \end{align}
+        Luego $I\land B\equiv 0\leq i<|s| \land_L res=\sum\limits_{j=0}^{|s|-i-2}s[|s|-1-j]\land |s|\geq1 \land |s|\mod2=0$ y por 
+        lo tanto no solo $I\land B\to wp(S,I)$, sino que $I\land B\equiv wp(S,I)$\\
+
+        Propongo a $fv=i+1$ como funcion variante y a continuacion aplico el teorema de terminacion:\\
+        \item $\{I\land B\land V_0=fv\}S\{fv<V_0\}\Longleftrightarrow \{I\land B\land V_0=fv\}\to wp(S,\{fv<V_0\})$. Veo la wp:\\
+        \cont\begin{align}
+            wp(res&:=res+s[i],wp(i:=i-1,fv-V_0))\equiv wp(res&:=res+s[i],i<V_0)\equiv i<V_0
+        \end{align}
+        Veo la implicacion:\\
+        \cont\begin{align}
+            &0\leq i<|s| \land_L res=\sum\limits_{j=0}^{|s|-i-2}s[|s|-1-j]\land |s|\geq1 \land |s|\mod2=0 \land i+1=V_0 \implies\\
+            &i<i+1 \implies 0<1\ \checkmark
+        \end{align}
+        
+        \item $I\land fv\leq0 \to \neg B$
+        \cont\begin{align}
+            &-1\leq i<|s| \land_L res=\sum\limits_{j=0}^{|s|-i-2}s[|s|-1-j]\land |s|\geq1 \land |s|\mod2=0 \land i+1\leq0 \implies\\
+            &i=-1\implies \neg (i\geq0)\ \checkmark
+        \end{align}
+    \end{enumerate}
+\end{itemize}
+\subsection*{Ejercicio 7}
+\begin{itemize}
+    \item 
+    \begin{lstlisting}[style=base]
+        i=0
+        while (i<|s|) do
+            if(i mod 2 = 0) then
+                s[i]:=2*i
+            else
+                s[i]:=2*i+1
+            endif
+            i:=i+1
+        endwhile
+    \end{lstlisting}
+    \item $P_c\equiv\{i=0\}$\\
+    $Q_c\equiv\{(\forall j:\entero)(\enRango{j}{s}\to_L ((j\mod 2=0 \land s[j]=2j)\lor(j\mod 2\neq0 \land s[j]=2j+1)))\}$\\
+    $B\equiv\{i<|s|\}$
+    \item $fv(i)=|s|-i$
+\end{itemize}
+\subsection*{Ejercicio 8}
+\begin{itemize}
+    \item 
+    \begin{lstlisting}[style=base]
+        i=0
+        while (i<|s|/2) do
+            s[j]:=0
+            s[|s|-1-j]:=0
+            i:=i+1
+        endwhile
+
+    \end{lstlisting}
+    \item $P_c\equiv\{i=0 \land |s|\mod 2=0\}$\\
+    $Q_c\equiv\{(\forall j:\entero)(\enRango{j}{s}\to_L s[j]=0)\}$\\
+    $B\equiv\{i<|s|/2\}$
+    \item $fv(i)=|s|/2-i$
+\end{itemize}
+\subsection*{Ejercicio 11}
+\begin{itemize}
+    \item [a) ] Obs se le asignan a todos los elementos anteriores a la posicion d el valor e y los posteriores manienen su valor.
+    Propongo el invariante $I\equiv\{0\leq i \leq d<|s|\land (\forall j:\entero)(0\leq j<i\to_L s[j]=e)\land (\forall j:\entero)(i\leq j<|s|\to_L s[j]=S_0[j])\}$\\
+    Propongo la funcion variante $fv=d-i$
+
+    \begin{enumerate}
+        \item \tuno\\
+        $P_c\equiv\{s=S_0\land i=0 \land 0\leq d<|s|\}$
+        \begin{itemize}
+            \item Como i=0, entonces, $0\leq i \leq d<|s|\equiv 0\leq d<|s|$, de manera que
+            tendria este rango en ambos lados de la implicacion
+            \item Como i=0 $(\forall j:\entero)(0\leq j<i\to_L s[j]=e)\equiv (\forall j:\entero)(0\leq j<0\to_L s[j]=e)\equiv True$
+            \item Como i=0 $(\forall j:\entero)(i\leq j<|s|\to_L s[j]=S_0[j])\equiv(\forall j:\entero)(0\leq j<|s|\to_L s[j]=S_0)$, es decir que todos
+            los elementos de la lista s sean los de la lista $S_0$, es decir, $s=S_0$
+        \end{itemize}
+        \item $I\land\neg B\to Q_c$
+        \cont\begin{align}
+            I\land i\geq d &\equiv i=d \land (\forall j:\entero)(0\leq j<d\to_L s[j]=e)\land (\forall j:\entero)(d\leq j<|s|\to_L s[j]=S_0[j])
+        \end{align}
+        $I\land\neg B\to Q_c$ pues ambas son iguales
+        \item $(I\land fv\leq0)\to\neg B$
+        \cont\begin{align}
+            &I\land d-i\leq0\equiv I\land i\geq d \implies \neg (i<d)
+        \end{align}
+    \end{enumerate}
+    \item [b) ] Obs:  se asigna el valor 'e' a todos los elementos mayores o iguales a la posicion d
+    y los anteriores se mantienen igual.\\
+    Propongo el invariante $I\equiv\{0\leq d \leq i\leq|s|\land (\forall j:\entero)(0\leq j<i\to_L s[j]=S_0[j])\land (\forall j:\entero)(d\leq j<i\to_L s[j]=e)\}$\\
+    Propongo la funcion variante $fv=|s|-i$
+    \begin{enumerate}
+        \item \tuno\\
+        $P_c\equiv\{s=S_0\land i=d \land 0\leq d<|s|\}$
+        Como i=d entonces: 
+        \begin{itemize}
+            \item $0\leq d \leq i\leq|s|\equiv 0\leq d \leq|s|$ y esto es true pues $0\leq d<|s|\implies 0\leq d \leq|s|$
+            \item $(\forall j:\entero)(0\leq j<d\to_L s[j]=S_0[j])$ es cierto pues el ciclo nunca
+            podra acceder a valores menores a d
+            \item $(\forall j:\entero)(d\leq j<d\to_L s[j]=e)\equiv True$
+        \end{itemize}
+        \item $I\land\neg B\to Q_c$
+        \cont\begin{align}
+            I\land \neg(i<|s|)\equiv i=|s| \land (\forall j:\entero)(0\leq j<|s|\to_L s[j]=S_0[j])\land (\forall j:\entero)(d\leq j<|s|\to_L s[j]=e)
+        \end{align}
+        Es decir, quedo textualmente la $Q_c$ y por tautologia $A\to A$ esto es cierto
+        \item $(I\land fv\leq0)\to\neg B$
+        \cont\begin{align}
+            i\land |s|-i\leq0\implies i=|s| \implies \neg (i<|s|) \equiv True\ \checkmark
+        \end{align}
+    \end{enumerate}
+    \item [c) ] Obs el ciclo suma todas las posiciones de una secuencia mas su largo.\\
+    Propongo el invariante $I\equiv\{-1\leq i <|s| \land res=|s|-1-i+\sum\limits_{j=i+1}^{|s|-1}s[j]\}$\\
+    Propongo la funcion variante $fv=i+1$
+    \begin{enumerate}
+        \item \tuno\\
+        $P_c\equiv\{i=|s|-1\land res=0\}$
+        \begin{itemize}
+            \item Como $i=|s|-1$ entonces i esta dentro del rango $-1\leq i<|s|$
+            \item como $i=|s|-1$ entonces $res=|s|-1-(|s|-1)+\sum\limits_{j=|s|-1+1}^{|s|-1}s[j]=0$
+        \end{itemize}
+        \item $I\land\neg B\to Q_c$
+        \cont\begin{align}
+            I\land \neg(i\geq0)\equiv i=-1 \land res=|s|-1-i+\sum\limits_{j=0}^{|s|-1}s[j]
+        \end{align}
+        Es decir, quedo textualmente la $Q_c$ y por tautologia $A\to A$ esto es cierto
+        \item $(I\land fv\leq0)\to\neg B$
+        \cont\begin{align}
+            I\land i+1\leq0\implies i=-1 \implies \neg(i\geq0)\implies True\ \checkmark
+        \end{align}
+    \end{enumerate}
+\end{itemize}
+\end{document}
