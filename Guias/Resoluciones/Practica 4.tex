@@ -1,0 +1,153 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, margin={.9in}]{geometry}
+\usepackage{amssymb, amsmath}
+\usepackage{setspace}
+\usepackage{listings}
+\spacing{1.3}
+\newcommand{\enRango}[2]{0\leq #1 <|#2|}
+\newcommand{\enRangoInc}[2]{0\leq #1 \leq|#2|}
+\newcommand{\cont}{ \setcounter{equation}{0}}
+\newcommand{\entero}{\mathbb{Z}}
+\newcommand{\rac}{\mathbb{Q}}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\In}{\textit{in }}
+\newcommand{\Inout}{\textit{inout }}
+\newenvironment{proc}
+{\begin{flushleft}
+
+    \newcommand{\encProc}[3]{{\setlength{\leftskip}{.4in}\ttfamily{proc} \textsl{##1} ($##2$):##3 \{ \\}}
+    \newcommand{\requiere}[1]{{\setlength{\parindent}{.7in}requiere \{##1\}}\\}
+    \newcommand{\asegura}[1]{{\setlength{\parindent}{.7in}asegura \{##1\}}\\}
+}{\hspace{.4in}\}\end{flushleft}}
+
+\newenvironment{TAD}[1]{
+    \begin{flushleft}\ttfamily{TAD} \textsf{#1}\{
+    
+    \newcommand{\pred}[3]{{\setlength{\leftskip}{.4in}{\ttfamily pred} \textit{##1} ($##2$)\{\\{\setlength{\parindent}{.7in}##3}}\}\\}
+    \newcommand{\aux}[4]{{\setlength{\parindent}{.4in}{\ttfamily aux} \textsl{##1} ($##2$):$##3$=##4}\\}
+    \newcommand{\obs}[2]{{\setlength{\parindent}{.4in}{\ttfamily obs} ##1: ##2}\\}
+        
+}
+{\end{flushleft}}
+\begin{document}
+\section*{Especificacion de TADs}
+\subsection*{Ejercicio 1}
+\begin{TAD}{NumeroRac}
+    \obs{num}{$\entero$}
+    \obs{den}{$\entero$}
+    \begin{proc}
+        \encProc{nuevoRac}{\In n,d:\entero}{NumeroRac}
+        \requiere{$d\neq0$}
+        \asegura{$res.num = n \land res.den = d$}
+        
+    \end{proc}
+    \begin{proc}
+        \encProc{suma}{\Inout a:NumeroRac,\In b:NumeroRac}{NumeroRac}
+        \requiere{$a=A_0$}
+        \asegura{$a.num=A_0.num*b.den+A_0.dem*b.num$}
+    \end{proc}
+    \begin{proc}
+        \encProc{resta}{\Inout a:NumeroRac,\In b:NumeroRac}{NumeroRac}
+        \requiere{$a=A_0$}
+        \asegura{$a.num=A_0.num*b.den-A_0.dem*b.num$}
+    \end{proc}
+    \begin{proc}
+        \encProc{multiplicacion}{\Inout a:NumeroRac,\In b:NumeroRac}{NumeroRac}
+        \requiere{$a=A_0$}
+        \asegura{$a.num=A_0.num*b.num \land a.den=A_0.den*b.den$}
+    \end{proc}
+    \begin{proc}
+        \encProc{division}{\Inout a:NumeroRac,\In b:NumeroRac}{NumeroRac}
+        \requiere{$a=A_0$}
+        \asegura{$a.num=A_0.num*b.den \land a.den=A_0.den*b.num$}
+    \end{proc}
+    \begin{proc}
+        \encProc{iguales}{\In a,b:NumeroRac}{Bool}
+        \requiere{True}
+        \asegura{$res=True\leftrightarrow a.num*b.den=a.dem*b.num$}
+    \end{proc}
+\end{TAD}
+\subsection*{Ejercicio 2}
+\begin{TAD}{Rectangulo2D}
+    \obs{vsi}{tupla($\real,\real$)} %vertice superior izquierdo
+    \obs{vsd}{tupla($\real,\real$)} %vertice superior derecho
+    \obs{vii}{tupla($\real,\real$)} %vertice inferior izquierdo
+    \obs{vid}{tupla($\real,\real$)} %vertice inferior derecho
+    \aux{resta}{\In a,b:tupla(\real,\real)}{tupla(\real,\real)}
+    {$(a_0-b_0,a_1-b_1)$}
+    \aux{prod}{\In a,b:tupla(\real,\real)}{\real}
+    {$a_0*b_o+a_1*b_1$}
+    \pred{noRepes}{\In t:seq\langle\real\rangle}{$(\forall i,j:\entero)(\enRango{i,j}{t}\land i\neq j\to_L t[i]\neq t[j])$}
+\newpage
+    \begin{proc}
+        \encProc{nuevoRectangulo}{\In a,b,c,d:\real}{Rectangulo2D}
+        \requiere{$noRepes(\langle a,b,c,d\rangle)$}
+        \asegura{prod(resta(a.vsi,b.vsd),resta(a.vsi,c.vii))=0}
+        \asegura{prod(resta(d.vid,b.vsd),resta(d.vid,c.vii))=0}
+        \asegura{prod(resta(c.vii,a.vsi),resta(c.vii,d.vid))=0}
+        \asegura{prod(resta(b.vsd,a.vsi),resta(b.vsd,d.vid))=0}
+    \end{proc}
+    \begin{proc}
+        \encProc{mover}{\Inout r:Rectangulo2D,\In dx,dy:\real}{Rectangulo2D}
+        \requiere{$r=R_0$}
+        \asegura{$r.vsi=(R_0.vsi_0+dx,R_0.vsi_1+dy)$}
+        \asegura{$r.vsi=(R_0.vsd_0+dx,R_0.vsd_1+dy)$}
+        \asegura{$r.vsi=(R_0.vii_0+dx,R_0.vii_1+dy)$}
+        \asegura{$r.vsi=(R_0.vid_0+dx,R_0.vid_1+dy)$}
+    \end{proc}    
+\end{TAD}
+\subsection*{Ejercicio 3}
+\begin{itemize}
+    \item [a) ]
+    \newcommand{\cola}{cola\langle T\rangle}
+    \newcommand{\pila}{pila\langle T\rangle}
+    \newcommand{\seq}{seq\langle T\rangle}
+    \begin{TAD}{$Cola\langle T\rangle$}
+        \obs{s}{$seq\langle T\rangle$}
+        \begin{proc}
+            \encProc{nuevaCola}{\In s:\seq}{$\cola$}
+            \requiere{True}
+            \asegura{|res.s|=0}
+        \end{proc}
+        \begin{proc}
+            \encProc{estaVacia}{\In c:\cola}{Bool}
+            \requiere{True}
+            \asegura{$res=True \leftrightarrow |c.s|=0$}
+        \end{proc}
+        \begin{proc}
+            \encProc{encolar}{\Inout c:\cola, e: T}{$\cola$}
+            \requiere{$c=C_0$}
+            \asegura{$c.s=concat(C_0.s,\{e\})$}
+        \end{proc}
+        \begin{proc}
+            \encProc{desencolar}{\Inout c:\cola}{T}
+            \requiere{$c=C_0$}
+            \asegura{$c.s=tail(C_0.s) \land res=head(C_0.s)$}
+        \end{proc}
+    \end{TAD}
+    \begin{TAD}{$Pila\langle T\rangle$}
+        \obs{s}{$seq\langle T\rangle$}
+        \begin{proc}
+            \encProc{nuevaPila}{\In s:\seq}{$\pila$}
+            \requiere{True}
+            \asegura{|res.s|=0}
+        \end{proc}
+        \begin{proc}
+            \encProc{estaVacia}{\In c:\pila}{Bool}
+            \requiere{True}
+            \asegura{$res=True \leftrightarrow |c.s|=0$}
+        \end{proc}
+        \begin{proc}
+            \encProc{apilar}{\Inout c:\pila, e: T}{$\pila$}
+            \requiere{$c=C_0$}
+            \asegura{$c.s=concat(\{e\}, C_0.s)$}
+        \end{proc}
+        \begin{proc}
+            \encProc{desapilar}{\Inout c:\pila}{T}
+            \requiere{$c=C_0$}
+            \asegura{$c.s=tail(C_0.s) \land res=head(C_0.s)$}
+        \end{proc}
+    \end{TAD}
+\end{itemize}
+\end{document}
