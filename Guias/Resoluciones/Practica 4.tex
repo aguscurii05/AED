@@ -16,17 +16,17 @@
 \newenvironment{proc}
 {\begin{flushleft}
 
-    \newcommand{\encProc}[3]{{\setlength{\leftskip}{.4in}\ttfamily{proc} \textsl{##1} ($##2$):##3 \{ \\}}
-    \newcommand{\requiere}[1]{{\setlength{\parindent}{.7in}requiere \{##1\}}\\}
-    \newcommand{\asegura}[1]{{\setlength{\parindent}{.7in}asegura \{##1\}}\\}
+    \newcommand{\encProc}[3]{{\setlength{\leftskip}{.4in}\ttfamily{proc} \textsl{##1} ($##2$):$##3$ \{ \\}}
+    \newcommand{\requiere}[1]{{\setlength{\parindent}{.7in}requiere \{$##1$\}}\\}
+    \newcommand{\asegura}[1]{{\setlength{\parindent}{.7in}asegura \{$##1$\}}\\}
 }{\hspace{.4in}\}\end{flushleft}}
 
 \newenvironment{TAD}[1]{
-    \begin{flushleft}\ttfamily{TAD} \textsf{#1}\{
+    \begin{flushleft}\ttfamily{TAD} \textsf{$#1$}\{
     
-    \newcommand{\pred}[3]{{\setlength{\leftskip}{.4in}{\ttfamily pred} \textit{##1} ($##2$)\{\\{\setlength{\parindent}{.7in}##3}}\}\\}
-    \newcommand{\aux}[4]{{\setlength{\parindent}{.4in}{\ttfamily aux} \textsl{##1} ($##2$):$##3$=##4}\\}
-    \newcommand{\obs}[2]{{\setlength{\parindent}{.4in}{\ttfamily obs} ##1: ##2}\\}
+    \newcommand{\pred}[3]{{\setlength{\leftskip}{.4in}{\ttfamily pred} \textit{##1} ($##2$)\{\\{\setlength{\parindent}{.7in}$##3$}}\}\\}
+    \newcommand{\aux}[4]{{\hspace{.4in}{\ttfamily aux} \textsl{##1} ($##2$):$##3$=$##4$}\\}
+    \newcommand{\obs}[2]{{\setlength{\parindent}{.4in}{\ttfamily obs} $##1$: $##2$}\\}
         
 }
 {\end{flushleft}}
@@ -34,55 +34,55 @@
 \section*{Especificacion de TADs}
 \subsection*{Ejercicio 1}
 \begin{TAD}{NumeroRac}
-    \obs{num}{$\entero$}
-    \obs{den}{$\entero$}
+    \obs{num}{\entero}
+    \obs{den}{\entero}
     \begin{proc}
         \encProc{nuevoRac}{\In n,d:\entero}{NumeroRac}
-        \requiere{$d\neq0$}
-        \asegura{$res.num = n \land res.den = d$}
+        \requiere{d\neq0}
+        \asegura{res.num = n \land res.den = d}
         
     \end{proc}
     \begin{proc}
         \encProc{suma}{\Inout a:NumeroRac,\In b:NumeroRac}{NumeroRac}
-        \requiere{$a=A_0$}
-        \asegura{$a.num=A_0.num*b.den+A_0.dem*b.num$}
+        \requiere{a=A_0}
+        \asegura{a.num=A_0.num*b.den+A_0.dem*b.num}
     \end{proc}
     \begin{proc}
         \encProc{resta}{\Inout a:NumeroRac,\In b:NumeroRac}{NumeroRac}
-        \requiere{$a=A_0$}
-        \asegura{$a.num=A_0.num*b.den-A_0.dem*b.num$}
+        \requiere{a=A_0}
+        \asegura{a.num=A_0.num*b.den-A_0.dem*b.num}
     \end{proc}
     \begin{proc}
         \encProc{multiplicacion}{\Inout a:NumeroRac,\In b:NumeroRac}{NumeroRac}
-        \requiere{$a=A_0$}
-        \asegura{$a.num=A_0.num*b.num \land a.den=A_0.den*b.den$}
+        \requiere{a=A_0}
+        \asegura{a.num=A_0.num*b.num \land a.den=A_0.den*b.den}
     \end{proc}
     \begin{proc}
         \encProc{division}{\Inout a:NumeroRac,\In b:NumeroRac}{NumeroRac}
-        \requiere{$a=A_0$}
-        \asegura{$a.num=A_0.num*b.den \land a.den=A_0.den*b.num$}
+        \requiere{a=A_0}
+        \asegura{a.num=A_0.num*b.den \land a.den=A_0.den*b.num}
     \end{proc}
     \begin{proc}
         \encProc{iguales}{\In a,b:NumeroRac}{Bool}
         \requiere{True}
-        \asegura{$res=True\leftrightarrow a.num*b.den=a.dem*b.num$}
+        \asegura{res=True\leftrightarrow a.num*b.den=a.dem*b.num}
     \end{proc}
 \end{TAD}
 \subsection*{Ejercicio 2}
 \begin{TAD}{Rectangulo2D}
-    \obs{vsi}{tupla($\real,\real$)} %vertice superior izquierdo
-    \obs{vsd}{tupla($\real,\real$)} %vertice superior derecho
-    \obs{vii}{tupla($\real,\real$)} %vertice inferior izquierdo
-    \obs{vid}{tupla($\real,\real$)} %vertice inferior derecho
+    \obs{vsi}{tupla(\real,\real)} %vertice superior izquierdo
+    \obs{vsd}{tupla(\real,\real)} %vertice superior derecho
+    \obs{vii}{tupla(\real,\real)} %vertice inferior izquierdo
+    \obs{vid}{tupla(\real,\real)} %vertice inferior derecho
     \aux{resta}{\In a,b:tupla(\real,\real)}{tupla(\real,\real)}
-    {$(a_0-b_0,a_1-b_1)$}
+    {(a_0-b_0,a_1-b_1)}
     \aux{prod}{\In a,b:tupla(\real,\real)}{\real}
-    {$a_0*b_o+a_1*b_1$}
-    \pred{noRepes}{\In t:seq\langle\real\rangle}{$(\forall i,j:\entero)(\enRango{i,j}{t}\land i\neq j\to_L t[i]\neq t[j])$}
+    {a_0*b_o+a_1*b_1}
+    \pred{noRepes}{\In t:seq\langle\real\rangle}{(\forall i,j:\entero)(\enRango{i,j}{t}\land i\neq j\to_L t[i]\neq t[j])}
 \newpage
     \begin{proc}
         \encProc{nuevoRectangulo}{\In a,b,c,d:\real}{Rectangulo2D}
-        \requiere{$noRepes(\langle a,b,c,d\rangle)$}
+        \requiere{noRepes(\langle a,b,c,d\rangle)}
         \asegura{prod(resta(a.vsi,b.vsd),resta(a.vsi,c.vii))=0}
         \asegura{prod(resta(d.vid,b.vsd),resta(d.vid,c.vii))=0}
         \asegura{prod(resta(c.vii,a.vsi),resta(c.vii,d.vid))=0}
@@ -90,11 +90,11 @@
     \end{proc}
     \begin{proc}
         \encProc{mover}{\Inout r:Rectangulo2D,\In dx,dy:\real}{Rectangulo2D}
-        \requiere{$r=R_0$}
-        \asegura{$r.vsi=(R_0.vsi_0+dx,R_0.vsi_1+dy)$}
-        \asegura{$r.vsi=(R_0.vsd_0+dx,R_0.vsd_1+dy)$}
-        \asegura{$r.vsi=(R_0.vii_0+dx,R_0.vii_1+dy)$}
-        \asegura{$r.vsi=(R_0.vid_0+dx,R_0.vid_1+dy)$}
+        \requiere{r=R_0}
+        \asegura{r.vsi=(R_0.vsi_0+dx,R_0.vsi_1+dy)}
+        \asegura{r.vsi=(R_0.vsd_0+dx,R_0.vsd_1+dy)}
+        \asegura{r.vsi=(R_0.vii_0+dx,R_0.vii_1+dy)}
+        \asegura{r.vsi=(R_0.vid_0+dx,R_0.vid_1+dy)}
     \end{proc}    
 \end{TAD}
 \subsection*{Ejercicio 3}
@@ -103,51 +103,563 @@
     \newcommand{\cola}{cola\langle T\rangle}
     \newcommand{\pila}{pila\langle T\rangle}
     \newcommand{\seq}{seq\langle T\rangle}
-    \begin{TAD}{$Cola\langle T\rangle$}
-        \obs{s}{$seq\langle T\rangle$}
+    \begin{TAD}{Cola\langle T\rangle}
+        \obs{s}{seq\langle T\rangle}
         \begin{proc}
-            \encProc{nuevaCola}{\In s:\seq}{$\cola$}
+            \encProc{nuevaCola}{\In s:\seq}{\cola}
             \requiere{True}
             \asegura{|res.s|=0}
         \end{proc}
         \begin{proc}
             \encProc{estaVacia}{\In c:\cola}{Bool}
             \requiere{True}
-            \asegura{$res=True \leftrightarrow |c.s|=0$}
+            \asegura{res=True \leftrightarrow |c.s|=0}
         \end{proc}
         \begin{proc}
-            \encProc{encolar}{\Inout c:\cola, e: T}{$\cola$}
-            \requiere{$c=C_0$}
-            \asegura{$c.s=concat(C_0.s,\{e\})$}
+            \encProc{encolar}{\Inout c:\cola, e: T}{\cola}
+            \requiere{c=C_0}
+            \asegura{c.s=concat(C_0.s,\{e\})}
         \end{proc}
         \begin{proc}
             \encProc{desencolar}{\Inout c:\cola}{T}
-            \requiere{$c=C_0$}
-            \asegura{$c.s=tail(C_0.s) \land res=head(C_0.s)$}
+            \requiere{c=C_0}
+            \asegura{c.s=tail(C_0.s) \land res=head(C_0.s)}
         \end{proc}
     \end{TAD}
-    \begin{TAD}{$Pila\langle T\rangle$}
-        \obs{s}{$seq\langle T\rangle$}
+    \item [b) ]
+    \begin{TAD}{Pila\langle T\rangle}
+        \obs{s}{seq\langle T\rangle}
         \begin{proc}
-            \encProc{nuevaPila}{\In s:\seq}{$\pila$}
+            \encProc{nuevaPila}{\In s:\seq}{\pila}
             \requiere{True}
             \asegura{|res.s|=0}
         \end{proc}
         \begin{proc}
             \encProc{estaVacia}{\In c:\pila}{Bool}
             \requiere{True}
-            \asegura{$res=True \leftrightarrow |c.s|=0$}
+            \asegura{res=True \leftrightarrow |c.s|=0}
         \end{proc}
         \begin{proc}
-            \encProc{apilar}{\Inout c:\pila, e: T}{$\pila$}
-            \requiere{$c=C_0$}
-            \asegura{$c.s=concat(\{e\}, C_0.s)$}
+            \encProc{apilar}{\Inout c:\pila, e: T}{\pila}
+            \requiere{c=C_0}
+            \asegura{c.s=concat(\{e\}, C_0.s)}
         \end{proc}
         \begin{proc}
             \encProc{desapilar}{\Inout c:\pila}{T}
-            \requiere{$c=C_0$}
-            \asegura{$c.s=tail(C_0.s) \land res=head(C_0.s)$}
+            \requiere{c=C_0}
+            \asegura{c.s=tail(C_0.s) \land res=head(C_0.s)
+            }
+        \end{proc}
+    \end{TAD}
+    \newcommand{\dobleCola}{dobleCola\langle T\rangle}
+    \item [c) ] \begin{TAD}{dobleCola\langle T\rangle}
+        \obs{elems}{seq\langle T\rangle}
+        \begin{proc}
+            \encProc{nuevaDobleCola}{\ }{\dobleCola}
+            \requiere{True}
+            \asegura{|res.elems|=0}
+        \end{proc}
+        \begin{proc}
+            \encProc{estaVacia}{\In c:\dobleCola}{Bool}
+            \requiere{True}
+            \asegura{|res.elems|=0}
+        \end{proc}
+        \begin{proc}
+            \encProc{encolarAdelante}{\Inout c:\dobleCola, \In e:T}{\ }
+            \requiere{c=C_0}
+            \asegura{c.elems=\{e\}++C_0.elems}
+        \end{proc}
+        \begin{proc}
+            \encProc{encolarAtras}{\Inout c:\dobleCola, \In e:T}{\ }
+            \requiere{c=C_0}
+            \asegura{c.elems=C_0.elems++\{e\}}
+        \end{proc}
+        \begin{proc}
+            \encProc{desencolar}{\Inout c:\dobleCola}{T}
+            \requiere{c=C_0}
+            \asegura{res=C_0.elems[|C_0.elems|/2]\land c.elems=subseq(C_0.elems,0,|C_0.elems|/2)++subseq(C_0.elems,|C_0.elems|/2,|C_0.elems|)}
         \end{proc}
     \end{TAD}
 \end{itemize}
+\newpage
+\subsection*{Ejercicio 4}
+\begin{itemize}
+\item[a) ]
+
+\begin{TAD}{Diccionario\langle K,V\rangle}
+    \obs{elem}{conj\langle tupla\langle K,V\rangle\rangle}
+    \begin{proc}
+        \encProc{nuevoDict}{\ }{Diccionario\langle K,V\rangle}
+        \asegura{|res.pares|=0}
+    \end{proc}
+    \begin{proc}
+        \encProc{definir}{\Inout d:Diccionario\langle K,V\rangle,\In k:K,\In t:T}{\ }
+        \requiere{d=D_0}
+        \asegura{(\exists t':tupla\langle K,V\rangle)(t'\in D_0 \land t'_0=k)\Leftrightarrow d.pares=(D_0.pares-\langle t'\rangle)\cup \langle\langle k,t\rangle\rangle}
+        \asegura{\neg(\exists t':tupla\langle K,V\rangle)(t'\in D_0 \land t'_0=k)\Leftrightarrow d.pares=D_0.pares\cup \langle\langle k,t\rangle\rangle}
+    \end{proc}
+    \begin{proc}
+        \encProc{obtener}{\In d:Diccionario\langle K,V\rangle,\In k:K}{T}
+        \requiere{claveInDict(d,k)}
+        \asegura{\langle k,res\rangle \in d.pares}
+    \end{proc}
+    \begin{proc}
+    \encProc{esta}{\In d:Diccionario\langle K,V\rangle,\In k:K}{Bool}
+    \requiere{True}
+    \asegura{res=True\Leftrightarrow claveInDict(d,k)}
+    \end{proc}
+    \begin{proc}
+        \encProc{borrar}{\Inout d:Diccionario\langle K,V\rangle,\In k:K}{\ }
+        \requiere{d=D_0 \land claveInDict(D_0,k)}
+        \asegura{(\exists t:T)(\langle k,t\rangle \in D_0.pares)\Leftrightarrow d.pares= D_0.pares-\langle\langle k,t\rangle\rangle}
+    \end{proc}
+    \pred{claveInDict}{\In d:Diccionario\langle K,V\rangle,\In k:K}{(\exists t:tupla\langle K,V\rangle)(t\in d.pares \land t_0=k)}
+
+\end{TAD}
+\end{itemize}
+\subsection*{Ejercicio 5}
+\begin{itemize}
+    \item [b) ] \begin{TAD}{conjunto\langle T\rangle}
+        \obs{esta(x:T)}{Bool}
+        \begin{proc}
+            \encProc{nuevoConj}{\ }{conjunto\langle T\rangle}
+            \asegura{(\forall x:T)(\neg res.esta(x))}
+        \end{proc}
+        \begin{proc}
+            \encProc{agregar}{\Inout c:conjunto\langle T\rangle,\In e:T}{\ }
+            \requiere{c=C_0}
+            \asegura{C_0.esta(e)\Leftrightarrow (\forall x:T)(C_0.esta(x)\to c.esta(x))}
+            \asegura{\neg C_0.esta(e)\Leftrightarrow (\forall x:T)(C_0.esta(x)\land x\neq e\to c.esta(x)\land c.esta(e))}
+        \end{proc}
+        \begin{proc}
+            \encProc{eliminar}{\Inout c:conjunto\langle T\rangle,\In e:T}{\ }
+            \requiere{c=C_0 \land C_0.esta(e)}
+            \asegura{(\forall x:T)(C_0.esta(x)\land x\neq e \leftrightarrow  c.esta(x)\land \neg c.esta(e))}
+        \end{proc}
+        \begin{proc}
+            \encProc{intersec}{\In a,b:conjunto\langle T\rangle}{conjunto\langle T\rangle}
+            \requiere{True}
+            \asegura{(\forall x:T)(a.esta(x)\land b.esta(x) \leftrightarrow res.esta(x))}
+        \end{proc}
+        \begin{proc}
+            \encProc{union}{\In a,b:conjunto\langle T\rangle}{conjunto\langle T\rangle}
+            \requiere{True}
+            \asegura{(\forall x:T)(a.esta(x)\lor b.esta(x) \leftrightarrow res.esta(x))}
+        \end{proc}
+    \end{TAD}
+    \item [d) ]
+    \begin{TAD}{punto}
+        \obs{rad}{\real}
+        \obs{ang}{\real}
+        \begin{proc}
+            \encProc{crearPunto}{\In r,a \real}{punto}
+            \asegura{res.rad=r\land res.ang=a}
+        \end{proc}
+        \begin{proc}
+            \encProc{dist}{\In p1,p2:punto}{\real}
+            \requiere{True}
+            \asegura{ res=norma(x(p1)-x(p2),y(p1)-y(p2))}
+        \end{proc}
+        \begin{proc}
+            \encProc{distOrig}{\In p:punto}{\real}
+            \requiere{True}
+            \asegura{norma(x(p),y(p))}
+        \end{proc}
+        \begin{proc}
+            \encProc{mover}{\Inout p:punto,\In dx,dy:\real}{\ }
+            \requiere{p=P_0}
+            \asegura{(\exists r,a:\real)(r*cos(a)=P_0.rad*cos(P_0.ang)+dx \land r*sen(a)=P_0.rad*sen(P_0.ang)+dy) \leftrightarrow p.rad=r \land p.ang=a}
+        \end{proc}
+        \aux{x}{\In p:punto}{\real}{cos(p.ang)*p.rad}
+        \aux{y}{\In p:punto}{\real}{sen(p.ang)*p.rad}
+        \aux{norma}{\In x,y: \real}{\real}{\sqrt{x^2+y^2}}
+    \end{TAD}
+\end{itemize}
+\newpage
+\subsection*{Ejercicio 6}
+\begin{itemize}
+\item [a)]
+\begin{TAD}{multiConjunto\langle T\rangle}
+    \obs{esta(x:T)}{Bool}
+    \obs{mult(x:T)}{\entero}
+    \begin{proc}
+        \encProc{nuevoMultiConjunto}{\ }{multiConjunto\langle T\rangle}
+        \asegura{(\forall t:T)(\neg res.esta(t)\leftrightarrow res.mult(t)=0)}
+    \end{proc}
+    \begin{proc}
+        \encProc{agregar}{\Inout c:multiConjunto\langle T\rangle,\In t:T}{\ }
+        \requiere{c=C_0}
+        \asegura{(\forall x:T)(C_0.esta(x)\land x\neq t\leftrightarrow c.esta(x)\land c.esta(t)\land C_0.mult(x)=c.mult(x)\land \newline  {\hspace{1.4in}c.mult(t)=C_0.mult(t)+1)}}
+    \end{proc}
+    \begin{proc}
+        \encProc{quitar}{\Inout c:multiConjunto\langle T\rangle,\In t:T}{\ }
+        \requiere{c=C_0}
+        \asegura{C_0.mult(t)>1 \land(\forall x:T)(C_0.esta(x)\land x\neq t\leftrightarrow c.esta(x)\land c.esta(t)\land\newline {\hspace{1.4in}C_0.mult(x)=c.mult(x)\land   c.mult(t)=C_0.mult(t)-1)}}
+        \asegura{C_0.mult(t)\leq1 \land(\forall x:T)(C_0.esta(x)\land x\neq t\leftrightarrow c.esta(x)\land \neg c.esta(t)\land\newline {\hspace{1.4in}C_0.mult(x)=c.mult(x)\land  c.mult(t)=0)}}
+    \end{proc}
+    \begin{proc}
+        \encProc{pertenece}{\In c:multiConjunto\langle T\rangle,\In t:T}{Bool}
+        \requiere{True}
+        \asegura{res=c.esta(t)}
+    \end{proc}
+    \begin{proc}
+        \encProc{multiplicidad}{\In c:multiConjunto\langle T\rangle,\In t:T}{\entero}
+        \requiere{True}
+        \asegura{res=c.mult(t)}
+    \end{proc}
+\end{TAD}
+\item [b) ] \begin{TAD}{multiDict\langle K,V\rangle}
+        \obs{data}{seq\langle tupla\langle K, V\rangle\rangle}
+        \begin{proc}
+            \encProc{nuevoMultiDIct}{\ }{multiDict\langle K,V\rangle}
+            \asegura{|res.data|=0}
+        \end{proc}
+        \begin{proc}
+            \encProc{definir}{\Inout md:multiDict\langle K,V\rangle, \In k:K, \In t:T}{\ }
+            \requiere{md=Md_0}
+            \asegura{cantApariciones(\langle K,V\rangle, md.data)=cantApariciones(\langle K,V\rangle, Md_0.data)+1}
+        \end{proc}
+        \begin{proc}
+            \encProc{obtener}{\In md:multiDict\langle K,V\rangle, \In k:K}{seq\langle V\rangle}
+            \requiere{True}
+            \asegura{(\forall t:tupla\langle K,V\rangle)(t\in md.data \land t_0=k \leftrightarrow t_1\in res)}
+        \end{proc}
+        \begin{proc}
+            \encProc{pertenece}{\In md:multiDict\langle K,V\rangle, \In k:K}{Bool}
+            \requiere{True}
+            \asegura{res=True\leftrightarrow claveInDict(md,k)}
+        \end{proc}
+        \begin{proc}
+            \encProc{borrar}{\Inout md:multiDict\langle K,V\rangle, \In k:K}{\ }
+            \requiere{md=Md_0}
+            \asegura{(\forall t:tupla\langle K,V\rangle)(t\in Md_0.data \land t_0=k \leftrightarrow \neg(t\in md.data))}
+        \end{proc}
+        \pred{claveInDict}{\In md:multiDict\langle K,V\rangle,\In k:K}{(\exists t:tupla\langle K,V\rangle)(t\in md.data \land t_0=k)}
+        \aux{cantApariciones}{\In t:T, \In s:seq\langle T\rangle}{\entero}{\sum\limits_{i=0}^{|s|-1}ifThenElse(s[i]=t,1,0)}
+\end{TAD}
+\end{itemize}
+\subsection*{Ejercicio 7}
+\begin{itemize}
+    \item [i) ]
+    \begin{TAD}{contador}
+        \obs{list}{seq\langle T\rangle}
+        \obs{cont(x:T)}{\entero}
+        \begin{proc}
+            \encProc{nuevoContador}{\In s:seq\langle T\rangle }{contador}
+            \asegura{(\forall t:T)(t\in s \to res.cont(t)=cantApariciones(t,s) )}
+        \end{proc}
+        \begin{proc}
+            \encProc{cantEventos}{\In c:contador,\In t:T}{\entero}
+            \requiere{True}
+            \asegura{res=c.cont(t)}
+        \end{proc}
+        \begin{proc}
+            \encProc{incrementarEvento}{\Inout c:contador,\In t:T}{\ }
+            \requiere{t\in c.list \land c=C_0}
+            \asegura{c.list=C_0.list++\langle t\rangle \land c.cont(t)=C_0.cont(t)+1}
+        \end{proc}
+    \end{TAD}
+    \item [ii) ]
+    \begin{TAD}{contador}
+        \obs{list}{seq\langle T\rangle}
+        \obs{cont(x:T)}{dict(\entero,\entero)}
+        \begin{proc}
+            \encProc{nuevoContador}{\In s:seq\langle T\rangle,\In fecha:\entero}{contador}
+            \asegura{(\forall t:T)(t\in s \leftrightarrow setKey(res.cont(t),fecha,cantApariciones(t,s)))}
+            \asegura{(\forall t:T)(t\in s \leftrightarrow t\in c.list)}
+        \end{proc}
+        \begin{proc}
+            \encProc{cantEventos}{\In c:contador,\In t:T,\In fecha:\entero}{\entero}
+            \requiere{True}
+            \asegura{(\exists f:\entero)(f\in c.cont(t) \land (\forall f':\entero)(f'\in c.cont(t) \Leftrightarrow f'\leq f\leq fecha))\leftrightarrow\newline
+             {\hspace{1.4in}res=d[f]}}
+        \end{proc}
+        \begin{proc}
+            \encProc{incrementarEvento}{\Inout c:contador,\In t:T,\In fecha:\entero}{\ }
+            \requiere{t\in c.list \land c=C_0}
+            \asegura{c.list=C_0.list++\langle t\rangle}
+            \asegura{cantApariciones(t,c.list)=cantApariciones(t,C_0.list)+1}
+            \asegura{setKey(c.cont(t),fecha,cantApariciones(t,C_0.list)+1)} 
+        \end{proc}
+        \begin{proc}
+            \encProc{eventosPorFecha}{\In c:contador,\In t:T,\In fecha:\entero}{\entero}
+            \requiere{fecha\in c.cont(t)}
+            \asegura{res= c.cont(t)[fecha]}
+        \end{proc}
+    \end{TAD}
+\end{itemize}
+\subsection*{Ejercicio 8}
+\begin{itemize}
+    \item [i) ]
+    \begin{TAD}{CacheFIFO\langle K,V\rangle}
+        \obs{data}{dict(K,V)}
+        \obs{time}{dict(K,\entero)}
+        \obs{capacidad}{\entero}
+        \begin{proc}
+            \encProc{nuevoCacheFIFO}{\In cap:\entero}{CacheFIFO\langle K,V\rangle}
+            \requiere{cap\geq0}
+            \asegura{res.capacidad=cap}
+            \asegura{|res.data|=0\land|res.time|=0}
+        \end{proc}
+        \begin{proc}
+            \encProc{esta}{\In c: CacheFIFO\langle K, V\rangle, \In k: K}{Bool}
+            \requiere{True}
+            \asegura{res=True\leftrightarrow k\in c.data\land k\in c.time}
+        \end{proc}
+        \begin{proc}
+            \encProc{obtener}{\In c: CacheFIFO\langle K, V\rangle, \In k: K}{V}
+            \requiere{k\in c.data\land k\in c.time}
+            \asegura{res=c.data[k]}
+        \end{proc}
+        \begin{proc}
+            \encProc{definir}{\Inout c: CacheFIFO\langle K, V\rangle, \In k: K,\in v:V}{\ }
+            \requiere{c=C_0}
+            \asegura{C_0.cap=0 \leftrightarrow c.cap=0\land c.data=\{\}\land c.time=\{\} }
+            \asegura{C_0.cap=|C_0.data| \land k\in C_0.data \leftrightarrow setKey(c.data,k,v)\land\newline {\hspace{1.4in}setKey(c.time,k,horaActual())}}
+            \asegura{C_0.cap=|C_0.data| \land \neg(k\in C_0.data) \leftrightarrow setKey(delKey(c.data,m),k,v) \land\newline {\hspace{1.4in}setKey(delKey(c.time,m),k,horaActual) \land claveMasVieja(C_0,m)}}
+            \asegura{C_0.cap>|C_0.data| \leftrightarrow setKey(c.data,k,v)\land setKey(c.time,k,horaActual())}
+            \asegura{c.cap=C_0.cap}
+        \end{proc}
+        \pred{claveMasVieja}{c: CacheFIFO\langle K, V\rangle,k: K}{
+            (\forall p:K)(p\in c.time \leftrightarrow c.time[p]\geq c.time[k])
+        }
+    \end{TAD}
+
+    \item [ii) ]
+    \begin{TAD}{CacheLRU\langle K,V\rangle}
+        \obs{data}{dict(K,V)}
+        \obs{time}{dict(K,\entero)}
+        \obs{access}{dict(K,\entero)}
+        \obs{capacidad}{\entero}
+        \begin{proc}
+            \encProc{nuevoCacheLRU}{\In cap:\entero}{CacheLRU\langle K,V\rangle}
+            \requiere{cap\geq0}
+            \asegura{res.capacidad=cap}
+            \asegura{|res.data|=0\land|res.time|=0\land|res.access|=0}
+        \end{proc}
+        \begin{proc}
+            \encProc{esta}{\In c: Cache\langle K, V\rangle, \In k: K}{Bool}
+            \requiere{True}
+            \asegura{res=True\leftrightarrow k\in c.data\land k\in c.time}
+        \end{proc}
+        \begin{proc}
+            \encProc{obtener}{\In c: Cache\langle K, V\rangle, \In k: K}{V}
+            \requiere{k\in c.data\land k\in c.time}
+            \asegura{res=c.data[k]\land setKey(c.access,k,horaActual())}
+        \end{proc}
+        \begin{proc}
+            \encProc{definir}{\Inout c: CacheLRU\langle K, V\rangle, \In k: K,\in v:V}{\ }
+            \requiere{c=C_0}
+            \asegura{C_0.cap=0 \leftrightarrow c.cap=0\land c.data=\{\}\land c.time=\{\}\land c.access=\{\} }
+            \asegura{C_0.cap=|C_0.data| \land k\in C_0.data \leftrightarrow c.data=setKey(c.data,k,v)\land\newline 
+            {\hspace{1.4in}c.time=setKey(c.time,k,horaActual())\land (\forall k':K)(k'\in C_0.access\Leftrightarrow k'\in c.access)}}
+            \asegura{C_0.cap=|C_0.data| \land \neg(k\in C_0.data) \leftrightarrow\newline
+            {\hspace{1.4in}c.data=setKey(delKey(C_0.data,m),k,v)} \land\newline 
+            {\hspace{1.4in}c.time=setKey(delKey(C_0.time,m),k,horaActual)} \land\newline
+            {\hspace{1.4in}((oldestAccess(C_0,m)\land c.access=delKey(C_0.access,m))\lor}\newline
+            {\hspace{1.4in}\neg oldestAccess(C_0,m) \land claveMasVieja(C_0,m))}}
+            \asegura{C_0.cap>|C_0.data| \leftrightarrow c.data=setKey(C_0.data,k,v)\land\newline 
+            {\hspace{1.4in}c.time=setKey(C_0.time,k,horaActual())\land (\forall k':K)(k'\in C_0.access\Leftrightarrow k'\in c.access)} }
+            \asegura{c.cap=C_0.cap}
+        \end{proc}
+        \pred{oldestKey}{c: CacheLRU\langle K, V\rangle,k: K}{
+            (\forall p:K)(p\in c.time \leftrightarrow c.time[p]\geq c.time[k])
+        }
+        \pred{oldestAccess}{c: CacheLRU\langle K, V\rangle,k: K}{
+            (\forall p:K)(p\in c.access \leftrightarrow c.access[p]\geq c.access[k])
+        }
+    \end{TAD}
+    \item [iii) ]
+    \begin{TAD}{CacheTTL\langle K,V\rangle}
+        \obs{data}{dict(K,V)}
+        \obs{time}{dict(K,\entero)}
+        \obs{tmax}{\entero}
+        \begin{proc}
+            \encProc{nuevoCacheTTL}{\In tiempoMax:\entero}{CacheTTL\langle K,V\rangle}
+            \requiere{cap\geq0}
+            \asegura{res.tmax=tiempoMax}
+            \asegura{|res.data|=0\land|res.time|=0}
+        \end{proc}
+        \begin{proc}
+            \encProc{esta}{\In c: CacheTTL\langle K, V\rangle, \In k: K}{Bool}
+            \requiere{True}
+            \asegura{res=True\leftrightarrow k\in c.data\land k\in c.time \land c.time[k]<c.tmax}
+        \end{proc}
+        \begin{proc}
+            \encProc{obtener}{\In c: CacheTTL\langle K, V\rangle, \In k: K}{V}
+            \requiere{k\in c.data \land k\in c.time\land c.time[k]<c.tmax}
+            \asegura{res=c.data[k]}
+        \end{proc}
+        \begin{proc}
+            \encProc{definir}{\Inout c: CacheLRU\langle K, V\rangle, \In k: K,\in v:V}{\ }
+            \requiere{c=C_0}
+            \asegura{c.data=setKey(C_0.data,k,v)\land c.time=setKey(C_0.time,k,time)}
+            \asegura{c.tmax=C_0.tmax}
+        \end{proc}
+    \end{TAD}
+\end{itemize}
+\subsection*{Ejercicio 9}
+\begin{TAD}{robot}
+    \obs{pos}{struct\langle x:\entero,y:\entero \rangle}
+    \obs{cont(p:struct\langle x:\entero,y:\entero \rangle)}{\entero}
+    \begin{proc}
+        \encProc{nuevoRobot}{\In posx,posy:\entero}{robot}
+        \asegura{res.pos.x=posx\land res.pos.y=posy}
+        \asegura{(\forall a,b:\entero)(a\neq posx\land b\neq posy\leftrightarrow res.cont(\langle x:a,y:b \rangle)=0)}
+        \asegura{res.cont(\langle x:posx,y:posy\rangle)=1}
+    \end{proc}
+    \begin{proc}
+        \encProc{arriba}{\Inout r:robot}{\ }
+        \requiere{r=R_0}
+        \asegura{r.pos.x=R_0.pos.x \land r.pos.y=R_0.pos.y+1}
+        \asegura{r.cont(\langle x:r.pos.x,y:r.pos.y\rangle)=R_0.cont(\langle x:R_0.pos.x,y:R_0.pos.y\rangle)+1}
+    \end{proc}
+    \begin{proc}
+        \encProc{abajo}{\Inout r:robot}{\ }
+        \requiere{r=R_0}
+        \asegura{r.pos.x=R_0.pos.x \land r.pos.y=R_0.pos.y-1}
+        \asegura{r.cont(\langle x:r.pos.x,y:r.pos.y\rangle)=R_0.cont(\langle x:R_0.pos.x,y:R_0.pos.y\rangle)+1}
+    \end{proc}
+    \begin{proc}
+        \encProc{derecha}{\Inout r:robot}{\ }
+        \requiere{r=R_0}
+        \asegura{r.pos.x=R_0.pos.x+1 \land r.pos.y=R_0.pos.y}
+        \asegura{r.cont(\langle x:r.pos.x,y:r.pos.y\rangle)=R_0.cont(\langle x:R_0.pos.x,y:R_0.pos.y\rangle)+1}
+    \end{proc}
+    \begin{proc}
+        \encProc{izquierda}{\Inout r:robot}{\ }
+        \requiere{r=R_0}
+        \asegura{r.pos.x=R_0.pos.x-1 \land r.pos.y=R_0.pos.y}
+        \asegura{r.cont(\langle x:r.pos.x,y:r.pos.y\rangle)=R_0.cont(\langle x:R_0.pos.x,y:R_0.pos.y\rangle)+1}
+    \end{proc}
+    \begin{proc}
+        \encProc{masDerecha}{\In r:robot}{\langle x:\entero,y:\entero\rangle}
+        \requiere{True}
+        \asegura{res=c\leftrightarrow res.cont(c)>0 \land(\forall c':\langle x:\entero,y:\entero\rangle)(res.cont(c')>0\leftrightarrow c'.x\leq c.x)}
+    \end{proc}
+    \begin{proc}
+        \encProc{cuantasVecesPaso}{\In r:robot,\In t:\langle x:\entero,y:\entero\rangle}{\entero}
+        \requiere{True}
+        \asegura{res=r.cont(t)}
+    \end{proc}
+\end{TAD}
+\subsection*{Ejercicio 10}
+\begin{TAD}{vivero}
+    \obs{stock}{dict(K,\entero)}
+    \obs{precios}{dict(K,\real)}
+    \obs{balance}{\real}
+    \begin{proc}
+        \encProc{nuevoVivero}{\In capital}{Vivero}
+        \asegura{|res.data|=0\land |res.stock|=0\land res.balance=capital}
+    \end{proc}
+    \begin{proc}
+        \encProc{comprar}{\Inout v:vivero,\In planta:string,\In cant:\entero,\In precio:\real}{\ }
+        \requiere{capital\geq cant*precio \land cant>0\land precio>0}
+        \requiere{v=V_0}
+        \asegura{planta\in v.stock\leftrightarrow v.stock=setKey(V_0.stock,planta,V_0.stock[planta]+cant)}
+        \asegura{planta \notin v.stock \leftrightarrow v.stock=setKey(V_0.stock,planta,cant)}
+        \asegura{v.balance=V_0.balance-cant*precio}
+        \asegura{v.precios=V_0.precios}
+    \end{proc}
+    \begin{proc}
+        \encProc{asignarPrecio}{\Inout v:vivero,\In planta:string,\In p:precio}{\ }
+        \requiere{v=V_0\land planta\in V_0.stock\land p>0}
+        \asegura{v.precios=setKey(V_0.stock,planta,p)\land v.stock=V_0.stock\land\newline
+        {\hspace{1.4in} v.balance=V_0.balance}}
+    \end{proc}
+    \begin{proc}
+        \encProc{venta}{\Inout v:vivero,\In planta:string}{\ }
+        \requiere{V_0.stock[planta]>0 \land planta\in V_0.precios \land v=V_0}
+        \asegura{v.stock[planta]=V_0.stock[planta]-1 \land v.precios=V_0.precios}
+        \asegura{v.balance=V_0.balance+v.precios[planta]}
+    \end{proc}
+    \begin{proc}
+        \encProc{balance}{\In v:vivero}{\real}
+        \requiere{True}
+        \asegura{res=v.balance}
+    \end{proc}
+\end{TAD}
+\subsection*{Ejercicio 11}
+
+\begin{TAD}{dobleCola\langle T\rangle}
+    \obs{cola1}{seq\langle T\rangle}
+    \obs{cola2}{seq\langle T\rangle}
+    \obs{lastCola}{\entero}
+    \begin{proc}
+        \encProc{nuevaDobleCola}{\In c1,c2:seq\langle T\rangle }{dobleCola\langle T\rangle}
+        \requiere{noHayRepetidos(c1++c2)}
+        \asegura{res.cola1=c1\land res.cola2=c2 \land lastCola=2}
+    \end{proc}
+    \begin{proc}
+        \encProc{encolar}{\Inout dc:dobleCola\langle T\rangle \In elem:T,\In cola:\entero}{\ }
+        \requiere{dc=Dc_0\land (cola=1\lor cola=2)}
+        \asegura{cola=1 \leftrightarrow dc.cola1=Dc_0.cola1++\{elem\}\land dc.cola2=Dc_0.cola2}
+        \asegura{cola=2 \leftrightarrow dc.cola2=Dc_0.cola2++\{elem\}\land dc.cola1=Dc_0.cola1}
+        \asegura{dc.lastCola=Dc_0.lastCola}
+    \end{proc}
+    \begin{proc}
+        \encProc{desencolar}{\Inout dc:dobleCola\langle T\rangle}{T}
+        \requiere{dc=Dc_0 \land (|Dc_0.cola1|>0 \lor |Dc_0.cola2|>0)}
+        \asegura{Dc_0.lastCola=2\land |Dc_0.cola1|>0 \leftrightarrow\newline {\hspace{1.4in}dc.cola1=tail(Dc_0.cola1)\land res=head(Dc_0.cola1)\land dc.lastCola=1}}
+        \asegura{Dc_0.lastCola=1\land |Dc_0.cola2|>0 \leftrightarrow\newline {\hspace{1.4in}dc.cola2=tail(Dc_0.cola2)\land res=head(Dc_0.cola2)\land dc.lastCola=2}}
+        \asegura{Dc_0.lastCola=2\land |Dc_0.cola1|=0  \land |Dc_0.cola2|>0 \leftrightarrow\newline {\hspace{1.4in}dc.cola2=tail(Dc_0.cola2)\land res=head(Dc_0.cola2)\land dc.lastCola=1}}
+        \asegura{Dc_0.lastCola=1\land |Dc_0.cola2|=0  \land |Dc_0.cola1|>0 \leftrightarrow\newline {\hspace{1.4in}dc.cola1=tail(Dc_0.cola1)\land res=head(Dc_0.cola1)\land dc.lastCola=2}}
+    \end{proc}
+    \begin{proc}
+        \encProc{mudarElemento}{\Inout dc:dobleCola\langle T\rangle,\In elem:T}{\ }
+        \requiere{elem\in(Dc_0.cola1++Dc_0.cola2)\land dc=Dc_0}
+        \asegura{esIndice(i,elem,Dc_0.cola1)\leftrightarrow\newline
+        {\hspace{1.4in}dc.cola1=subseq(Dc_0.cola1,0,i)++subseq(Dc_0.cola1,i+1,|Dc_0.cola1|)}\land\newline 
+        {\hspace{1.4in}dc.cola2=Dc_0.cola2++\{elem\}}}
+        \asegura{esIndice(i,elem,Dc_0.cola2)\leftrightarrow\newline
+        {\hspace{1.4in}dc.cola2=subseq(Dc_0.cola1,0,i)++subseq(Dc_0.cola2,i+1,|Dc_0.cola2|)}\land\newline 
+        {\hspace{1.4in}dc.cola1=Dc_0.cola1++\{elem\}}}
+    \end{proc}
+    \pred{noHayRepetidos}{s:seq\langle T\rangle}{
+        (\forall i,j:T)(i\in s\land j\in s \to i\neq j)
+    }
+    \pred{esIndice}{i:\entero,elem: T,s:seq\langle T\rangle}{
+        res=True \leftrightarrow 0\leq i<|s| \land_L s[i]=elem
+    }
+\end{TAD}
+\subsection*{Ejercicio 12}
+\begin{TAD}{CallOfDuty:The\ Arrival\ of\ AED}
+    \obs{batallones}{dict(K,seq\langle \entero\rangle)}
+    \obs{money}{\real}
+    \obs{lands}{seq\langle T\rangle}
+    Nota: por comodidad se usara la equivalencia cod=CallOfDuty:The Arrival of AED
+    \begin{proc}
+        \encProc{CoDInit}{\In m:\real,\In land:K,\In}{cod}
+        \requiere{m\geq0}
+        \asegura{res.batallones=\{\}\land res.money=m\land res.lands=land}
+    \end{proc}
+    \begin{proc}
+        \encProc{contratarMercenario}{\Inout c:cod,\In bat:K,\In mer:struct\langle power:\entero,prize:\real\rangle}{\ }
+        \requiere{c=C_0\land C_0.money\geq mer.prize}
+        \requiere{mer.prize\geq0 \land mer.power\geq0}
+        \asegura{|C_0.batallones[bat]|>0 \leftrightarrow\newline
+        {\hspace{1.4in}c.batallones=setKey(C_0.batallones,bat,C_o.batallones[bat]++\{mer.power\})}}
+        \asegura{|C_0.batallones[bat]|=0 \leftrightarrow c.batallones=setKey(C_0.batallones,bat,\{mer.power\})}
+        \asegura{(\forall k:K)(k\in C_0.batallones \land k\neq bat \leftrightarrow c.batallones[k]=C_0.batallones[k])}
+        \asegura{c.money=C_0.money-mer.prize}
+        \asegura{c.lands=C_0.lands}
+    \end{proc}
+    \begin{proc}
+        \encProc{atacarTerritorio}{\Inout c:cod,\In bat:k, \In terr:T,\In power:\entero}{\ }
+        \requiere{c=C_0}
+        \requiere{terr\notin C_0.lands\land power\geq0\land C_0.money\geq500}        
+        \asegura{poderBat(C_0,bat)>power \leftrightarrow c.money=C_0-money+1000 \land\newline
+        {\hspace{1.4in}c.lands=C_0.lands++\{terr\}} }
+        \asegura{poderBat(C_0,bat)\leq power \leftrightarrow c.money=C_0-money-500 \land c.lands=C_0.lands}
+        \asegura{c.batallones=C_0.batallones}
+    \end{proc}
+    \begin{proc}
+        \encProc{cantTerritorios}{\In c:cod}{\entero}
+        \asegura{res=|c.lands|}
+    \end{proc}
+    \aux{poderBat}{\In c:cod,\In bat:K}{\entero}{
+        \sum_{i=0}^{|c.batallones[bat]|-1}c.batallones[bat][i]
+    }
+    
+\end{TAD}
 \end{document}
