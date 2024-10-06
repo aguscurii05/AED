@@ -3,22 +3,42 @@ package aed;
 import java.util.*;
 
 public class ListaEnlazada<T> implements Secuencia<T> {
-    // Completar atributos privados
+    private int len ;
+    private Nodo primero;
+    private Nodo ultimo;
 
     private class Nodo {
-        // Completar
+        T valor;
+        Nodo sig;
+        Nodo ant;
+        Nodo(T v){valor=v;}
     }
 
     public ListaEnlazada() {
-        throw new UnsupportedOperationException("No implementada aun");
+        len = 0;
+        primero = null;
+        ultimo = null;
     }
 
     public int longitud() {
-        throw new UnsupportedOperationException("No implementada aun");
+        return len;
     }
 
     public void agregarAdelante(T elem) {
-        throw new UnsupportedOperationException("No implementada aun");
+        if (primero== null) {
+            Nodo nuevo = new Nodo(elem);
+            nuevo.ant= null;
+            nuevo.sig = null;
+            primero = nuevo;
+            ultimo = nuevo;
+        }
+        else{
+            Nodo nuevo = new Nodo(elem);
+            nuevo.ant= null;
+            nuevo.sig= primero;
+            primero =nuevo;
+        }
+        len++;
     }
 
     public void agregarAtras(T elem) {
@@ -26,8 +46,12 @@ public class ListaEnlazada<T> implements Secuencia<T> {
     }
 
     public T obtener(int i) {
-        throw new UnsupportedOperationException("No implementada aun");
-    }
+        Nodo puntero = primero;
+        for (int j=0;j<i;j++){
+            puntero=puntero.sig;
+        }
+        return puntero.valor;
+        }
 
     public void eliminar(int i) {
         throw new UnsupportedOperationException("No implementada aun");
