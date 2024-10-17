@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, margin={.9in}]{geometry}
+\usepackage{amssymb, amsmath}
+\usepackage{setspace}
+\usepackage{listings}
+\spacing{1.3}
+\begin{document}
+\section*{Practica 5 - Complejidad\\}
+\subsection*{Ejercicio 1\\}
+\begin{itemize}
+    \item [a) ] $(n^2-4n-2 \in O(n^2))\equiv \exists n_o,k >0\ tq\ n\geq n_0 \implies f(n)\leq k*g(n)$\\\\
+    \begin{align}
+        n^2-4n-2 &\leq n^2\\
+        -4n-2 &\leq 0\\
+        -4n &\leq 2\\
+        n &\geq -\dfrac{1}{2}\\ 
+    \end{align}
+    Existen dichos $n_o$ y $k$ y una posibilidad es $n_0= -\dfrac{1}{2}$ y $k=1$
+
+    \item [b) ] $f\in O(n^k) \implies f\leq m\cdot n^k\leq m\cdot n^{k+1} \implies \boxed{f\in O(n^{k+1})}$
+
+    \item [c) ] Qvq $log n \in O(n)$. Veo por limite
+    \setcounter{equation}{0}
+    \begin{align}
+        \lim_{n\to\infty}\dfrac{log\ n}{n}=\lim_{n\to\infty}\dfrac{1}{ln(10)n}=0
+    \end{align}
+    Por lo tanto como $f\in O(log\ n)$ y $log\ n \in O(n)$ entonces $f\in O(n)$
+\end{itemize}
+\subsection*{Ejercicio 2}
+\begin{itemize}
+    \item [a) ] $2^n\in O(1)$ no vale ya que $2^n\geq 1$ para todo n mayor a 0. Por
+    ejemplo con n=1 esta afirmacion no vale.
+    \item [b) ] $n\in O(n!)$. Veo por limite:
+    \setcounter{equation}{0}
+    \begin{align}
+        \lim_{n\to\infty}\dfrac{n}{n!}=\lim_{n\to\infty}\dfrac{1}{(n-1)!}=\lim_{n\to\infty}\dfrac{1}{\infty}=0
+    \end{align}
+    Luego como el limite es 0 $n\in O(n!)$
+
+    \item [c) ] $n!\in O(n^n)$ Si veo termino a termino, entonces tendre n-terminos tanto
+    para $n!$ como para $n^n$. Luego al comparar dichos terminos, puedo decir que todos los de n!
+    son $\leq n$. Luego como todos los de $n^n$ son n, entonces puedo afirmar que $n!\in O(n^n)$
+
+    \item [d) ] $2^n\in O(n!)$. Tomando la misma idea de antes, al comparar termino por termino,
+    estaria enfrentando a 2 contra todos los valores de n!. Asi basta con tomar cualquier
+    $k\geq 2$ para que valga la afirmacion.
+
+    \item [e) ] $i\cdot n\in O(j\cdot n)\implies in\leq k\cdot jn \implies i\leq k\cdot j$. Si $i\leq j$ vale
+    la afirmacion. Si si i>j entonces basta con tomar algun $k\geq\dfrac{i}{j}$
+
+    \item [f) ] Para todo $k\in\mathbb{N} 2^k\in O(1)\implies 2^k\leq m.1$. Esto vale
+    pues ambas son constantes, por lo tanto siempre va a existir un k lo suficientemente grande
+    como para que $2^k\leq m$
+
+    \item[g) ] $log(n)\in O(n)$. Veo por limite:
+    \setcounter{equation}{0}
+    \begin{align}
+        \lim_{n\to\infty}\dfrac{log\ n}{n}=\lim_{n\to\infty}\dfrac{1}{ln(10)n}=0
+    \end{align}
+    Luego $log(n)\in O(n)$
+
+    \item [h) ] No vale, es lo inverso a lo planteado en d)
+
+    \item [i) ] $n^5+b.n^3 \in \Theta(n^5) \Leftrightarrow b=0$\\
+    $\Leftarrow ) b=0 \implies n^5\in\Theta(n^5) \equiv True$
+
+    $\Rightarrow) n^5+b.n^3 \in \Theta(n^5) \implies n^5+b.n^3 \in O(n^5) \land n^5+b.n^3 \in \Omega (n^5)$. Veo por limite.
+    \setcounter{equation}{0}
+    \begin{align}
+        \lim_{n\to\infty}\dfrac{n^5+b.n^3}{n^5}=\lim_{n\to\infty}1+b.\dfrac{1}{n^2}=1+0=1
+    \end{align} 
+    De esta manera $n^5+b.n^3\in \Theta(n^5+b.n^3)=\Theta(n^5)$ para todo valor de b.
+    En consecuencia no vale $\Leftrightarrow$
+
+    \item [j) ] $n^k.log(n)\in O(n^k+1) \implies n^k.log(n)\leq m. n^{k+1} \implies log(n)\leq m.n \implies log(n)\in O(n)$\\
+    Luego esto vale (demostrado en g)
+\end{itemize}
+
+\subsection*{Ejercicio 3}
+
+Significa que ,dada una funcion h, todas las funciones f que acotan a h por arriba estan
+a su vez acotadas por arriba por g. Luego si estan contenidas mutuamente entonces van a tener
+el mismo crecimiento.
+
+\subsection*{Ejercicio 4}
+\end{document}
