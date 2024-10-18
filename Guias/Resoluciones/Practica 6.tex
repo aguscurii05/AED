@@ -1,0 +1,259 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[a4paper, margin={.9in}]{geometry}
+\usepackage{amssymb, amsmath}
+\usepackage{setspace}
+\usepackage{listings}
+\spacing{1.3}
+\newcommand{\invRep}[2]{\noindent\texttt{pred} invRep (#1)\{#2\}\\}
+\newcommand{\abst}[2]{\noindent\texttt{pred} abs (#1)\{#2\}\\}
+\newcommand{\pred}[3]{\noindent\texttt{pred} #1 (#2)\{#3\}\\}
+\newcommand{\func}[1]{\textbf{\ttfamily{#1}}}
+\newcommand{\entero}{\mathbb{Z}}
+\newcommand{\rac}{\mathbb{Q}}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\In}{\textit{in }}
+\newcommand{\Inout}{\textit{inout }}
+\newcommand{\new}{\textbf{new} }
+\newenvironment{modulo}[2]{
+    \begin{flushleft}
+        
+    
+    \noindent\func{modulo} #1 \func{implementa} #2 $\{$
+    \newcommand{\obs}[2]{{\hspace{.65cm}##1 : ##2}\\}
+    \newcommand{\var}[2]{\hspace{1.4cm}\func{var} ##1 : ##2\\}
+    
+
+}{$\}$\end{flushleft}}
+\newenvironment{proc}[3]{\begin{flushleft}
+    
+
+        \hspace{.65cm}\func{proc} #1 (#2): #3 $\{$\\
+        \newcommand{\s}[1]{\hspace{.65cm}##1}
+        \newcommand{\linea}[1]{\hspace{1.4cm}##1}
+        \newcommand{\lineaint}[1]{\hspace{2.05cm}##1\\}
+        
+        \newcommand{\asig}[2]{\hspace{1.4cm}##1 := ##2\\}
+        \newcommand{\cond}[1]{\hspace{1.4cm}{\ttfamily{if}} (##1) {\ttfamily{then}}\\}
+        \newcommand{\ElseIf}[1]{\hspace{1.4cm}{\ttfamily{ElseIf}} (##1) {\ttfamily{then}}\\}
+        \newcommand{\Else}{\hspace{1.4cm}{\ttfamily{else}}\\}
+        \newcommand{\Endif}{\hspace{1.4cm}{\ttfamily{endif}}\\}
+        \newcommand{\while}[1]{\hspace{1.4cm}{\ttfamily{while}} (##1) {\ttfamily{do}}\\}
+        \newcommand{\Endwhile}{\hspace{1.4cm}{\ttfamily{endwhile}}\\}
+        \newcommand{\return}[1]{\hspace{1.4cm}{\textbf{return}} ##1\\}
+    }{\hspace{.65cm}$\}$\end{flushleft}}
+\begin{document}
+\section*{Ejercicio 1\\}
+
+\begin{proc}{agregarAtras}{\Inout l:$listaEnlazada<T>$, \In t: $T$}{}
+    \asig{nodo}{\new $NodoLista<T>$}
+    \asig{nodo.valor}{t}
+    \asig{nodo.siguiente}{null}
+    \cond{l.longitud==0}
+    \s\asig{l.primero}{nodo}
+    \s\asig{l.ultimo}{nodo}
+    \Else
+    \s\asig{l.ultimo.siguiente}{nodo}
+    \s\asig{l.ultimo}{nodo}
+    \Endif
+    \linea{l.longitud++}
+\end{proc}
+\begin{proc}{obtener}{\In l: $listaEnlazada<T>$, \In i: $\entero$}{$T$}
+    \asig{j}{0}
+    \while{$j<i$}
+    \lineaint{j++}
+    \Endwhile
+    \return{l[j]}
+\end{proc}
+\begin{proc}{concatenar}{\Inout l1: $listaEnlazada<T>$, \In l2: $listaEnlazada<T>$}{}
+    \cond{$l1.longitud!=0$ and $l2==0$}
+    \s\asig{l1}{l1}
+    \ElseIf{$l1.longitud==0$ and $l2.longitud!=0$}
+    \s\asig{l1.primero}{l2.primero}
+    \s\asig{l1.ultimo}{l2.ultimo}
+    \s\asig{puntero}{l2.primero.siguiente}
+    \s\while{puntero!=null}
+    \s\lineaint{agregarAtras(l1,puntero)}
+    \s\s\asig{puntero}{puntero.siguiente}
+    \s\Endwhile
+    \Else
+    \s\asig{l1.ultimo}{l2.ultimo}
+    \s\asig{puntero}{l2.primero}
+    \s\while{puntero!=null}
+    \s\lineaint{agregarAtras(l1,puntero)}
+    \s\s\asig{puntero}{puntero.siguiente}
+    \s\Endwhile
+    \Endif
+    \asig{l1.longitud}{l1.longitud+l2.longitud}
+\end{proc}
+\newpage
+\noindent$agregarAtras\ \in O(1)$\\
+$obtener\ \in O(n)$\\
+$concatenar\ \in O(n)$\\
+
+El invariante de representacion debe indicar que el largo de la secuencia se corresponde
+con la cantidad de elementos que tiene la misma y que 'primero' y 'ultimo' pertenecen a la
+secuencia (esta mal)
+
+\section*{Ejercicio 2}
+
+\invRep{c:$conjArr<T>$}{$c.tamano\geq c.datos.length \land noRepetidos(c)$}
+
+\pred{noRepetidos}{c:$conjArr<T>$}{$(\forall i:\entero)(0\leq i<c.tamano \to \neg(\exists j:\entero)(0\leq j<c.tamano \land j\neq i \land c[j]=c[i])$}
+
+\abst{c:$conjArr<T>$, c': $ConjuntoAcotado<T>$}{$c.tamano=c'.capacidad \land
+(\forall i:\entero)(0\leq i\leq c.tamano \to c[i]\in c'.elems)$}
+
+\section*{Ejercicio 3}
+
+\invRep{c: $conjuntoLista<T>$}{$c.tamano=c.datos.longitud$}
+
+\abst{c: $conjuntoLista<T>$, c': $conjunto<T>$}{$c.tamano=|c'.elems| \land (\forall e:T)(e\in c.datos \leftrightarrow e\in c'.elems)$}
+
+\begin{modulo}{$conjuntoLista<T>$}{$conjunto<T>$}
+    \begin{proc}{conjVacio}{}{$ConjuntoLista<T>$}
+        \asig{res.datos}{\new listavacia()}
+        \asig{res.tamaño}{0}
+        \return{res}
+        
+    \end{proc}
+    \begin{proc}{pertenece}{\In c:$conjuntoLista<T>$,\In e:$T$}{Bool}
+        \asig{res}{False}
+        \asig{puntero}{c.datos.cabeza}
+        \while{$puntero!=null \land res=False$}
+        \s\cond{puntero.val==e}
+        \s\s\asig{res}{True}
+        \s\Else
+        \s\s\asig{puntero}{puntero.siguiente}
+        \s\Endif
+        \Endwhile
+        \return{res}
+    \end{proc}
+    \begin{proc}{agregar}{\Inout c:$conjuntoLista<T>$,\In e:$T$}{}
+        \cond{pertenece(c,e)}
+        \s\asig{newUlt}{\new $nodoLista<T>$}
+        \s\asig{newUlt.sig}{null}
+        \s\asig{newUlt.ant}{c.datos.ultimo}
+        \s\asig{c.datos.ultimo.siguiente}{newUlt}
+        \s\asig{c.datos.ultimo}{newUlt}
+        \Endif
+    \end{proc}
+    \noindent(\texttt{agregarRapido} asume que el elemento se encuentra en la lista)
+    \begin{proc}{agregarRapido}{\Inout c:$conjuntoLista<T>$,\In e:$T$}{}
+        \asig{newUlt.sig}{null}
+        \asig{newUlt}{\new $nodoLista<T>$}
+        \asig{newUlt.ant}{c.datos.ultimo}
+        \asig{c.datos.ultimo.siguiente}{newUlt}
+        \asig{c.datos.ultimo}{newUlt}
+    \end{proc}
+    \begin{proc}{unir}{\Inout c1:$conjuntoLista<T>$,\In c2:$conjuntoLista<T>$}{}
+        \cond{c2.tamaño!=0 and c1.tamaño!=0}
+        \s\asig{puntero}{c2.datos.cabeza}
+        \s\asig{c1.ultimo.siguiente}{puntero}
+        
+        \s\while{puntero!=null}
+        \s\s\cond{$pertenece(c1,puntero)==False$}
+        \s\s\lineaint{agregar(c1,puntero)}
+        \s\s\s\cond{$puntero.siguiente==null$}
+        \s\s\s\s\asig{c1.datos.ultimo}{puntero}
+        \s\s\s\Endif
+        \s\s\Endif
+        \s\s\asig{puntero}{puntero.siguiente}
+        \s\Endwhile
+        \ElseIf{c1.tamaño=0}
+        \s\asig{c1}{c2}
+        \Endif  
+    \end{proc}
+\end{modulo}
+\begin{itemize}
+    \item $conjVacio\in O(1)$
+    \item $pertenece\in O(n)$
+    \item $agregar\in O(n)$
+    \item $agregarRapido\in O(1)$
+    \item $unir \in O(n^2)$
+\end{itemize}
+
+\section*{Ejercicio 4}
+
+\begin{modulo}{$indice$}{$Conjunto\langle tupla\langle \entero,\entero,\entero\rangle\rangle$}
+    \var{data}{$array\langle tupla\langle \entero,\entero,\entero\rangle\rangle$}
+    \var{indices}{$array\langle array\langle\entero\rangle\rangle$}    
+\end{modulo}
+
+\invRep{i:indice}{$(\forall a:array\langle\entero\rangle)(a\in i.indices \to a.length = i.data.longitud) \land 
+\\(\forall j:\entero)(0\leq j\leq 2 \to_L (\forall k:\entero)( 1\leq k<i[j].length \to_L
+ i.data[k]_j\geq i.data[k-1]_j))\land i.indices.length=3$}
+
+\abst{i: indice,c': $Conjunto\langle tupla\langle \entero,\entero,\entero\rangle\rangle$}{$(\forall e:tupla\langle \entero,\entero,\entero\rangle)(e\in i.data \leftrightarrow e\in c.elems)$}
+
+\noindent\begin{proc}{buscarPor}{$i:indice, comp:\entero, t:tupla\langle \entero,\entero,\entero\rangle$}{Bool}
+    \asig{res}{false}
+    \asig{int j}{0}
+    \asig{pos}{i.indices[comp][j]}
+    \while{$j<i.data.length$}
+    \s\cond{$t==i.data[pos]$}
+    \s\s\asig{res}{true}
+    \s\Endif
+    \return{res}
+\end{proc}
+\begin{proc}{agregar}{$\Inout i:indice,\In t:tupla\langle \entero,\entero,\entero\rangle,\In comp:\entero$}{}
+    \cond{buscarPor(i,t,comp)}
+    \lineaint{i.data.length++}
+    \s\asig{i.data[i.data.length-1]}{t}
+    \s\asig{int j}{0}
+    \s\while{$j<3$}
+    \s\lineaint{agregarAIndice(i,j,t)}
+    \s\Endwhile
+\end{proc}
+\begin{proc}{agregarAIndice}{$\Inout i:indice,\In j:\entero,\In t:tupla\langle \entero,\entero,\entero\rangle,\In comp:\entero$}{}
+    \asig{j}{0}
+    \asig{newIndice}{$\new\ array\langle\entero\rangle(i.data.length)$}
+    \asig{noSeAgrego}{True}
+    \while{$j<i.data.length-1$}
+    \s\asig{pos}{i.indices[comp][j]}
+    \s\cond{$i.data[pos]_{comp}\geq t_{comp}$ and noSeAgrego}
+    \s\s\asig{newArray[j]}{i.data.length-1}
+    \s\s\asig{noSeAgrego}{False}
+    \s\s\asig{newArray[j+1]}{pos}
+    \s\Else
+    \s\s\asig{newArray[j]}{pos}
+    \s\Endif
+    \Endwhile
+    \cond{noSeAgrego}
+    \s\asig{newArray[i.data.length-1]}{i.data.length-1}
+    \Endif
+    \asig{i.indices[comp]}{newIndice}
+\end{proc}
+
+\begin{proc}{sacar}{$\Inout i:indice,\In j:\entero,\In t:tupla\langle \entero,\entero,\entero\rangle,\In comp:\entero$}{}
+    \cond{buscarPor(i,t,comp)}
+    \asig{newData}{$\new array\langle tupla\langle \entero,\entero,\entero\rangle\rangle(i.data.length-1)$}
+    \asig{j}{0}
+    \while{$j<i.data.length$}
+    \s\cond{i.data[j]!=t}
+    \s\s\asig{newArray[j]}{i.data[j]}
+    \s\Else 
+    \s\s\asig{posTupla}{j}
+    \s\Endif
+    \Endwhile
+    \asig{k}{0}
+    \asig{newindex0}{$\new\ array\langle\entero\rangle(i.data.length-1)$}
+    \asig{newindex1}{$\new\ array\langle\entero\rangle(i.data.length-1)$}
+    \asig{newindex2}{$\new\ array\langle\entero\rangle(i.data.length-1)$}
+    \while{$k<i.data.length$}
+    \s\cond{i.indice[k]!=posTupla}
+    \s\s\asig{newindex0[k]}{i.indice[0][k]}
+    \s\s\asig{newindex1[k]}{i.indice[1][k]}
+    \s\s\asig{newindex2[k]}{i.indice[2][k]}
+    \s\Endif
+    \Endwhile
+    \asig{i.indice[0]}{newindex0}
+    \asig{i.indice[1]}{newindex1}
+    \asig{i.indice[2]}{newindex2}
+    \asig{i.data}{newData}
+
+
+
+    
+\end{proc}
+\end{document}
