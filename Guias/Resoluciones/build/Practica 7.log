@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.9.10)  25 OCT 2024 11:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.9.10)  1 NOV 2024 21:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"c:/Users/Curi/Desktop/Facultad/AED/Guias/Resoluciones/Practica 6.tex"
-(c:/Users/Curi/Desktop/Facultad/AED/Guias/Resoluciones/Practica 6.tex
+**"c:/Users/Curi/Desktop/Facultad/AED/Guias/Resoluciones/Practica 7.tex"
+(c:/Users/Curi/Desktop/Facultad/AED/Guias/Resoluciones/Practica 7.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
 (C:\Users\Curi\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
@@ -162,23 +162,23 @@ Package: listings 2023/02/27 1.9 (Carsten Heinz)
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count284
 \l__pdf_internal_box=\box55
-) (c:\Users\Curi\Desktop\Facultad\AED\Guias\Resoluciones\build\Practica 6.aux)
-\openout1 = `"Practica 6.aux"'.
+) (c:\Users\Curi\Desktop\Facultad\AED\Guias\Resoluciones\build\Practica 7.aux)
+\openout1 = `"Practica 7.aux"'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
  (C:\Users\Curi\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count285
@@ -233,79 +233,60 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 \c@lstlisting=\count291
+LaTeX Font Info:    Trying to load font information for U+msa on input line 57.
+(C:\Users\Curi\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 57.
+ (C:\Users\Curi\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 57.
+ (C:\Users\Curi\AppData\Local\Programs\MiKTeX\tex/latex/base\omscmr.fd
+File: omscmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 57.
 
-Underfull \hbox (badness 10000) in paragraph at lines 46--46
+Underfull \hbox (badness 10000) in paragraph at lines 57--58
+
+ []
+
+
+Overfull \hbox (22.9459pt too wide) in paragraph at lines 60--61
+\OT1/cmtt/m/n/10 pred \OT1/cmr/m/n/10 el-em-InAB (e: $\OML/cmm/m/it/10 T$\OT1/cmr/m/n/10 ,raiz: $\OML/cmm/m/it/10 Nodo < T >$\OT1/cmr/m/n/10 )\OMS/cmsy/m/n/10 f$\OML/cmm/m/it/10 raiz \OMS/cmsy/m/n/10 6\OT1/cmr/m/n/10 = [] \OMS/cmsy/m/n/10 ^[] \OT1/cmr/m/n/10 (\OML/cmm/m/it/10 e \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 raiz:dato \OMS/cmsy/m/n/10 _ \OT1/cmr/m/n/10 (\OML/cmm/m/it/10 raiz:izq \OMS/cmsy/m/n/10 6\OT1/cmr/m/n/10 = [] \OMS/cmsy/m/n/10 ^[] \OML/cmm/m/it/10 elemInAB\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 e; raiz:izq\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 _
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 60--61
 
  []
 
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 48.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 48.
-(C:\Users\Curi\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 48.
- (C:\Users\Curi\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 63.
+[1
 
-{C:/Users/Curi/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 90--93
-
+{C:/Users/Curi/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] [2]
+Overfull \hbox (8.54195pt too wide) in paragraph at lines 162--163
+\OML/cmm/m/it/10 cp:data\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 i\OT1/cmr/m/n/10 ][] \OML/cmm/m/it/10 > cp:data\OT1/cmr/m/n/10 [2\OML/cmm/m/it/10 i \OT1/cmr/m/n/10 + 1][]) \OMS/cmsy/m/n/10 ^ \OT1/cmr/m/n/10 (2\OML/cmm/m/it/10 i \OT1/cmr/m/n/10 + 2 \OML/cmm/m/it/10 < cp:data:length\OT1/cmr/m/n/10 () \OMS/cmsy/m/n/10 ^[] \OML/cmm/m/it/10 cp:data\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 i\OT1/cmr/m/n/10 ][] \OML/cmm/m/it/10 > cp:data\OT1/cmr/m/n/10 [2\OML/cmm/m/it/10 i \OT1/cmr/m/n/10 + 2][])) \OMS/cmsy/m/n/10 ^ j\OML/cmm/m/it/10 altura\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 cp:data; \OT1/cmr/m/n/10 2) \OMS/cmsy/m/n/10 ^^@
  []
 
-LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 100.
-(C:\Users\Curi\AppData\Local\Programs\MiKTeX\tex/latex/base\omscmr.fd
-File: omscmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 100.
 
-Underfull \hbox (badness 10000) in paragraph at lines 100--101
+Underfull \hbox (badness 10000) in paragraph at lines 162--163
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 102--103
+Underfull \hbox (badness 10000) in paragraph at lines 164--165
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 105--106
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 109--110
+[3] [4] [5] [6]
+Underfull \hbox (badness 10000) in paragraph at lines 329--333
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 111--112
-
- []
-
-[2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 185--186
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 187--188
-
- []
-
-[4] [5]
-Underfull \hbox (badness 10000) in paragraph at lines 291--292
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 295--296
-
- []
-
-[6] [7] [8] (c:\Users\Curi\Desktop\Facultad\AED\Guias\Resoluciones\build\Practica 6.aux)
+[7] [8] (c:\Users\Curi\Desktop\Facultad\AED\Guias\Resoluciones\build\Practica 7.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
@@ -316,17 +297,17 @@ L3 programming layer <2024-01-04>
 ### semi simple group (level 1) entered at line 7 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 4544 strings out of 474485
- 67395 string characters out of 5744206
- 1934542 words of memory out of 5000000
- 26803 multiletter control sequences out of 15000+600000
- 563452 words of font info for 56 fonts, out of 8000000 for 9000
+ 4547 strings out of 474485
+ 67404 string characters out of 5744206
+ 1933542 words of memory out of 5000000
+ 26806 multiletter control sequences out of 15000+600000
+ 563090 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,6n,65p,291b,1209s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\Curi\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on "c:\Users\Curi\Desktop\Facultad\AED\Guias\Resoluciones\build\Practica 6.pdf" (8 pages, 144291 bytes).
+ 57i,6n,65p,288b,1227s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ <C:\Users\Curi\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/Curi/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on "c:\Users\Curi\Desktop\Facultad\AED\Guias\Resoluciones\build\Practica 7.pdf" (8 pages, 137379 bytes).
 PDF statistics:
- 89 PDF objects out of 1000 (max. 8388607)
+ 84 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

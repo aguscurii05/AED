@@ -251,9 +251,129 @@ secuencia (esta mal)
     \asig{i.indice[1]}{newindex1}
     \asig{i.indice[2]}{newindex2}
     \asig{i.data}{newData}
-
-
-
-    
 \end{proc}
+\newpage
+\section*{Ejercicio 5}
+
+\begin{modulo}{$bufferCircular<T>$}{$Cola<T>$}
+    \var{data}{$array<T>$}
+    \var{f}{int}
+    \var{i}{int}
+    \var{size}{int}
+    \begin{proc}{encolar}{\Inout b:$bufferCircular<T>$, \In elem: T}{}
+        \cond{$b.f!=-1$ and (($b.i>b.f$ and $b.i-b.f>1$) or ($b.i<b.f$ and $b.size-b.f>0$))}
+        \s\asig{b.data[f]}{elem}
+        \s \asig{b.f}{b.f+1}
+        \ElseIf{b.f==-1}
+        \s\asig{b.data[b.i]}{elem}
+        \s\asig{b.f}{b.i}
+        \Endif
+    \end{proc}
+    \begin{proc}{desencolar}{\Inout b:$bufferCircular<T>$}{T}
+        \asig{res}{null}
+        \cond{i=f}
+        \s\asig{res}{b.data[i-1]}
+        \s\asig{b.data[i-1]}{null}
+        \s\asig{f}{-1}
+        \ElseIf{i!=f}
+        \s\asig{res}{b.data[i-1]}
+        \s\asig{b.data[i-1]}{null}
+        \s\cond{b.i==b.size}
+        \s\s\asig{b.i}{1}
+        \s\Else
+        \s\s\asig{b.i}{b.i+1}
+        \s\Endif
+        \Endif
+        \return{res}
+    \end{proc}
+\end{modulo}
+
+\invRep{b:$bufferCircular<T>$}{$0\leq i\leq b.size \land -1\leq f\leq b.size \land size=b.data.length$}
+
+\abst{b:$bufferCircular<T>$,b':$ColaAcotada<T>$}{$cantElems(b)=b'.s.length \land \\
+(i>f \leftrightarrow b'.s = subseq(b.data,b.i-1,b.size-1)++subseq(b.data,0,b.f-1))\land\\
+(i\leq f \leftrightarrow b'.s=subseq(b.data,b.i-1,b.f-1))\land (f=-1 \leftrightarrow b'.s=\langle\rangle)$}
+
+No tiene sentido usar un buffer circular para una pila ya que siempre se agregan o se eliminan elementos
+en la ultima posicion, por lo tanto no tendria ninguna utilidad reciclar espacio con un buffer ya que, 
+el funcionamiento en si mismo de la pila permite reciclar la ultima posicion.
+
+\section*{Ejercicio 6}
+\subsection*{Diccionario sobre listaEnlazada}
+\texttt{Pares} es $struct<key:K,val:V>$
+\begin{modulo}{$dict<K,V>$}{$Diccionario<K,V>$}
+    \var{data}{$listaEnlazada<Pares>$}
+    \begin{proc}{diccionarioVacio}{}{$dict<K,V>$}
+        \linea{res.data.listavacia()\\}
+        \return{res}
+    \end{proc}
+    \begin{proc}{esta}{d:$dict<K,V>$,clave:K}{Bool}
+        \asig{res}{False}
+        \asig{it}{d.data.iterador()}
+        \while{it.haySiguiente()}
+        \s\cond{$it.siguiente().key==k$ and $res!=True$}
+        \s\s\asig{res}{True}
+        \s\Endif
+        \Endwhile
+        \return{res}
+    \end{proc}
+    \begin{proc}{definir}{\Inout d: $dict<K,V>$, \In k: K, \In v: V}{}
+        \asig{it}{d.data.iterador()}
+        \asig{def}{False}
+        \while{it.haySiguiente() and !def}
+        \s\asig{elem}{it.siguiente()}
+        \s\cond{elem.key==k}
+        \s\s\asig{elem.val}{v}
+        \s\s\asig{def}{True}
+        \s\Endif
+        \Endwhile
+        \cond{!def}
+        \s\asig{newElem}{\new Pares}
+        \s\asig{newElem.key}{k}
+        \s\asig{newElem.val}{v}
+        \lineaint{d.data.agregarAtras(newElem)}
+        \Endif
+    \end{proc}
+    \newpage
+    \begin{proc}{definirRapido}{\Inout d: $dict<K,V>$, \In k: K, \In v: V}{}
+        \asig{newElem}{\new Pares}
+        \asig{newElem.key}{k}
+        \asig{newElem.val}{v}
+        \linea{d.data.agregarAtras(newElem)}
+
+    \end{proc}
+    \begin{proc}{obtener}{\Inout d: $dict<K,V>$, \In k: K}{V}
+        \asig{it}{d.data.iterador()}
+        \asig{find}{False}
+        \while{it.haySiguiente() and !find}
+        \s\asig{elem}{it.siguiente()}
+        \s\cond{elem.key==k}
+        \s\s\asig{res}{elem.val}
+        \s\s\asig{find}{True}
+        \s\Endif
+        \Endwhile
+        \return{res}
+    \end{proc}
+    \begin{proc}{borrar}{\Inout d: $dict<K,V>$, \In k: K}{}
+        \asig{value}{obtener(d,k)}
+        \asig{Elem}{\new Pares}
+        \asig{Elem.key}{k}
+        \asig{Elem.val}{value}
+        \linea{d.data.eliminar(elem)}
+    \end{proc}
+    \begin{proc}{tamaño}{d:$dict<K,V>$}{int}
+        \return{d.data.longitud()}
+    \end{proc}
+    
+\end{modulo}
+
+\begin{itemize}
+    \item $diccionarioVacio\in O(1)$
+    \item $esta\in O(n)$
+    \item $definir\in O(n)$
+    \item $definirRapido \in O(1)$
+    \item $obtener\in O(n)$
+    \item $borrar\in O(n)$
+    \item $tamano\in O(1)$
+\end{itemize}
 \end{document}

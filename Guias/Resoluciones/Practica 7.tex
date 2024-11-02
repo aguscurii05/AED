@@ -1,0 +1,378 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[a4paper, margin={.9in}]{geometry}
+\usepackage{amssymb, amsmath}
+\usepackage{setspace}
+\usepackage{listings}
+\spacing{1.3}
+\newcommand{\invRep}[2]{\noindent\texttt{pred} invRep (#1)\{$#2$\}\\}
+\newcommand{\abst}[2]{\noindent\texttt{pred} abs (#1)\{#2\}\\}
+\newcommand{\pred}[3]{\noindent\texttt{pred} #1 (#2)\{$#3$\}\\}
+\newcommand{\aux}[3]{\noindent\texttt{aux} #1 ($#2$)=$#3$\\}
+\newcommand{\func}[1]{\textbf{\ttfamily{#1}}}
+\newcommand{\entero}{\mathbb{Z}}
+\newcommand{\rac}{\mathbb{Q}}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\In}{\textit{in }}
+\newcommand{\Inout}{\textit{inout }}
+\newcommand{\new}{\textbf{new} }
+\newcommand{\Null}{\texttt{null}}
+\newenvironment{modulo}[2]{
+    \begin{flushleft}
+        
+    
+    \noindent\func{modulo} #1 \func{implementa} #2 $\{$
+    \newcommand{\obs}[2]{{\hspace{.65cm}##1 : ##2}\\}
+    \newcommand{\var}[2]{\hspace{1.4cm}\func{var} ##1 : ##2\\}
+    
+
+}{$\}$\end{flushleft}}
+\newenvironment{proc}[3]{\begin{flushleft}
+    
+
+        \hspace{.7cm}\func{proc} #1 (#2): #3 $\{$\\
+        \newcommand{\s}[1]{\hspace{.7cm}##1}
+        \newcommand{\ts}[1]{\hspace{2.1cm}##1}
+        \newcommand{\linea}[1]{\hspace{1.4cm}##1}
+        \newcommand{\lineaint}[1]{\hspace{2.1cm}##1\\}
+        
+        \newcommand{\asig}[2]{\hspace{1.4cm}##1 := ##2\\}
+        \newcommand{\cond}[1]{\hspace{1.4cm}{\ttfamily{if}} (##1) {\ttfamily{then}}\\}
+        \newcommand{\ElseIf}[1]{\hspace{1.4cm}{\ttfamily{ElseIf}} (##1) {\ttfamily{then}}\\}
+        \newcommand{\Else}{\hspace{1.4cm}{\ttfamily{else}}\\}
+        \newcommand{\Endif}{\hspace{1.4cm}{\ttfamily{endif}}\\}
+        \newcommand{\while}[1]{\hspace{1.4cm}{\ttfamily{while}} (##1) {\ttfamily{do}}\\}
+        \newcommand{\Endwhile}{\hspace{1.4cm}{\ttfamily{endwhile}}\\}
+        \newcommand{\return}[1]{\hspace{1.4cm}{\textbf{return}} ##1\\}
+    
+    }{\hspace{.7cm}$\}$\end{flushleft}}
+\begin{document}
+\section{}
+\subsection{}
+El invrep debe asegurar que para todos los elementos del arbol haya algun 
+camino que los conecte con la raiz, excepto que sean la raiz en si.
+
+\subsection{}
+
+\invRep{ab:$ArbolBinario<T>$}{(\forall e:T)(e\in ab\land ab.raiz\neq null\leftrightarrow elemInAB(e,ab.raiz))}
+
+\pred{elemInAB}{e: $T$,raiz: $Nodo<T>$}{
+    raiz\neq \null \land_L (e=raiz.dato \lor (raiz.izq\neq \Null \land_L elemInAB(e,raiz.izq))\lor (raiz.der\neq \Null \land_L elemInAB(e,raiz.der)))}
+
+\subsection{}
+\begin{modulo}{$ArbolBinario<T>$}{$Arbol Binario <T>$}
+    \begin{proc}{alturaRama}{\In raiz: $Nodo<T>$}{int}
+        \cond{raiz!=null}
+        \s\asig{altura}{1}
+        \s\asig{altIzq}{0}
+        \s\asig{altDer}{0}
+        \s\cond{raiz.izq!=null}
+        \s\s\asig{altIzq}{alturaRama(raiz.izq)}
+        \s\Endif
+        \s\cond{raiz.der!=null}
+        \s\s\asig{altDer}{alturaRama(raiz.der)}
+        \s\Endif
+        \s\cond{altIzq$>$altDer}
+        \s\s\asig{res}{altura+altIzq}
+        \s\Else
+        \s\s\asig{res}{altura+altDer}
+        \Else
+        \s\asig{res}{0}
+        \Endif
+        \return{res}    
+    \end{proc}
+    \begin{proc}{hojasRama}{\In raiz: $Nodo<T>$}{int}
+        \asig{res}{0}
+        \cond{raiz=null}
+        \lineaint{res++}
+        \cond{raiz.izq!=null}
+        \s\asig{res}{res+hojasRama(raiz.izq)}
+        \Else
+        \lineaint{res++}
+        \Endif
+        \cond{raiz.der!=null}
+        \s\asig{res}{res+hojasRama(raiz.der)}
+        \Else
+        \lineaint{res++}
+        \Endif
+        
+    \end{proc}
+    \begin{proc}{altura}{\In ab:$ArbolBinario<T>$}{int}
+        \return{alturaRama(ab.raiz)}        
+    \end{proc}
+    \begin{proc}{cantidadHojas}{\In ab:$ArbolBinario<T>$}{int}
+        \return{hojasRama(ab.raiz)}        
+    \end{proc}
+\end{modulo}
+$altura\in O(a)$ [altura del arbol]\\
+$cantidadHojas\in O(a)$ [altura del arbol]
+\section{Hacer} 
+\section{}
+\subsection{Hacer} 
+\subsection{}
+Supongo que las key son elementos comparables\\
+$elem<K,V>$ es $struct<key:K,val:V>$
+\begin{modulo}{$dictABB<K,V>$}{$Diccionario<K,V>$}
+    \var{data}{$ABB<elem<K,V>>$}
+    \var{keys}{$ABB<K>$}
+    \begin{proc}{diccionarioVacio}{}{dictABB}
+        \asig{datos}{\new $ABB<elem<K,V>>$}
+        \asig{datos.raiz}{\Null}
+        \asig{claves}{\new $ABB<K>$}
+        \asig{claves.raiz}{\Null}
+        \asig{res}{\new $dictABB<K,V>$}
+        \asig{res.data}{datos}
+        \asig{res.keys}{claves}
+        \return{res}
+    \end{proc}
+    \begin{proc}{pertenece}{\In d: $dictABB<K,V>$, \In k: K}{bool}
+        \var{res}{bool}
+        \asig{res}{esta(d.keys,k)}
+        \return{res}
+    \end{proc}
+    \begin{proc}{definir}{\Inout d: $dictABB<K,V>$, \In k: K,\In v:V}{}
+        \asig{elemento}{\new $elem<K,V>$}
+        \asig{elemento.key}{k}
+        \asig{elemento.val}{v}
+        \linea{insertar(d.data,elemento)}\\
+        \linea{insertar(d.keys,k)}\\
+    \end{proc}
+
+    
+\end{modulo}
+\begin{itemize}
+    \item $diccionarioVacio \in O(1)$
+    \item $esta\in O(n)$ [ABB]
+    \item $esta\in O(log_2(n))$ [AVL (altura)]
+\end{itemize}
+
+\section{HACER}
+\section{}
+
+\begin{proc}{esMaxHeap}{a:AB}{Bool}
+    \return{$a\geq a.izq\ \&\ a\geq a.der\ \&\ esMaxHeap(a.izq)\ \&\ esMaxHeap(a.der)$}
+
+\end{proc}
+
+\section{}
+\subsection{}
+
+\invRep{cp:$colaprioridad\langle T\rangle$}{(\forall i:\entero)(0\leq i\leq cp.data.length()\to_L
+ (2i+1<cp.data.length() \land_L cp.data[i]_1>cp.data[2i+1]_1)\land (2i+2<cp.data.length() \land_L cp.data[i]_1>cp.data[2i+2]_1))\land
+ |altura(cp.data,2)-altura(cp.data,1)|\leq 1}
+
+\aux{altura}{a:array<T>,i:int}{ifThenElse(i<a.length(),1+max(altura(2i+1),altura(2i+2)),0)}
+\subsection{}
+\begin{modulo}{$colaprioridad\langle T\rangle$}{$ColaPrioridad\langle T\rangle$}
+    \var{data}{$array\langle\langle T,\real\rangle\rangle$}
+    \begin{proc}{encolar}{$cp:colaprioridad\langle T\rangle, e:T, p:\real$}{}
+        \asig{i}{0}
+        \asig{copia}{\new $array\langle\langle T,\real\rangle\rangle$}
+        \while{$i<cp.data.length()$}
+        \s\asig{copia[i]}{cp.data[i]}
+        \lineaint{i++}
+        \Endwhile
+        \asig{copia[i]}{$\langle e,p \rangle$}
+        \while{$((i\%2=0\ \&\ copia[i]_1>copia[(i-2)/2]_1)\ \|\ (i\%2!=0\ \&\ copia[i]_1>copia[(i-1)/2]_1))\ \&\ i!=0$}
+        \s\cond{$i\%2=0$}
+        \s\s\asig{copia[i-2]/2}{$\langle e,p \rangle$}
+        \s\s\asig{copia[i]}{padre}
+        \s\s\asig{padre}{copia[(i-2)/2]}
+        \s\s\asig{i}{(i-2)/2}
+        \s\Else
+        \s\s\asig{copia[i-1]/2}{$\langle e,p \rangle$}
+        \s\s\asig{copia[i]}{padre}
+        \s\s\asig{padre}{copia[(i-1)/2]}
+        \s\s\asig{i}{(i-1)/2}
+        \asig{cp.data}{copia}
+        
+    \end{proc}
+    \begin{proc}{desencolar}{cp:$colaprioridad\langle T\rangle$}{T}
+        \asig{max}{cp.data[0]}
+        \asig{copia}{\new $array\langle T\rangle (cp.data.length()-1)$}
+        \asig{copia[0]}{cp.data[cp.data.length()-1]}
+        \asig{i}{1}
+        \while{$i<copia.length()$}
+        \s\asig{copia[i]}{cp.data[i]}
+        \lineaint{i++}
+        \Endwhile
+        \asig{i}{0}
+        \while{$2i+1<copia.length()\ \|\ 2i+1<copia.length()$}
+        \s\cond{$copia[2i+1]_1>copia[2i+2]_1$}
+        \s\s\asig{raiz}{copia[i]}
+        \s\s\asig{copia[i]}{copia[2i+1]}
+        \s\s\asig{copia[2i+1]}{raiz}
+        \s\s\asig{i}{2i+1}
+        \s\Else
+        \s\s\asig{raiz}{copia[i]}
+        \s\s\asig{copia[i]}{copia[2i+2]}
+        \s\s\asig{copia[2i+2]}{raiz}
+        \s\s\asig{i}{2i+2}
+        \s\Endif
+        \Endwhile
+        \asig{cp.data}{copia}
+        \return{$max_0$}        
+    \end{proc}
+    \begin{proc}{cambiarPrioridad}{$cp:colaprioridad\langle T\rangle, e:T, p:\real$}{}
+        \while{$cp.data[i]_0!=e$}
+        \lineaint{i++}
+        \Endwhile
+        \asig{cp.data[i]}{$\langle e,p\rangle$}
+        (en esta parte del proc debo subir o bajar el elemento hasta que
+        su padre sea mas grande y sus hijos mas chicos)    
+    \end{proc}
+\end{modulo}
+\section{}
+En todos los lugares donde considero la prioridad, en vez de un ifThenElse deberia tener una estructura
+if(prior1){...}elseIf(prior2){...}else{...} donde prior1 y prior2 serian las prioridades. En el caso de los while
+deberia considerar que si al comparar los valores obtengo una igualdad entra en juego la segunda prioridad
+
+\section{}
+
+\begin{proc}{ordenar}{a:$array\langle T\rangle$}{$array\langle T\rangle$}
+    \asig{h}{\new $colaPrioridadLog\langle T\rangle$}
+    \lineaint{h.colaPrioridadDesdeSecuencia(a)}  
+    \asig{res}{\new $array\langle T\rangle(a.length())$}
+    \asig{i}{0}
+    \while{$i<a.length()$}
+    \s\asig{prox}{desencolarMax(h)}
+    \s\asig{array[i]}{prox}
+    \Endwhile
+    \return{res}
+\end{proc}
+\section{HACER}
+\section{HACER}
+\section{}
+$Nodo$ es $struct\langle valor:T, alfabeto:vector\langle Nodo\rangle\rangle$\\
+$palabra$ es $seq\langle T\rangle$
+\begin{modulo}{$triePalabras\langle T\rangle$}{TrieDePalabras}
+    \var{raiz}{Nodo}
+    \begin{proc}{primerPalabra}{t:$triePalabras\langle T\rangle$}{palabra}
+        \asig{act}{t.raiz}
+        \asig{i}{0}
+        \while{$i\leq25\ \&\ actual.alfabeto!=null$}
+        \s\cond{actual.alfabeto[i]!=null}
+        \s\s\asig{res}{res+actual.valor}
+        \s\s\asig{actual}{actual.alfabeto[i]}
+        \s\s\asig{i}{0}
+        \s\Else 
+        \s\lineaint{i++}
+        \Endwhile
+        \return{res}
+        
+    \end{proc}
+    \begin{proc}{ultimaPalabra}{t:$triePalabras\langle T\rangle$}{palabra}
+        \asig{act}{t.raiz}
+        \asig{i}{25}
+        \while{$i\geq0\ \&\ actual.alfabeto!=null$}
+        \s\cond{actual.alfabeto[i]!=null}
+        \s\s\asig{res}{res+actual.valor}
+        \s\s\asig{actual}{actual.alfabeto[i]}
+        \s\s\asig{i}{25}
+        \s\Else 
+        \s\lineaint{i- -}
+        \Endwhile
+        \return{res}
+        
+    \end{proc}
+    \begin{proc}{buscarIntervalo}{t:$triePalabras\langle T\rangle; p1,p2:palabras$}{$seq\langle palabra\rangle$}
+        \asig{p}{null}
+        \while{$p<p2$}
+        \s\asig{p}{primerPalabra(t)}
+        \lineaint{borrar(p,t)}
+        \s\cond{$p1\leq p\leq p2$}
+        \s\s\asig{res}{res+p}
+        \s\Endif
+        \Endwhile
+        \return{res}        
+    \end{proc}
+\end{modulo}
+
+\section{}
+Nodo es $struct\langle val:int,izq:Nodo,der:Nodo\rangle$
+\begin{proc}{filRep}{$mb:array\langle array\langle \entero\rangle\rangle$}{$array\langle\entero\rangle$}
+    \asig{fil}{0}
+    \asig{act}{\new $Nodo\langle \entero\rangle$}
+    \asig{raiz}{\new $Nodo\langle \entero\rangle$}
+    \asig{res}{\new $array\langle\entero\rangle(mb.length())$}
+    \asig{i}{0}
+    \while{i<mb.length()}
+    \s\asig{res[i]}{-1}
+    \Endwhile
+    \while{$f<mb.length()$}
+    \s\asig{col}{0}
+    \s\asig{act}{raiz}
+    \s\while{$c<mb[fil][col].length()$}  
+    \s\s\cond{$mb[fil][col]=0$}
+    \ts\asig{act}{act.izq}
+    \ts\cond{c=mb[f].length-1\ \&\ act.val!=null}
+    \ts\s\asig{res[act.val]}{f}
+    \ts\Endif
+    \ts\asig{act.val}{f}
+    \s\s\Endif
+    \s\s\cond{$mb[fil][col]=1$}
+    \ts\asig{act}{act.der}
+    \ts\cond{c=mb[f].length-1\ \&\ act.val!=null}
+    \ts\s\asig{res[act.val]}{f}
+    \ts\Endif
+    \ts\asig{act.val}{f}
+    \s\s\Endif
+    \s\lineaint{c++}
+    \s\Endwhile
+    \lineaint{f++}
+    \Endwhile
+    \return{res}
+    
+\end{proc}
+
+\section{}
+Nota: voy a suponer una funcion booleana \texttt{esMayus()} que devuelve si una letra es mayuscula\\
+Nodo es $struct\langle pals:vector\langle String\rangle, abecedario:vector\langle Nodo\rangle\rangle$\\
+Supongo que al inicializar el Nodo pals se inicializa vacio y abecedario con 27 Nodos
+que representan a cada letra del abecedario\\
+\begin{proc}{pal2Patron}{pal:String}{$array\langle\rangle$}
+    \asig{i}{0}
+    \asig{patron}{\new $array\langle Char\rangle$}
+    \while{$i<pal.length()$}
+    \s\cond{esMayus(pal[i])}
+    \s\s\asig{patron}{patron+pal[i]}
+    \s\Endif
+    \lineaint{i++}
+    \Endwhile
+    \return{patron}    
+\end{proc}
+\begin{proc}{array2trie}{a:$array\langle String\rangle$}{Nodo}
+    \asig{i}{0}
+    \asig{listaPatrones}{$\new array\langle(String,String)\rangle(a.length())$}
+    \while{$i<a.length()$}
+    \s\asig{patron}{pal2Patron(a[i])}
+    \s\asig{listaPatrones}{listaPatrones+(patron,a[i])}
+    \lineaint{i++}
+    \Endwhile
+    \asig{res}{\new Nodo}
+    \asig{i}{0}
+    \while{$i<listaPatrones.length()$}
+    \s\asig{j}{0}
+    \s\asig{act}{res}
+    \s\while{$j<listaPatrones[i]_0.length()$}
+    \s\s\asig{act}{act.abecedario[j]}
+    \s\lineaint{j++}
+    \s\Endwhile
+    \lineaint{$act.pals.agregarAtras(listaPatrones[i]_1)$}
+    \lineaint{i++}
+    \Endwhile
+    \return{res}            
+\end{proc}
+\begin{proc}{palabrasConPatron}{a:$array\langle String\rangle$, p:String}{$array\langle String\rangle$}
+    \asig{trie}{array2trie(a)}
+    \asig{i}{0}
+    \asig{act}{trie}
+    \while{$i<p.length()$}
+    \s\asig{letra}{p[i]}
+    \s\asig{act}{act.abecedario[letra]}
+    \lineaint{i++}
+    \Endwhile
+    Falta terminar aca
+\end{proc}
+
+\end{document}

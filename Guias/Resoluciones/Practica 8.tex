@@ -1,0 +1,187 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[a4paper, margin={.9in}]{geometry}
+\usepackage{amssymb, amsmath}
+\usepackage{setspace}
+\usepackage{listings}
+\spacing{1.3}
+\newcommand{\invRep}[2]{\noindent\texttt{pred} invRep (#1)\{$#2$\}\\}
+\newcommand{\abst}[2]{\noindent\texttt{pred} abs (#1)\{$#2$\}\\}
+\newcommand{\pred}[3]{\noindent\texttt{pred} #1 (#2)\{$#3$\}\\}
+\newcommand{\func}[1]{\textbf{\ttfamily{#1}}}
+\newcommand{\entero}{\mathbb{Z}}
+\newcommand{\rac}{\mathbb{Q}}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\In}{\textit{in }}
+\newcommand{\Inout}{\textit{inout }}
+\newcommand{\new}{\textbf{new} }
+\newcommand{\Null}{\texttt{null}}
+\newenvironment{modulo}[2]{
+    \begin{flushleft}
+        
+    
+    \noindent\func{modulo} #1 \func{implementa} #2 $\{$
+    \newcommand{\obs}[2]{{\hspace{.7cm}##1 : ##2}\\}
+    \newcommand{\var}[2]{\hspace{.7cm}\func{var} ##1 : $##2$\\}
+    
+
+}{$\}$\end{flushleft}}
+\newenvironment{proc}[3]{\begin{flushleft}
+    
+
+        \hspace{.7cm}\func{proc} #1 ($#2$): $#3$ $\{$\\
+        \newcommand{\s}[1]{\hspace{.7cm}##1}
+        \newcommand{\linea}[1]{\hspace{1.4cm}##1\\}
+        \newcommand{\lineaint}[1]{\hspace{2.1cm}##1\\}
+        
+        \newcommand{\asig}[2]{\hspace{1.4cm}##1 := ##2\\}
+        \newcommand{\cond}[1]{\hspace{1.4cm}{\ttfamily{if}} (##1) {\ttfamily{then}}\\}
+        \newcommand{\ElseIf}[1]{\hspace{1.4cm}{\ttfamily{elseIf}} (##1) {\ttfamily{then}}\\}
+        \newcommand{\Else}{\hspace{1.4cm}{\ttfamily{else}}\\}
+        \newcommand{\Endif}{\hspace{1.4cm}{\ttfamily{endif}}\\}
+        \newcommand{\while}[1]{\hspace{1.4cm}{\ttfamily{while}} (##1) {\ttfamily{do}}\\}
+        \newcommand{\Endwhile}{\hspace{1.4cm}{\ttfamily{endwhile}}\\}
+        \newcommand{\return}[1]{\hspace{1.4cm}{\textbf{return}} ##1\\}
+    
+    }{\hspace{.7cm}$\}$\end{flushleft}}
+\begin{document}
+\noindent{\Huge{Practica 8}}\\\\
+\noindent{\Large{Agustin Stescovich Curi}}
+\section{}
+
+(Funcion abstraccion) Necesito que todas las ventas registradas en \texttt{ventasPorProducto} aparezcan en \texttt{ventas}, que por cada
+producto la suma de los montos de todas sus ventas se equivalente al valor asociado
+a dicho producto en \texttt{totalPorProducto} y que la venta(monto) mas caro de cada producto en \texttt{ventasPorProducto}
+sea el valor asociado a dicho producto en \texttt{ultimoPrecio}.\\
+(invariante de representacion) Para cada producto la suma de todas las ventas debe ser equivalente a 
+\texttt{totalPorProducto}[producto] y la mayor de ellas debe ser equivalente a \texttt{ultimoPrecio}[producto].\\\\
+
+
+$\texttt{tup}=tupla\langle producto,fecha,monto\rangle$\\\\
+
+\invRep{c:comercioImpl}{(\forall p:producto)(pertenece(p,c.ventas)\leftrightarrow 
+(\exists s:seq\langle \texttt{tup})((\forall t:\texttt{tup})(t_1=p \land t\in s \leftrightarrow 
+t\in c.ventas)\land \displaystyle\sum_{i=0}^{|s|-1}s[i]_2 = c.totalPorProducto[p]\land (\exists m:\texttt{tup})(esMax(m,s)\land t_2=ultimoPrecio[p])))}\\\\
+
+\pred{pertenece}{$p:producto,v:seq\langle\texttt{tup}\rangle$}{(\exists t:\texttt{tup})(t\in v \land t_0=p)}\\\\
+
+\pred{esMax}{$t:\texttt{tup},v:seq\langle\texttt{tup}\rangle$}{t\in v \land (\forall t':\texttt{tup})(t'\in v \to t'_2\leq t_2)}\\\\
+
+
+\abst{c:comercioImpl,c':com}{(\forall p:producto)(p\in c'.vpp\land pertenece(p,c.ventas)\leftrightarrow (\forall t:\langle fecha,monto\rangle)
+(t\in c'.vpp[p]\leftrightarrow \langle p,t_0,t_1 \rangle\in c.ventas\land (\exists t':\langle fecha,monto\rangle)(t'\in c'.vpp[p]\land t'_0\geq t_0 \land t'_1=c.ultimoPrecio[p]))\land
+\displaystyle\sum_{i=0}^{|c'.vpp[p]|-1}c'.vpp[p][i][1]=c.totalPorProducto[p])}
+
+\section{}
+
+\subsection{Invrep(castellano)}
+
+Necesito que para cada alarma(key) en planta.alarmas, todos los sensores pertenecientes
+al conjunto asociado a la alarma sean claves en planta.sensores y que la alarma pertenezca al conjunto
+asociado a cada sensor.\\\\
+
+\subsection{Invariante de Representacion}
+\invRep{p:plantaImpl}{(\forall a:alarma)(a\in p.alarmas\to (\forall s:sensor)(s\in p.alarmas[a]\to s\in p.sensores \land a\in p.sensores[s]))}\\\\
+\subsection{Funcion Abstraccion}
+\abst{p:plantaImpl, p':planta}{(\forall s:sensor,a:alarma)(a\in p'.alarmas\land <s,a>\in p'.sensores\leftrightarrow s\in p.alarmas[a]\land a\in p.alarmas[s])}
+
+
+\section{}
+
+\subsection{Invrep(castellano)}
+Necesito: i)si un estudiante pertenece a \texttt{estudiantes} entonces pertence tambien a
+\texttt{faltas}, \texttt{notas} y\\ \texttt{notasPorEstudiante} ii) La cantaidad de faltas
+por estudiante debe ser un numero mayor o igual a 0 iii) Si un estudiante pertenece al i-esimo
+conjunto en \texttt{notas} entonces la i-esima posicion en el \textit{array} de la clave de
+dicho estudiante en \texttt{notasPorEstudiante} es mayor a 0. iv) \texttt{estudiantes},\texttt{faltas} y \texttt{notasPorEstudiante}
+tienen el mismo tamaño siempre v) El tamaño de \texttt{notas} es 10 vi) el tamaño de todos
+los elementos de \texttt{notas} es el mismo que el de \texttt{estudiantes}
+
+\subsection{Invariante de representacion}
+
+\invRep{s:secundarioImpl}{(\forall e:estudiante)(e\in s.estudiantes \to e\in s.faltas \land e\in s.notas \land e\in s.notasPorEstudiante
+\land s.faltas[e]\geq 0\land (\forall i:\entero)(0\leq i\leq10\land e\in s.notas[i]\leftrightarrow s.notasPorEstudiante[e][i]>0 ))
+\land s.estudiantes.length=s.faltas.length=s.notasPorEstudiante.length\land s.notas.lenght=10
+\land (\forall j:\entero)(0\leq j\leq10 \to s.notas[i].lenght=s.estudiantes.length)}
+
+\subsection{Funcion abstraccion}
+
+\abst{s:secundarioImpl,s':secundario}{(\forall e:estudiante)(e\in s'.estudiantes \leftrightarrow e\in s.estudiantes)\land 
+(\forall e':estudiantes,i:\entero)(e'\in s'.faltas \land s'.faltas[e']=i \leftrightarrow e'\in s.faltas \land s.faltas[e']=i)\land
+(\forall e":estudiantes,n:\entero)(0\leq n\leq10 \land e"\in s'.notas\land n\in s'.notas[e"] \leftrightarrow
+e"\in s.notas[n]\land e"\in s.notasPorEstudiante \land s.notasPorEstudiante[e"][n]>0)}
+
+
+\section{}
+HACER
+
+\section{}
+
+\subsection{Invariante de representacion}
+\subsection{Funcion abstraccion}
+\subsection{Modulo}
+\begin{modulo}{MIB}{Matriz infinita de booleanos}
+    \var{data}{vector\langle vector\langle boolean\rangle\rangle}
+    \var{inv}{vector\langle vector\langle boolean\rangle\rangle}
+    \var{vacio}{boolean}
+    \begin{proc}{crear}{ }{MIB}
+        \asig{res}{\new MIB()}
+        \linea{res.data.vectorVacio()}
+        \linea{res.inv.vectorVacio()}
+        \asig{res.vacio}{False}
+        \return{res}    
+    \end{proc}
+    \begin{proc}{agregar}{\Inout m:MIB, \In f,c:\entero, \In b:boolean}{ }
+        \asig{act}{m.data.longitud()}
+        \cond{$act<f$}
+        \s\while{$act\leq f$}
+        \s\lineaint{fil.vectorVacio()}
+        \s\lineaint{act++}
+        \s\lineaint{m.data.agregarAtras(fil)}
+        \s\lineaint{m.inv.agregarAtras(fil)}
+        \s\Endwhile
+        \Endif
+        \asig{act}{m.data.obtener(f).longitud()}
+        \cond{$act<c$}
+        \s\while{$act\leq c$}
+        \s\s\asig{col=False}
+        \s\lineaint{act++}
+        \s\lineaint{m.data.agregarAtras(col)}
+        \s\lineaint{m.inv.agregarAtras(col)}
+        \s\Endwhile
+        \Endif
+        \linea{modificarPosicion(m.data.obtener(f),c,b)}
+        \linea{modificarPosicion(m.inv.obtener(f),c,!b)}
+    \end{proc}
+    \begin{proc}{ver}{\In m:MIB, \In f,c:\entero}{boolean}
+        \cond{$m.data.longitud()>f$}
+        \s\return{m.vacio}
+        \ElseIf{$m.data.obtener(f).longitud()>c$}
+        \s\return{m.vacio}
+        \Else
+        \s\return{$m.obtener(f).obtener(c)$}
+        \Endif
+    \end{proc}
+    \begin{proc}{complementar}{\Inout m:MIB}{ }
+        \asig{copiaD}{$\new\ vector\langle vector\langle boolean\rangle\rangle$}
+        \asig{copiaI}{$\new\ vector\langle vector\langle boolean\rangle\rangle$}
+        \asig{copiaVacio}{\new boolean}
+        \asig{copiaD}{m.data}
+        \asig{copiaI}{m.inv}
+        \asig{copiaVacio}{m.vacio}
+        \asig{m.data}{copiaI}
+        \asig{m.inv}{copiaD}
+        \asig{m.vacio}{copiaVacio}
+
+        
+    \end{proc}
+\end{modulo}
+
+\subsection{Complejidades}
+\begin{itemize}
+    \item $crear\in O(1)$
+    \item $agregar\in O(max(f,c))$ [f y c son las entradas para la fila y columna]
+    \item $ver\in O(1)$
+    \item $complementar\in O(1)$
+\end{itemize}
+\end{document}
