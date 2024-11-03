@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1730219283.54488 "c:/Users/Curi/Desktop/Facultad/AED/Guias/Resoluciones/Practica 8.tex" "build/Practica 8.pdf" "Practica 8" 1730219289.13588 0
+["pdflatex"] 1730605365.20102 "c:/Users/Curi/Desktop/Facultad/AED/Guias/Resoluciones/Practica 8.tex" "build/Practica 8.pdf" "Practica 8" 1730605367.59586 0
   "C:/Users/Curi/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1727026339 81068 299f700eb05b1217173e62b88b513bd0 ""
   "C:/Users/Curi/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/tcrm1000.pk" 1726151680 11548 4fc8591a8b9a65e8c19d8c4e57ac4637 ""
   "C:/Users/Curi/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1725996118 24224615 e45cbd29557dc65cb4264e8608f362d8 ""
@@ -66,9 +66,9 @@
   "C:/Users/Curi/AppData/Local/Programs/MiKTeX/tex/latex/listings/listings.sty" 1679057124 80947 75a96bb4c9f40ae31d54a01d924df2ff ""
   "C:/Users/Curi/AppData/Local/Programs/MiKTeX/tex/latex/listings/lstmisc.sty" 1679057124 77021 d05e9115c67855816136d82929db8892 ""
   "C:/Users/Curi/AppData/Local/Programs/MiKTeX/tex/latex/setspace/setspace.sty" 1670403145 22490 8cac309b79a4c53a4ffce4b1b07aead0 ""
-  "Practica 8.tex" 1730219263 8459 b242be0953c1bc3a1c6e29ef9a7e606b ""
-  "build/Practica 8.aux" 1730219288 1598 15ad13941481aef73f7e4c9268defd7c "pdflatex"
-  "c:/Users/Curi/Desktop/Facultad/AED/Guias/Resoluciones/Practica 8.tex" 1730219263 8459 b242be0953c1bc3a1c6e29ef9a7e606b ""
+  "Practica 8.tex" 1730605363 14199 c6ad33f52b8eea0ca512d6b2ebe4a24b ""
+  "build/Practica 8.aux" 1730605366 2818 a351d2bf9ab7ab7c20c90e378692c2a7 "pdflatex"
+  "c:/Users/Curi/Desktop/Facultad/AED/Guias/Resoluciones/Practica 8.tex" 1730605363 14199 c6ad33f52b8eea0ca512d6b2ebe4a24b ""
   (generated)
   "build/Practica 8.aux"
   "build/Practica 8.log"

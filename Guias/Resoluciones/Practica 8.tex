@@ -8,6 +8,7 @@
 \newcommand{\invRep}[2]{\noindent\texttt{pred} invRep (#1)\{$#2$\}\\}
 \newcommand{\abst}[2]{\noindent\texttt{pred} abs (#1)\{$#2$\}\\}
 \newcommand{\pred}[3]{\noindent\texttt{pred} #1 (#2)\{$#3$\}\\}
+\newcommand{\aux}[3]{\noindent\texttt{aux} #1 ($#2$)=$#3$\\}
 \newcommand{\func}[1]{\textbf{\ttfamily{#1}}}
 \newcommand{\entero}{\mathbb{Z}}
 \newcommand{\rac}{\mathbb{Q}}
@@ -184,4 +185,151 @@ HACER
     \item $ver\in O(1)$
     \item $complementar\in O(1)$
 \end{itemize}
+
+\section{Hacer}
+
+\section{}
+Vagon es \texttt{String}\\
+Tren es $listaEnlazada\langle Vagon\rangle$
+\begin{modulo}{PDM}{playaDeManiobras}
+    \var{trenes}{array\langle listaEnlazada\langle Vagon\rangle\rangle}
+    \begin{proc}{abrirPlaya}{capacidad:\entero}{PDM}
+        \asig{trenes}{$\new\ array\langle listaEnlazada\langle Vagon\rangle\rangle(capacidad)$}
+        \asig{res.trenes}{trenes}
+        \return{res}        
+    \end{proc}
+    \begin{proc}{recibirTren}{p:PDM,t:Tren}{\entero}
+        \asig{i}{0}
+        \while{i<p.trenes.length()\ \&\ p.trenes[i]!=null}
+        \lineaint{i++}
+        \Endwhile
+        \asig{p.trenes[i]}{t}
+        \return{i}
+    \end{proc}
+    \begin{proc}{despacharTren}{p:PDM,v:\entero}{ }
+        \asig{p.trenes[v]}{null}        
+    \end{proc}
+    \begin{proc}{unirTrenes}{p:PDM,v1:\entero,v2:\entero}{ }
+        \asig{via1}{p.trenes[v1]}
+        \asig{via2}{p.trenes[v2]}
+        \asig{via1.ultimo.siguiente}{via2.primero}
+        \asig{via2.primero.anterior}{via1.ultimo}
+        \asig{via1.ultimo}{via2.ultimo}    
+    \end{proc}
+    \begin{proc}{moverVagon}{p:PDM,v:vagon,origen:\entero,destino:\entero}{ }
+        \asig{it}{p.trenes[origen].iterador()}
+        \asig{actual}{null}
+        \while{it.haySiguiente()\ \&\ act.val!=v}
+        \s\asig{actual}{it.siguiente()}
+        \Endwhile
+        \cond{p.trenes[origen].longitud=1}
+        \s\asig{p.trenes[origen].cabeza}{null}
+        \s\asig{p.trenes[origen].ultimo}{null}
+
+        \ElseIf{actual=p.trenes[origen].cabeza}
+        \s\asig{primero}{p.trenes[origen].cabeza}
+        \s\asig{primero}{actual.siguiente}
+        \s\asig{primero.anterior}{null}
+
+        \ElseIf{actual=p.trenes[origen].ultimo}
+        \s\asig{ultimo}{p.trenes[origen].ultimo}
+        \s\asig{ultimo}{actual.anterior}
+        \s\asig{ultimo.siguiente}{null}
+
+        \Else
+        \s\asig{ant}{actual.anterior}
+        \s\asig{sig}{actual.siguiente}
+        \s\asig{ant.siguiente}{sig}
+        \s\asig{sig.anterior}{ant}
+        \linea{p.trenes[destino].agregarAtras(v)}
+        
+    \end{proc}
+\end{modulo}
+\subsection{Complejidades}
+\begin{itemize}
+    \item $abrirPlaya\in O(1)$
+    \item $recibirTren\in O(v)$
+    \item $despacharTren\in O(1)$
+    \item $unirTrenes\in O(1)$
+    \item $moverVagon\in O(t)$
+\end{itemize}
+
+\subsection{Invariante de Representacion}
+\invRep{p:PDM}{(\forall t:tren)(t\in p.trenes \leftrightarrow (\exists i:\entero)(0\leq i\leq p.trenes.length()\land_L p.trenes[i]=t))}
+
+\subsection{Funcion Abstraccion}
+\abst{p:PDM, p':playaDeManiobras}{p.trenes.length()=p'.trenes.longitud() \land (\forall v:Vagon)(v\in p.trenes \land v\in p'.trenes \leftrightarrow
+ (\exists via:\entero)(0\leq via\leq p'.trenes.longitud()\land_L 
+ (\exists vag:\entero)(0\leq vag\leq p'.trenes[vag].longitud() \land_L p.trenes[via][vag]=p'.trenes[via][vag]=v)))}
+
+\section{}
+\subsection{Modulo}
+\begin{modulo}{IB}{ingresosAlBanco}
+    \var{data}{vector\langle\entero\rangle}
+    \var{totalHasta}{vector\langle\entero\rangle}
+    \begin{proc}{nuevoIngresos}{ }{IB}
+        \s\var{res}{IB}
+        \asig{res.data}{vectorVacio()}
+        \asig{res.totalHasta}{vectorVacio()}
+        \return{res}    
+    \end{proc}
+    \begin{proc}{registrarNuevoDia}{i:IB,cant:\entero}{ }
+        \linea{agregarAtras(i.data,cant)}
+        \cond{longitud(i.totalHasta)=0}
+        \s\linea{agregarAtras(i.totalHasta,cant)}
+        \Else
+        \s\asig{ult}{ultimo(i.totalHasta)}
+        \s\linea{agregarAtras(i.totalHasta,ult+cant)}
+    \end{proc}
+    \begin{proc}{cantDias}{i:IB}{\entero}
+        \return{longitud(i.data)}        
+    \end{proc}
+    \begin{proc}{cantPersonas}{i:IB, desde:\entero,hasta:\entero}{\entero}
+        \return{res.totalHasta[hasta]-res.totalHasta[desde]+res.data[desde]}        
+    \end{proc}
+    requiere que la longitud sea mayor a 1
+    \begin{proc}{mediana}{i:IB}{\entero}
+        \asig{d}{0}
+        \while{$0\leq d<long(i.data)-1\ \&\ cantPersonas(i,0,d)\leq cantPersonas(i,d+1,long(i.data))$}
+        \lineaint{i++}
+        \Endwhile
+        \return{d-1}
+    
+    \end{proc}
+\subsection{} El sistema crece en funcion de la cantidad de dias que pasaron, de manera que
+el tamaño crecera a n cuando estemos en el n-dia
+
+\subsection{Invariante de Representacion}
+\invRep{i:IB}{i.data.longitud()=i.totalHasta.longitud()\land (\forall d:\entero)
+(0\leq d\leq i.data.longitud() \to_L tot(i,d)=i.totalHasta[d])}
+\aux{tot}{i:IB, d:dia}{\displaystyle\sum_{j=0}^{hasta}i.data[j]}
+
+\subsection{Funcion Abstraccion}
+\abst{i:IB, i':ingresosAlBanco}{i.data.longitud()=i'.totales.longitud()\land
+(\forall dia:\entero)(0\leq dia< i.data.longitud()\to_L i.data[dia]=i'.totales[dia])}
+
+\end{modulo}
+
+\section{}
+
+
+\subsection{Modulo}
+Cliente es $\entero$
+\begin{modulo}{madereraImpl}{Maderera}
+    \var{deposito}{colaPrioridadLog\langle\entero\rangle}
+    \var{ventas}{DiccionarioDigital\langle Cliente,vector\langle fecha,tamano \rangle\rangle}
+    \begin{proc}{comprarUnListon}{m:madereraImpl,tam:\entero}{ }
+        \linea{encolar(m.deposito,t,t)}    
+    \end{proc}
+    \begin{proc}{venderUnListon}{m:madereraImpl,tam:\entero,c:Cliente,f:fecha}{ }
+        \asig{liston}{desencolarMax(m.deposito)}
+        \asig{prior}{liston-t}
+        \linea{encolar(m.deposito,prior,prior)}
+        \asig{ven}{obtener(m.ventas,c)}
+        \linea{$agregarAtras(ven,\langle f,t\rangle$)}        
+    \end{proc}
+    \begin{proc}{ventasACliente}{m:madereraImpl,c:Cliente}{vector\langle fecha,tamano \rangle}
+        \return{obtener(m.ventas,c)}
+    \end{proc}
+\end{modulo}
 \end{document}
