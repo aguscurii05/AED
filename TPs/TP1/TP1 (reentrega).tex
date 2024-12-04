@@ -1,0 +1,470 @@
+\documentclass[10pt,a4paper]{article}
+
+\input{AEDmacros}
+\usepackage{caratula} % Version modificada para usar las macros de algo1 de ~> https://github.com/bcardiff/dc-tex
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{parskip}
+\usepackage{indentfirst}
+\usepackage{changepage}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\lstdefinestyle{base}{
+  emptylines=1,
+  breaklines=true,
+  moredelim=**[is][\color{darkgray}]{@}{@},
+  basicstyle=\ttfamily\footnotesize\bfseries,
+  frame=tb,
+}
+
+\titulo{Trabajo Práctico 1}
+\subtitulo{Especificación y WP}
+
+\fecha{\today}
+
+\materia{Algoritmos y Estructuras de Datos}
+\grupo{Grupo ElDobleMenosUno}
+
+\integrante{Deukmedjian, Iván}{521/24}{deukivan@gmail.com}
+\integrante{Stescovich Curi, Agustín Ezequiel}{184/24}{agustinstescovichcuri@gmail.com}
+\integrante{Feito, Agustín}{236/24}{agustinfeito@hotmail.com}
+\integrante{Raffo, Pedro}{168/24}{pedroraffo25@gmail.com}
+% Pongan cuantos integrantes quieran
+
+% Declaramos donde van a estar las figuras
+% No es obligatorio, pero suele ser comodo
+\graphicspath{{../static/}}
+
+\begin{document}
+
+\maketitle
+
+\section{Especificación}
+
+\subsection{grandesCiudades}
+
+% versión sin macros:
+
+% \begin{tabbing}
+%     tabula \=tabula \=3 \kill
+%     \texttt{proc grandesCiudades} (in $ciudades : seq \langle \mathsf{Ciudad} \rangle) : seq \langle \mathsf{Ciudad} \rangle$ \\
+%     \> \texttt{requiere} \{$\mathsf{noHayNombresRepetidos}(ciudades) \land \mathsf{todasPoblacionesPositivas}(ciudades)$\} \\
+%     \> \texttt{asegura} \{$\mathsf{noHayNombresRepetidos}(res) \land ((c \in ciudades \land c.habitantes > 50000) \leftrightarrow c \in res)$\}
+% \end{tabbing}
+
+% \begin{tabbing}
+%     tabula \=tabula \=3 \kill
+%     \texttt{pred noHayNombresRepetidos} ($s : seq \langle \mathsf{Ciudad} \rangle$) \{ \\
+%     \> $(\forall i : \mathbb{Z}) (0 \leq i < |s| \longrightarrow_L \lnot (\exists j : \mathbb{Z}) (0 \leq j < |s| \land_L i \neq j \land s[i].nombre = s[j].nombre))$ \\
+%     \}  
+% \end{tabbing}
+
+% \begin{tabbing}
+%     tabula \=tabula \=3 \kill
+%     \texttt{pred todasPoblacionesPositivas} ($s : seq \langle \mathsf{Ciudad} \rangle$)
+%     \{$(\forall i : \mathbb{Z}) (0 \leq i < |s| \longrightarrow_L s[i]_1 \geq 0)$\}
+% \end{tabbing}
+
+\begin{proc}{grandesCiudades}{\In ciudades : \TLista{\mathsf{Ciudad}}}{\TLista{\mathsf{Ciudad}}}
+    \requiere{\mathsf{noHayNombresRepetidos}(ciudades) \land \mathsf{todasPoblacionesPositivas}(ciudades)}
+    \asegura{\mathsf{noHayNombresRepetidos}(res) \land \paraTodo[unalinea]{c}{\mathsf{Ciudad}}{(c \in ciudades \land c.habitantes > 50000} \leftrightarrow c \in res)}
+\end{proc}
+
+\pred{noHayNombresRepetidos}{s : \TLista{\mathsf{Ciudad}}}
+{\paraTodo[unalinea]{i}{\ent}{0 \leq i < |s| \longrightarrow_L \lnot \existe[unalinea]{j}{\ent}{0 \leq j < |s| \land_L i \neq j \land s[i].nombre = s[j].nombre}}}
+
+\pred{todasPoblacionesPositivas}{s : \TLista{\mathsf{Ciudad}}}{\paraTodo[unalinea]{i}{\ent}{0 \leq i < |s| \longrightarrow_L s[i].habitantes \geq 0}}
+
+
+
+\subsection{sumaDeHabitantes}
+
+\textcolor{darkgray}{(\textsc{NOTA 1}: Para una mejor legibilidad de la especificación, se sustituye a $menoresDeCiudades$ por $men$ \\
+y a $mayoresDeCiudades$ por $may$, es decir: $menoresDeCiudades = men$ y $mayoresDeCiudades = may$.)} \\
+\textcolor{darkgray}{(\textsc{NOTA 2}: Reusamos aquí los predicados \textsf{noHayNombresRepetidos} y \textsf{todasPoblacionesPositivas}.)}
+
+\begin{proc}{sumaDeHabitantes}{\In men, may : \TLista{\mathsf{Ciudad}}}{\TLista{\mathsf{Ciudad}}}
+	\requiere{\mathsf{noHayNombresRepetidos}(men) \land \mathsf{noHayNombresRepetidos}(men) \land \mathsf{mismasCiudades}(may, \ men)}
+	\requiere{\mathsf{todasPoblacionesPositivas}(may) \land \mathsf{todasPoblacionesPositivas}(may)}
+	\asegura{\mathsf{noHayNombresRepetidos}(res) \land \mathsf{mismasCiudades}(res, men)}
+	\begin{tabbing}
+    tabula \=tabulaaa \=tabula \kill
+    \> \texttt{asegura} \{$(\forall i, j : \ent) \ ((0 \leq i < |men| \land 0 \leq j < |may| \land_L men[i].nombre = may[j].nombre) \longrightarrow_L$ \\
+    \> \> $(\exists k : \ent) \ (0 \leq k < |res| \land_L res[k].nombre = men[i].nombre$  \\
+    \> \> $\land_L \ men[i].habitantes + may[j].habitantes = res[k].habitantes))$\}
+    \end{tabbing}
+    % sufrí demasiado haciendo que esto quede alineado
+\end{proc}    
+
+\pred{mismasCiudades}{c1, c2 : \TLista{\mathsf{Ciudad}}}
+{|c1| = |c2| \land_L \paraTodo[unalinea]{i}{\ent}{0 \leq i < |c1| \longrightarrow_L \existe[unalinea]{j}{\ent}{0 \leq j < |c2| \land_L c1[i].nombre = c2[j].nombre}}}
+% si ambas tienen la misma longitud y cada elemento es distinto, pedir esto es que ambas listas estén emparejadas uno-a-uno
+
+
+
+\subsection{hayCamino}
+
+% versión sin macros:
+
+% \begin{tabbing}
+%     tabula \=tabula \=tabula \kill
+%     \texttt{proc hayCamino} (in $distancias: seq \langle seq \langle \mathbb{Z} \rangle \rangle,$ in $desde, hasta : \mathbb{Z}) : \mathsf{Bool}$ \\
+%     \> \texttt{requiere} \{$\mathsf{esMatrizCuadrada}(distancias) \land \mathsf{esMatrizSimetrica}(distancias)$\} \\
+%     \> \texttt{requiere} \{$\mathsf{ningunElementoNegativo}(distancias) \land 0 \leq desde, hasta < |distancias|$\} \\
+%     \> \texttt{asegura} \{$res = \mathtt{true} \leftrightarrow (\exists i : seq \langle \mathbb{Z} \rangle) (\mathsf{esCaminoValido}(i, desde, hasta, distancias)$\}
+% \end{tabbing}
+    
+% \begin{tabbing}
+%     tabula \=tabula \=tabula \kill
+%     \texttt{pred esMatrizCuadrada} $(m : seq \langle seq \langle \mathbb{Z} \rangle \rangle)$ \{ \\
+%     \> $(\forall i : \mathbb{Z}) (0 \leq i < |m| \longrightarrow_L |m| = |m[i]|)$\}
+% \end{tabbing}
+    
+% \begin{tabbing}
+%     tabula \=tabula \=tabula \kill 
+%     \texttt{pred esMatrizSimetrica} $(m : seq \langle seq \langle \mathbb{Z} \rangle \rangle)$ \{ \\
+%     \> $(\forall i, j : \mathbb{Z}) (0 \leq i, j < |m| \longrightarrow_L m[i][j] = m[j][i])$\}
+% \end{tabbing}
+    
+% \begin{tabbing}
+%     tabula \=tabula \=tabula \kill
+%     \texttt{pred ningunElementoNegativo} $(s : seq \langle seq \langle \mathbb{Z} \rangle \rangle)$ \{ \\
+%     \> $(\forall i, j : \mathbb{Z}) (0 \leq i, j < |m| \longrightarrow_L m[i][j] \geq 0)$\}
+% \end{tabbing}
+
+% \begin{tabbing}
+%     tabula \=tabula \=tabula \kill 
+%     \texttt{pred esCaminoValido} $(camino : seq \langle \mathbb{Z} \rangle, origen : \mathbb{Z}, destino : \mathbb{Z}, m : seq \langle \langle \mathbb{Z} \rangle \rangle )$ \{ \\
+%     \> $|camino| \geq 2 \land_L camino[0] = origen \land camino[|camino| - 1] = destino$ \\
+%     \> $\land (\forall i : \mathbb{Z}) (0 \leq i < |camino| - 1 \longrightarrow_L (camino[i] \neq camino[i + 1] \rightarrow m[i][i + 1] > 0))$\}
+% \end{tabbing}
+
+\begin{proc}{hayCamino}{\In distancias : \TLista{\TLista{\ent}}, \In desde, hasta : \ent}{\textsf{Bool}}
+    \requiere{\mathsf{esMatrizCuadrada}(distancias) \land \mathsf{esMatrizSimetrica}(distancias)}
+    \requiere{\mathsf{ningunElementoNegativo}(distancias) \land 0 \leq desde, hasta < |distancias|}
+    \asegura{res = \True \leftrightarrow \existe[unalinea]{i}{\TLista{\ent}}{\mathsf{esCaminoValido}(i, desde, hasta, distancias)}}
+\end{proc}
+
+\texttt{pred esMatrizCuadrada} $(m : seq \langle seq \langle \mathbb{Z} \rangle \rangle)$ \{$(\forall i : \mathbb{Z})$ $(0 \leq i < |m| \longrightarrow_L |m| = |m[i]|)$\}
+
+\texttt{pred esMatrizSimetrica} $(m : seq \langle seq \langle \mathbb{Z} \rangle \rangle)$ \{$(\forall i, j : \mathbb{Z})$ $(0 \leq i, j < |m| \longrightarrow_L m[i][j] = m[j][i])$\}
+    
+\texttt{pred ningunElementoNegativo} $(s : seq \langle seq \langle \mathbb{Z} \rangle \rangle)$ \{$(\forall i, j : \mathbb{Z})$ $(0 \leq i, j < |m| \longrightarrow_L m[i][j] \geq 0)$\}
+% estos los paso sin macros para que queden en una sola línea - si no ocupan mucho espacio
+
+% \pred{esMatrizCuadrada}{m : \TLista{\TLista{\ent}}}{\paraTodo[unalinea]{i}{\ent}{0 \leq i < |m| \longrightarrow_L |m| = |m[i]|}}
+% \pred{esMatrizSimetrica}{m : \TLista{\TLista{\ent}}}{\paraTodo[unalinea]{i, j}{\ent}{0 \leq i, j < |m| \longrightarrow_L m[i][j] = m[j][i]}}
+% \pred{ningunElementoNegativo}{m : \TLista{\TLista{\ent}}}{\paraTodo[unalinea]{i, j}{\ent}{0 \leq i, j < |m| \longrightarrow_L m[i][j] \geq 0}}
+
+\pred{esCaminoValido}{camino : \TLista{\ent}, origen, destino : \ent, m : \TLista{\TLista{\ent}}}
+{|camino| \geq 2 \land_L (camino[0] = origen \land camino[|camino| - 1] = destino) \land_L \\
+\paraTodo[unalinea]{i}{\ent}{0 \leq i < |camino| - 1 \longrightarrow_L m[camino[i]][camino[i + 1]] > 0}}
+
+
+
+\subsection{cantidadCaminosNSaltos}
+
+\textcolor{darkgray}{(\textsc{NOTA}: Reusamos aquí los predicados \textsf{esMatrizCuadrada} y \textsf{esMatrizSimetrica}.)}
+
+\begin{proc}{cantidadCaminosNSaltos}{\Inout conexion : \TLista{\TLista{\ent}}, \In n : \ent}{}
+	\requiere{conexion = C_0 \land \mathsf{esMatrizCuadrada}(conexion) \land \mathsf{esMatrizSimetrica}(conexion) \land n \geq 1}
+    \requiere{\paraTodo[unalinea]{i,j}{\ent}{0 \leq i, j < |conexion| \longrightarrow_L 0 \leq conexion[i][j] \leq 1}}
+	\asegura{\mathsf{esMatrizCuadrada}(conexion) \land \mathsf{esMatrizSimetrica}(conexion) \land \mathsf{esNEsimaPotencia}(conexion, \ C_0, \ n)}
+\end{proc}
+
+\pred{esNEsimaPotencia}{matriz, base : \TLista{\TLista{\ent}}, exp : \ent}
+{\existe[unalinea]{s}{\TLista{\TLista{\TLista{\ent}}}}{|s| = exp \land_L s[0] = base \land s[exp - 1] = matriz \land_L \\
+\paraTodo[unalinea]{i}{\ent}{0 \leq i < exp \longrightarrow_L |s[i]| = |s[0]| \land \mathsf{esMatrizCuadrada}(s[i]) \land_L \\
+(i \neq 0 \longrightarrow_L \mathsf{esProducto}(s[i], \ s[i-1], \ s[0]))}}}
+
+
+\pred{esProducto}{matriz, factor1, factor2 : \TLista{\TLista{\ent}}}
+{\paraTodo[unalinea]{i, j}{\ent}{0 \leq i, j < |matriz| \longrightarrow_L 
+matriz[i][j]=\sum_{k = 0}^{|matriz| - 1} factor1[i][k] * factor2[k][j]}}
+
+
+\subsection{caminoMinimo}
+
+% versión sin macros:
+
+% \begin{tabbing}
+%     tabula \=tabula \=tabula \kill 
+%     \texttt{proc caminoMinimo} $(origen : \mathbb{Z}, destino : \mathbb{Z}, distancias : seq \langle \langle \mathbb{Z} \rangle \rangle ) : seq \langle \mathbb{Z} \rangle $ \{ \\
+%     \> \texttt{requiere} \{$0 \leq origen, destino < |distancias| \land \mathsf{esMatrizCuadrada}(distancias) \land \mathsf{esMatrizSimetrica}(distancias)$\} \\
+%     \> \texttt{asegura} \{$res = \leftrightarrow \lnot (\exists i : seq \langle \mathbb{Z} \rangle) (\mathsf{esCaminoValido}(i, origen, destino, distancias)$\} \\
+%     \> \texttt{asegura} \{$res \neq \langle \rangle \leftrightarrow \mathsf{esCaminoMinimo}(res, origen, destino, distancias)$\}
+%     \end{tabbing}
+
+% \begin{tabbing}
+%     tabula \=tabula \=tabula \kill 
+%     \texttt{aux distanciaCamino} $(camino : seq \langle \mathbb{Z} \rangle, m : seq \langle \langle \mathbb{Z} \rangle \rangle) = \sum_{i = 0}^{|camino| - 1} m[i][i + 1]$
+% \end{tabbing}
+
+% \begin{tabbing}
+%     tabula \=tabula \=tabula \kill 
+%     \texttt{pred esCaminoMinimo} $(camino : seq \langle \mathbb{Z} \rangle, origen : \mathbb{Z}, destino : \mathbb{Z}, m : seq \langle \langle \mathbb{Z} \rangle \rangle )$ \{ \\
+%     \> $\mathsf{esCaminoValido}(res, origen, destino, m) \land_L$ \\
+%     \> $(\forall i : seq \langle \mathbb{Z} \rangle) (\mathsf{esCaminoValido}(i, origen, destino, m) \longrightarrow_L \mathsf{distanciaCamino}(i, m) \geq \mathsf{distanciaCamino}(res, m))$\}
+% \end{tabbing}
+
+\textcolor{darkgray}{(\textsc{NOTA}: Reusamos aquí los predicados \textsf{esMatrizCuadrada}, \textsf{esMatrizSimetrica} y \textsf{ningunElementoNegativo}.)}
+
+\begin{proc}{caminoMinimo}{origen, destino : \ent, distancias : \TLista{\TLista{\ent}}}{\TLista{\ent}}
+    \requiere{\mathsf{esMatrizCuadrada}(distancias) \land \mathsf{esMatrizSimetrica}(distancias)}
+    \requiere{\mathsf{ningunElementoNegativo}(distancias) \land 0 \leq origen, \ destino < |distancias|}
+    \asegura{res = \langle \rangle \leftrightarrow \lnot \existe[unalinea]{i}{\TLista{\ent}}{\mathsf{esCaminoValido}(i, \ origen, \ destino, \ distancias)}}
+    \asegura{res \neq \langle \rangle \leftrightarrow \mathsf{esCaminoMinimo}(res, \ origen, \ destino, \ distancias)}
+\end{proc}
+
+\aux{distanciaCamino}{camino : \TLista{\ent}, m : \TLista{\TLista{\ent}}}{\ent}{\sum\limits_{i = 0}^{|camino| - 1} m[camino[i]][camino[i + 1]]}
+
+\pred{esCaminoMinimo}{camino : \TLista{\ent}, origen, destino : \ent, m : \TLista{\TLista{\ent}}}
+{\mathsf{esCaminoValido}(res, \ origen, \ destino, \ m) \land_L \paraTodo[unalinea]{i}{\TLista{\ent}}{ \\
+\mathsf{esCaminoValido}(i, \ origen, \ destino, \ m) \longrightarrow_L \mathsf{distanciaCamino}(i, \ m) \geq \mathsf{distanciaCamino}(res, \ m)}}
+
+
+
+\newpage
+
+
+
+\section{Correctitud}
+\subsection{Demostración de correctitud de la implementación de \textsf{poblaciónTotal}}
+
+Esta es la tripla de Hoare a probar:
+\begin{equation*}
+    \begin{split}
+        &\textbf{P} \equiv \{(\exists i:\mathbb{Z})(0 \leq i < |ciudades| \land_L ciudades[i].habitantes > 50,000) \land \\
+        &(\forall i : \mathbb{Z})(0 \leq i < |ciudades| \longrightarrow_L ciudades[i].habitantes \geq 0) \land\\
+        &(\forall i :\mathbb{Z})(\forall j \mathbb{Z})(0 \leq i < j < |ciudades| \longrightarrow_L ciudades[i].nombre \ne ciudades[j].nombre)\}
+    \end{split}
+\end{equation*}
+\begin{lstlisting}[style=base]
+    res := 0;
+    i := 0;
+    while (i < ciudades.length) do 
+        res = res + ciudades[i].habitantes; @Nuestro S1 en el ciclo@
+        i := i + 1; @Nuestro S2 en el ciclo@
+    endwhile
+\end{lstlisting}
+\begin{equation*}
+    \begin{split}
+        &\textbf{Q}\equiv \{res = \sum_{j = 0}^{|ciudades| - 1} ciudades[j].habitantes\}
+    \end{split}
+\end{equation*}
+
+
+\subsubsection{Teorema del invariante}
+Proponemos el siguiente invariante y demostramos la correctitud parcial del ciclo: 
+\begin{equation*}
+    I \equiv \{0 \leq i \leq |ciudades| \land_L res = \sum\limits_{j = 0}^{i - 1} ciudades[j].habitantes\}
+\end{equation*}
+
+\begin{itemize}
+\item{\textbf{Condición 1:} $\mathbf{P_c \Rightarrow I}$} \\
+\end{itemize}
+\begin{equation*}
+    \begin{split}
+        P_c \equiv \ 
+        &(\exists i:\mathbb{Z})(0 \leq i < |ciudades| \land_L ciudades[i].habitantes > 50,000) \ \land \\
+        & (\forall i : \mathbb{Z})(0 \leq i < |ciudades| \longrightarrow_L ciudades[i].habitantes \geq 0) \ \land \\
+        &(\forall i :\mathbb{Z})(\forall j : \mathbb{Z})(0 \leq i < j < |ciudades| \longrightarrow_L ciudades[i].nombre \ne ciudades[j].nombre) \ \land \\
+        & res = 0 \land i = 0 \Longrightarrow (0 \leq i \leq |ciudades| \land res = \sum\limits_{j = 0} ^ {i - 1} ciudades[j].habitantes)
+    \end{split}
+\end{equation*}
+
+Utilizamos que $P_c \Rightarrow res = 0 \land i = 0$ y reemplazamos en el invariante:
+        \begin{equation*}
+            \begin{split}
+                & \ 0 \leq 0 \leq |ciudades| \land res = \sum\limits_{j = 0} ^ {-1}Ciudades[j].habitantes \\
+                \equiv & \ True \land res = 0 \\
+                \equiv & \ res = 0
+            \end{split}
+        \end{equation*}
+Se evidencia que $P_c \Rightarrow res = 0 \land i = 0 \Rightarrow res = 0$, y $\therefore$ se cumple que el antecedente implica al consecuente. \\
+
+
+\begin{itemize}
+    \item{\textbf{Condición 2: validez de la tripla} $\mathbf{\{I \land B\} \ \texttt{S} \ \{I\}}$}
+\end{itemize}
+
+Comenzamos resolviendo la WP:
+    \setcounter{equation}{0}
+        \begin{align}
+                \textbf{wp(\texttt{S}, I)} &\equiv wp(\texttt{S1; S2}, \ I) \\
+                &\equiv wp(\texttt{S1}, \ wp(\texttt{S2}, \ I)) \\
+                &\equiv wp(\texttt{S1}, \ wp(\texttt{i := i + 1}, \ (0 \leq i \leq |ciudades| \land res = \sum\limits_{j = 0}^{i - 1} ciudades[j].habitantes)) \\
+                &\equiv wp(\texttt{S1}, \ 0 \leq i + 1 \leq |ciudades| \land res = \sum\limits_{j = 0}^{i} ciudades[j].habitantes) \\
+                &\equiv (0 \leq i + 1 \leq |ciudades| \land 0\leq i < |ciudades| \ \land \\
+                & \ \ \ \ res + ciudades[i].habitantes = (\sum\limits_{j = 0}^{i - 1} ciudades[j].habitantes) + ciudades[i].habitantes \\
+                &\equiv 0 \leq i < |ciudades| \land res = \sum\limits_{j = 0}^{i - 1} ciudades[j].habitantes
+        \end{align}
+
+Ahora vemos la implicación $\mathbf{(I\land B) \Rightarrow wp(\textbf{S},I)}$:
+    \setcounter{equation}{0}
+    \begin{align}
+               & \equiv 0 \leq i \leq |ciudades| \land res = \sum\limits_{j = 0} ^ {i - 1} ciudades[j].habitantes \land i < |ciudades| \\
+               & \equiv 0 \leq i < |ciudades| \land res = \sum\limits_{j = 0} ^ {i - 1} ciudades[j].habitantes \\
+               \nonumber & \Rightarrow 0 \leq i < |ciudades| \land res =\sum\limits_{j=0} ^ {i-1} ciudades[j].habitantes 
+    \end{align}
+
+Esto se cumple dado que es una tautología del tipo $p \Rightarrow p$. \\
+
+
+\begin{itemize}
+    \item{\textbf{Condición 3:} $\mathbf{I \land \lnot B \Rightarrow Q_c}$}
+\end{itemize}
+
+\setcounter{equation}{0}
+\begin{align}
+        \nonumber & \ \ \ \ I \land \lnot B \\ 
+        & \equiv 0 \leq i \leq |ciudades| \land_L res = \sum_{j = 0}^{i - 1} ciudades[j].habitantes \land \lnot (i < |ciudades|) \\
+        & \equiv i = |ciudades| \land_L res = \sum_{j = 0}^{i - 1} ciudades[j].habitantes \\
+        & \equiv i = |ciudades| \land_L res = \sum_{j = 0}^{|ciudades| - 1} ciudades[j].habitantes \\
+        \nonumber & \Rightarrow res = \sum_{j = 0}^{|ciudades| - 1} ciudades[j].habitantes \\
+        \nonumber & \equiv True
+\end{align}
+
+\ldots pues $p \land q \Rightarrow q$ es tautología.
+
+
+
+\subsubsection{Teorema de terminación}
+Proponemos la función variante $fv = |ciudades| - i$ y buscamos probar que el ciclo satisface el teorema de terminación. \\
+
+\begin{itemize}
+    \item{\textbf{Condición 4: validez de la tripla} $\mathbf{\{I \land B \land fv = v_0\} \ \texttt{s} \ \{fv < v_0\}}$}
+\end{itemize}
+Primero, debemos calcular la precondición más débil del ciclo respecto de $fv < v_0$:
+\begin{equation*} 
+    \begin{split}
+    & wp(\mathtt{res := res + ciudades[i].habitantes; \ i := i + 1}, \ fv < v_0) \\
+    \equiv \ & wp(\mathtt{res := res + ciudades[i].habitantes}, \ (wp(\mathtt{i := i + 1}, \ fv < v_0))
+    \end{split}
+\end{equation*}
+
+Calculemos primero la WP anidada:
+\begin{equation*}
+    \begin{split}
+    & wp(\mathtt{i := i + 1}, \ fv < v_0) \\
+    \equiv \ & wp(\mathtt{i := i + 1}, \ |ciudades| - i < v_0) \\
+    \equiv \ & def(i + 1) \land_L Q_{i + 1}^{i} \\
+    \equiv \ & True \land_L |ciudades| - i - 1 < v_0 \\
+    \equiv \ & |ciudades| - i - 1 < v_0
+    \end{split}
+\end{equation*}
+
+Usando esto,
+\begin{equation*}
+    \begin{split}
+    & wp(\mathtt{res := res + ciudades[i].habitantes}, \ (wp(\mathtt{i := i + 1}, \ fv < v_0)) \\
+    \equiv \ & wp(\mathtt{res := res + ciudades[i].habitantes}, \ |ciudades| - i - 1 < v_0) \\
+    \equiv \ & def(res + ciudades[i].habitantes) \land_L Q_{res \ + \ ciudades[i].habitantes}^{res} \\
+    \equiv \ & 0 \leq i < |ciudades| \land_L |ciudades| - i - 1 < v_0 \\
+    \end{split}
+\end{equation*}
+
+Dada la precondición más débil, comprobamos ahora que $I \land B \land fv = v_0$ la fuerza:
+\begin{equation*}
+    \begin{split}
+    & I \land B \land fv = v_0 \\
+    \equiv \ & 0 \leq i \leq |ciudades| \land_L res = \sum_{j = 0}^{i - 1} ciudades[j].habitantes \land i < |ciudades| \land |ciudades| - i = v_0
+    \end{split}
+\end{equation*}
+
+Basta ver que $|ciudades| - i = v_0 \Rightarrow |ciudades| - i - 1 < v_0$, pues 
+\begin{equation*}
+    \begin{split}
+    & |ciudades| - i - 1 < |ciudades| - i \\
+    \equiv \ & -1 < 0 \\
+    \equiv \ & True
+    \end{split}
+\end{equation*}
+Por lo tanto, la tripla de Hoare $\{I \land B \land fv = v_0\} \ \mathtt{s} \ \{fv < v_0\}$ es válida. \\
+
+
+\begin{itemize}
+    \item{\textbf{Condición 5:} $\mathbf{(I \land fv \leq 0) \Rightarrow \lnot B}$}
+\end{itemize}
+
+Ahora, debemos mostrar que la guarda del ciclo deja de valer cuando la función variante es menor o igual a 0. \\
+\begin{equation*}
+    \begin{split}
+    & I \land fv \leq 0 \\
+    \equiv \ & 0 \leq i \leq |ciudades| \land_L res = \sum_{j = 0}^{i - 1} ciudades[j].habitantes \land |ciudades| - i < 0
+    \end{split}
+\end{equation*}
+
+Tenemos que\ldots \\
+\begin{equation*}
+    \begin{split}
+        & |ciudades| - i < 0 \land 0 \leq i \leq |ciudades| \\
+        \Rightarrow \ & i = |ciudades| \\
+        \Rightarrow \ & \lnot(i < |ciudades|)
+    \end{split}
+\end{equation*}
+\ldots que es la implicación que buscábamos probar.
+
+
+
+\subsubsection{Finalización de la demostración}
+Sabemos que el ciclo del programa es correcto respecto de $(P_c, \ Q_c)$, pero falta demostrar la validez de \\
+$\{P\} \ \mathtt{res := 0; i := 0} \ \{P_c\}$, es decir, que se llegue siempre a la precondición del ciclo partiendo de la especificación. \\
+
+Comenzamos calculando la precondición más debil de las instrucciones anteriores al ciclo respecto de $P_c$:
+\begin{equation*}
+    \begin{split}
+    & wp(\mathtt{res := 0; \ i := 0}, \ P_c) \\
+    \equiv \ & wp(\mathtt{res := 0}, \ wp(\mathtt{i := 0}, \ P_c))
+    \end{split}
+\end{equation*}
+
+\textcolor{darkgray}{(\textsc{NOTA}: para ahorrar espacio, recordamos que $P_c \equiv P \land res = 0 \land i = 0$.)}\\
+\begin{equation*}
+    \begin{split}
+    & wp(\mathtt{i := 0}, \ P_c)) \\
+    \equiv \ & def(0) \land_L Q_{0}^{i} \\
+    \equiv \ & True \land_L (P \land res = 0 \land 0 = 0) \\
+    \equiv \ & P \land res = 0
+    \end{split}
+\end{equation*}
+
+Entonces, \\
+\begin{equation*}
+    \begin{split}
+    & wp(\mathtt{res := 0}, \ wp(\mathtt{i := 0}, \ P_c)) \\
+    \equiv \ & wp(\mathtt{res := 0}, \ P \land res = 0) \\
+    \equiv \ & def(0) \land_L Q_{0}^{res} \\
+    \equiv \ & P \land 0 = 0 \\
+    \equiv \ & P \\
+    \end{split}
+\end{equation*}
+
+Se sigue trivialmente que $P \Rightarrow P$, y por lo tanto la tripla $\{P\} \ \mathtt{res := 0; i := 0} \ \{P_c\}$ es válida. \\
+Luego, por monotonía, como $\{P\} \ \mathtt{res := 0; i := 0} \ \{P_c\}$ y $\{P_c\} \ \mathtt{S} \ \{Q\}$ son válidas, también lo es $\{P\} \ \mathtt{res := 0; i := 0; S} \ \{Q\}$. \\
+Así, hemos demostrado que la implementación de \textsf{poblaciónTotal} es correcta respecto de su especificación.
+
+\newpage
+
+\subsection{¿El valor devuelto por el programa es mayor a 50.000?}
+
+Demostramos anteriormente que la implementación \texttt{S} es correcta respecto de la especificación, y por tanto basta ver que la especificación cumple lo pedido.
+
+Sabemos  que \textit{ciudades} es un parámetro de tipo \textsf{in}, por lo que no se modifica en ningún punto del programa. \\
+Además, obtenemos de la precondición del programa que\ldots
+
+\begin{itemize}
+    \item{\existe[unalinea]{i}{\ent}{0 \leq i < |ciudades| \land_L ciudades[i].habitantes > 50,000} \\
+          (existe al menos un elemento de \textit{ciudades} cuya segunda componente es estrictamente mayor a $50,000$),}
+    \item{\paraTodo[unalinea]{i}{\ent}{0 \leq i < |ciudades \longrightarrow_L ciudades[i].habitantes \geq 0} \\
+          (ninguna segunda componente de un elemento en \textit{ciudades} es negativa),}
+
+\ldots y de la postcondición que\ldots
+
+    \item{$res = \sum\limits_{i = 0}^{|ciudades| - 1} ciudades[i].habitantes$ \\
+          (el resultado obtenido es la sumatoria de la segunda componente de todo elemento en \textit{ciudades}).}
+\end{itemize}
+
+Por tanto, dadas estas condiciones, se garantiza que $\sum\limits_{j = 0}^{|ciudades| - 1} ciudades[j].habitantes$ sea mayor a $50.000$.
+
+\end{document}
